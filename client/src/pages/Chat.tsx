@@ -151,7 +151,7 @@ export default function Chat() {
       }}
     >
       {/* 顶部哲学家头像区域 - 固定 */}
-      <div className="relative flex-shrink-0 py-8 px-4" style={{ height: "280px" }}>
+      <div className="relative flex-shrink-0 py-8 px-4" style={{ height: "clamp(200px, 25vh, 280px)" }}>
         {/* 聚光灯效果 */}
         <div 
           className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 rounded-full opacity-20 blur-3xl"

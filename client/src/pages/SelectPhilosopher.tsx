@@ -400,13 +400,13 @@ export default function SelectPhilosopher() {
             opacity: 0;
           }
           30% {
-            width: 600px;
-            height: 600px;
+            width: 60vmin;
+            height: 60vmin;
             opacity: 0.8;
           }
           100% {
-            width: 1000px;
-            height: 1000px;
+            width: 100vmin;
+            height: 100vmin;
             opacity: 0;
           }
         }
@@ -419,13 +419,13 @@ export default function SelectPhilosopher() {
             opacity: 0;
           }
           20% {
-            width: 1200px;
-            height: 1200px;
+            width: 120vmin;
+            height: 120vmin;
             opacity: 0.9;
           }
           100% {
-            width: 3000px;
-            height: 3000px;
+            width: 300vmin;
+            height: 300vmin;
             opacity: 0;
           }
         }
@@ -438,13 +438,13 @@ export default function SelectPhilosopher() {
             opacity: 0;
           }
           25% {
-            width: 800px;
-            height: 800px;
+            width: 80vmin;
+            height: 80vmin;
             opacity: 0.3;
           }
           100% {
-            width: 1500px;
-            height: 1500px;
+            width: 150vmin;
+            height: 150vmin;
             opacity: 0;
           }
         }
