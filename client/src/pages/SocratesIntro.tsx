@@ -151,30 +151,33 @@ export default function SocratesIntro() {
                         {currentScript.text}
                       </p>
                       
-                      {/* 按钮移到文字右下方 */}
+                      {/* 按钮重新设计 - 居中显示 */}
                       <motion.div
-                        className="absolute -bottom-16 right-0"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3, duration: 0.4 }}
+                        className="absolute -bottom-20 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 0.5 }}
                       >
+                        {/* 装饰线 */}
+                        <div className="w-16 h-px bg-gray-300" />
+                        
                         {currentScene < script.length - 1 ? (
                           // 前两页：下一页
                           <button
                             onClick={handleNext}
-                            className="flex items-center gap-2 text-gray-500 hover:text-black transition-colors duration-300"
+                            className="flex items-center gap-2 text-gray-400 hover:text-black transition-all duration-300 group"
                             aria-label="下一页"
                           >
-                            <span className="text-base font-normal">下一页</span>
-                            <ArrowRight className="w-5 h-5" />
+                            <span className="text-sm font-light tracking-wider">下一页</span>
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                           </button>
                         ) : (
                           // 第三页：开始对话按钮
                           <button
                             onClick={handleStartChat}
-                            className="text-gray-500 hover:text-black transition-colors duration-300"
+                            className="text-gray-400 hover:text-black transition-colors duration-300"
                           >
-                            <span className="text-base font-normal">开始对话</span>
+                            <span className="text-sm font-light tracking-wider">开始对话</span>
                           </button>
                         )}
                       </motion.div>

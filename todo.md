@@ -314,3 +314,17 @@
 - [x] 前两页显示“下一页” + 箭头图标
 - [x] 第三页显示“开始对话”
 
+
+
+## 重新设计按钮排版
+- [x] 优化按钮与文字的间距和位置：
+  - [x] 按钮从右下角改为居中显示
+  - [x] 位置：-bottom-20（文字下方 80px）
+  - [x] 水平居中：left-1/2 transform -translate-x-1/2
+- [x] 改进按钮的视觉设计和对齐方式：
+  - [x] 添加装饰线：宽 64px，高 1px，灰色
+  - [x] 文字样式：text-sm font-light tracking-wider
+  - [x] 颜色：text-gray-400 hover:text-black
+  - [x] 箭头 hover 效果：向右平移 translate-x-1
+- [x] 提升整体美观度和可读性
+
