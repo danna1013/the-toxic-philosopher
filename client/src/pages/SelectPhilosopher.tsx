@@ -124,12 +124,12 @@ export default function SelectPhilosopher() {
   return (
     <div className="min-h-screen text-white relative overflow-hidden" style={{
       backgroundColor: explodingId ? '#FAFAFA' : '#000000',
-      transition: explodingId ? 'background-color 1.5s ease-in-out 1s' : 'none',
+      transition: explodingId ? 'background-color 1.8s ease-in-out 0.5s' : 'none',
     }}>
       {/* 星空背景 */}
       <div className="absolute inset-0 overflow-hidden" style={{
         opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.8s ease-out' : 'none',
+        transition: explodingId ? 'opacity 1.2s ease-out 0.6s' : 'none',
       }}>
         {/* 背景星星 */}
         {[...Array(200)].map((_, i) => {
@@ -213,7 +213,7 @@ export default function SelectPhilosopher() {
       {/* 导航栏 */}
       <nav className="relative z-50 flex items-center justify-between px-8 py-6" style={{
         opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.6s ease-out' : 'none',
+        transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
       }}>
         <div className="flex flex-col gap-0.5">
           <h1 className="text-lg font-bold tracking-wide">毒舌哲学家</h1>
@@ -230,7 +230,7 @@ export default function SelectPhilosopher() {
       {/* 标题 - 分步动画 */}
       <div className="relative z-10 text-center pt-12 pb-8" style={{
         opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.6s ease-out' : 'none',
+        transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
       }}>
         <h1 className={`text-5xl font-bold mb-4 tracking-wider ${isReturning ? '' : 'animate-fadeInStep1'}`}>
           宇宙不在乎你的困惑
@@ -241,7 +241,7 @@ export default function SelectPhilosopher() {
       {/* 竖直发光连接线 */}
       <div className="absolute left-1/2 top-0 bottom-0 w-px transform -translate-x-1/2 z-0" style={{
         opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.6s ease-out' : 'none',
+        transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
       }}>
         <div
           className="w-full h-full"
@@ -255,7 +255,7 @@ export default function SelectPhilosopher() {
       {/* 星球容器 - 延迟显示 */}
       <div className={`relative h-[1200px] w-full ${isReturning ? '' : 'animate-fadeInStep3'}`} style={{
         opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.8s ease-out 0.2s' : 'none',
+        transition: explodingId ? 'opacity 1s ease-out 0.6s' : 'none',
       }}>
         {philosophers.map((phil) => (
           <div
@@ -350,7 +350,7 @@ export default function SelectPhilosopher() {
       {/* 底部信息 */}
       <footer className="relative z-10 text-center pb-8 text-xs text-gray-500" style={{
         opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.6s ease-out' : 'none',
+        transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
       }}>
         <p>Made by CSIG 云产品一部 Elisedai · Powered by GPT-4o</p>
       </footer>
