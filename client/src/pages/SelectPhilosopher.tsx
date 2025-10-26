@@ -291,27 +291,28 @@ export default function SelectPhilosopher() {
               }}
             />
             
-            {/* 墨水扩散动画 */}
+            {/* 黑白墨水扩散动画 */}
             {explodingId === phil.id && (
               <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                {/* 中心墨水扩散波纹 */}
-                {[...Array(5)].map((_, i) => (
+                {/* 中心黑白墨水扩散波纹 */}
+                {[...Array(6)].map((_, i) => (
                   <div
                     key={`ink-${i}`}
                     className="absolute rounded-full"
                     style={{
-                      background: `radial-gradient(circle, ${phil.color}40 0%, transparent 70%)`,
-                      animation: `inkSpread 2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+                      background: `radial-gradient(circle, rgba(255, 255, 255, ${0.9 - i * 0.15}) 0%, rgba(255, 255, 255, 0) 70%)`,
+                      animation: `inkSpreadBW 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
                       animationDelay: `${i * 0.15}s`,
                     }}
                   />
                 ))}
                 
-                {/* 墨点飘散 */}
-                {[...Array(30)].map((_, i) => {
-                  const angle = (i / 30) * Math.PI * 2;
-                  const distance = 100 + Math.random() * 150;
-                  const size = 2 + Math.random() * 4;
+                {/* 黑白墨点飘散 */}
+                {[...Array(40)].map((_, i) => {
+                  const angle = (i / 40) * Math.PI * 2;
+                  const distance = 200 + Math.random() * 350;
+                  const size = 2 + Math.random() * 5;
+                  const isWhite = Math.random() > 0.5;
                   return (
                     <div
                       key={`dot-${i}`}
@@ -321,9 +322,10 @@ export default function SelectPhilosopher() {
                         top: '50%',
                         width: size + 'px',
                         height: size + 'px',
-                        backgroundColor: phil.color,
-                        animation: `inkDot 1.5s ease-out forwards`,
-                        animationDelay: `${0.3 + i * 0.02}s`,
+                        backgroundColor: isWhite ? '#FFFFFF' : '#000000',
+                        opacity: 0.6,
+                        animation: `inkDotBW 1.8s ease-out forwards`,
+                        animationDelay: `${0.6 + i * 0.015}s`,
                         '--dot-x': `${Math.cos(angle) * distance}px`,
                         '--dot-y': `${Math.sin(angle) * distance}px`,
                       } as React.CSSProperties}
@@ -393,25 +395,27 @@ export default function SelectPhilosopher() {
           opacity: 0;
         }
         
-        /* 墨水扩散动画 */
-        @keyframes inkSpread {
+        /* 黑白墨水扩散动画 */
+        @keyframes inkSpreadBW {
           0% {
             width: 0;
             height: 0;
             opacity: 0;
           }
-          50% {
-            opacity: 0.6;
-          }
-          100% {
+          30% {
             width: 600px;
             height: 600px;
+            opacity: 0.8;
+          }
+          100% {
+            width: 1000px;
+            height: 1000px;
             opacity: 0;
           }
         }
         
-        /* 墨点飘散动画 */
-        @keyframes inkDot {
+        /* 黑白墨点飘散动画 */
+        @keyframes inkDotBW {
           0% {
             transform: translate(-50%, -50%) translate(0, 0);
             opacity: 0;
