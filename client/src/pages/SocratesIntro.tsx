@@ -73,7 +73,7 @@ export default function SocratesIntro() {
         <div className="w-full flex flex-col items-center justify-center gap-12">
           {/* 图片区域 - 背景融合 */}
           <div className="w-full flex items-center justify-center relative">
-            <div className="relative w-full max-w-3xl">
+            <div className="relative w-full max-w-3xl" style={{ aspectRatio: '1 / 1' }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`image-container-${currentScene}`}
@@ -89,7 +89,7 @@ export default function SocratesIntro() {
                   <img
                     src={currentScript.image}
                     alt={currentScript.imageAlt}
-                    className="w-full h-auto"
+                    className="w-full h-full object-contain"
                     style={{
                       filter: 'grayscale(100%)',
                     }}
