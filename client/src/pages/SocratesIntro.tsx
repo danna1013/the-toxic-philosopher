@@ -75,15 +75,9 @@ export default function SocratesIntro() {
           <div className="w-full flex items-center justify-center relative">
             <div className="relative w-full max-w-3xl">
               <AnimatePresence mode="wait">
-                <motion.img
-                  key={`image-${currentScene}`}
-                  src={currentScript.image}
-                  alt={currentScript.imageAlt}
-                  className="w-full h-auto"
-                  style={{
-                    filter: 'grayscale(100%) contrast(1.1) brightness(1.05)',
-                    mixBlendMode: 'multiply',
-                  }}
+                <motion.div
+                  key={`image-container-${currentScene}`}
+                  className="relative"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -91,15 +85,25 @@ export default function SocratesIntro() {
                     duration: 0.5,
                     ease: [0.4, 0, 0.2, 1]
                   }}
-                />
+                >
+                  <img
+                    src={currentScript.image}
+                    alt={currentScript.imageAlt}
+                    className="w-full h-auto"
+                    style={{
+                      filter: 'grayscale(100%) contrast(1.1) brightness(1.05)',
+                      mixBlendMode: 'multiply',
+                    }}
+                  />
+                  {/* 渐变遮罩，边缘融入白色背景 */}
+                  <div 
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: 'linear-gradient(to bottom, rgba(250,250,250,0.3) 0%, rgba(250,250,250,0) 20%, rgba(250,250,250,0) 80%, rgba(250,250,250,0.3) 100%), linear-gradient(to right, rgba(250,250,250,0.2) 0%, rgba(250,250,250,0) 15%, rgba(250,250,250,0) 85%, rgba(250,250,250,0.2) 100%)',
+                    }}
+                  />
+                </motion.div>
               </AnimatePresence>
-              {/* 渐变遮罩，边缘融入白色背景 */}
-              <div 
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: 'linear-gradient(to bottom, rgba(250,250,250,0.3) 0%, rgba(250,250,250,0) 20%, rgba(250,250,250,0) 80%, rgba(250,250,250,0.3) 100%), linear-gradient(to right, rgba(250,250,250,0.2) 0%, rgba(250,250,250,0) 15%, rgba(250,250,250,0) 85%, rgba(250,250,250,0.2) 100%)',
-                }}
-              />
             </div>
           </div>
 
