@@ -255,27 +255,6 @@ export default function SelectPhilosopher() {
             onMouseLeave={() => setHoveredId(null)}
             onClick={() => handleSelect(phil.id)}
           >
-            {/* 光晕层 - 默认脉动 */}
-            <div 
-              className="absolute inset-0 rounded-full animate-glow-pulse"
-              style={{
-                background: `radial-gradient(circle, ${phil.color}50 0%, ${phil.color}30 40%, ${phil.color}15 70%, transparent 100%)`,
-                filter: 'blur(15px)',
-                pointerEvents: 'none',
-              }}
-            />
-            
-            {/* 光晕层 - 悬停增强 */}
-            {hoveredId === phil.id && (
-              <div 
-                className="absolute inset-0 rounded-full animate-glow-strong"
-                style={{
-                  background: `radial-gradient(circle, ${phil.color}70 0%, ${phil.color}40 50%, ${phil.color}20 75%, transparent 100%)`,
-                  filter: 'blur(20px)',
-                  pointerEvents: 'none',
-                }}
-              />
-            )}
             
             {/* 星球图片 */}
             <img
