@@ -1,0 +1,465 @@
+import { useState, useEffect } from 'react';
+
+const philosophers = [
+  {
+    id: 'socrates',
+    name: '苏格拉底',
+    fullName: 'Socrates',
+    size: 'large', // 180px
+    position: { top: '35%', left: '15%' }
+  },
+  {
+    id: 'nietzsche',
+    name: '尼采',
+    fullName: 'Friedrich Nietzsche',
+    size: 'medium', // 140px
+    position: { top: '20%', right: '20%' }
+  },
+  {
+    id: 'wittgenstein',
+    name: '维特根斯坦',
+    fullName: 'Ludwig Wittgenstein',
+    size: 'large', // 180px
+    position: { top: '50%', left: '45%' }
+  },
+  {
+    id: 'kant',
+    name: '康德',
+    fullName: 'Immanuel Kant',
+    size: 'small', // 100px
+    position: { top: '60%', right: '15%' }
+  },
+  {
+    id: 'freud',
+    name: '弗洛伊德',
+    fullName: 'Sigmund Freud',
+    size: 'medium', // 140px
+    position: { top: '70%', left: '25%' }
+  }
+];
+
+export default function SelectPhilosopher() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoaded(true), 100);
+  }, []);
+
+  // 生成星星
+  const stars = Array.from({ length: 200 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 3 + 1,
+    hasCross: Math.random() > 0.9 // 10%的星星有十字光芒
+  }));
+
+  // 生成流动曲线路径
+  const generateFlowingPath = (index: number) => {
+    const startX = Math.random() * 100;
+    const startY = Math.random() * 100;
+    const curves = [];
+    
+    let x = startX;
+    let y = startY;
+    
+    for (let i = 0; i < 8; i++) {
+      const dx = (Math.random() - 0.5) * 30;
+      const dy = (Math.random() - 0.5) * 30;
+      const cx1 = x + (Math.random() - 0.5) * 20;
+      const cy1 = y + (Math.random() - 0.5) * 20;
+      const cx2 = x + dx + (Math.random() - 0.5) * 20;
+      const cy2 = y + dy + (Math.random() - 0.5) * 20;
+      
+      curves.push(`C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x + dx} ${y + dy}`);
+      x += dx;
+      y += dy;
+    }
+    
+    return `M ${startX} ${startY} ${curves.join(' ')}`;
+  };
+
+  const flowingPaths = Array.from({ length: 15 }, (_, i) => ({
+    id: i,
+    path: generateFlowingPath(i),
+    opacity: Math.random() * 0.3 + 0.1
+  }));
+
+  const getSizeInPx = (size: string) => {
+    switch (size) {
+      case 'large': return 180;
+      case 'medium': return 140;
+      case 'small': return 100;
+      default: return 140;
+    }
+  };
+
+  return (
+    <div className={`min-h-screen bg-black text-white overflow-hidden relative transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+      {/* 导航栏 */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-b border-white/10">
+        <div className="px-8 py-5 flex items-center justify-between">
+          <a href="/" className="flex flex-col gap-0.5 hover:opacity-70 transition-opacity">
+            <div className="text-lg font-bold tracking-wide text-white">毒舌哲学家</div>
+            <div className="text-[10px] font-medium tracking-[0.2em] text-gray-400">THE TOXIC PHILOSOPHER</div>
+          </a>
+          <div className="flex items-center gap-8">
+            <a href="/" className="relative text-base text-gray-400 hover:text-white transition-colors group">
+              首页
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-white group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <a href="/about" className="relative text-base text-gray-400 hover:text-white transition-colors group">
+              设计理念
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-white group-hover:w-full transition-all duration-300"></span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      {/* 宇宙背景 */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* SVG流动曲线 */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          {flowingPaths.map(flow => (
+            <path
+              key={flow.id}
+              d={flow.path}
+              fill="none"
+              stroke="white"
+              strokeWidth="0.05"
+              opacity={flow.opacity}
+              className="animate-flow-drift"
+              style={{ animationDelay: `${flow.id * 0.5}s` }}
+            />
+          ))}
+        </svg>
+
+        {/* 星星 */}
+        {stars.map(star => (
+          <div
+            key={star.id}
+            className="absolute"
+            style={{
+              left: `${star.x}%`,
+              top: `${star.y}%`
+            }}
+          >
+            {/* 星星圆点 */}
+            <div
+              className="bg-white rounded-full"
+              style={{
+                width: `${star.size}px`,
+                height: `${star.size}px`
+              }}
+            />
+            {/* 十字光芒 */}
+            {star.hasCross && (
+              <>
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white"
+                  style={{
+                    width: `${star.size * 3}px`,
+                    height: '1px'
+                  }}
+                />
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white"
+                  style={{
+                    width: '1px',
+                    height: `${star.size * 3}px`
+                  }}
+                />
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* 主内容区 */}
+      <div className="relative z-10 pt-32 pb-16 px-8">
+        {/* 标题 */}
+        <div className="text-center mb-20 animate-fade-in-up">
+          <h1 className="text-6xl font-bold mb-6 text-white">
+            选择你的哲学导师
+          </h1>
+          <p className="text-xl text-gray-400 tracking-wide">
+            五位思想之光,在宇宙中等待
+          </p>
+        </div>
+
+        {/* 哲学家星球 */}
+        <div className="relative w-full max-w-6xl mx-auto" style={{ minHeight: '700px' }}>
+          {philosophers.map((phil, index) => {
+            const sizeInPx = getSizeInPx(phil.size);
+            
+            return (
+              <div
+                key={phil.id}
+                className="absolute transition-all duration-700 cursor-pointer animate-planet-enter"
+                style={{
+                  ...phil.position,
+                  transform: 'translate(-50%, -50%)',
+                  animationDelay: `${index * 0.15}s`
+                }}
+              >
+                <div className="relative">
+                  {/* 星球主体 */}
+                  <div 
+                    className="relative animate-planet-float"
+                    style={{
+                      width: `${sizeInPx}px`,
+                      height: `${sizeInPx}px`,
+                      animationDelay: `${index * 0.3}s`
+                    }}
+                  >
+                    {/* 多层曲线光圈 - 顶级优化 */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      {/* 生成多层密集光圈 */}
+                      {Array.from({ length: 12 }, (_, ringIndex) => {
+                        const scale = 1.5 + ringIndex * 0.12;
+                        const opacity = 0.7 - ringIndex * 0.05;
+                        const rotationSpeed = 35 + ringIndex * 3;
+                        
+                        return (
+                          <div
+                            key={ringIndex}
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-ring-rotate"
+                            style={{
+                              width: `${sizeInPx * scale}px`,
+                              height: `${sizeInPx * scale * 0.32}px`,
+                              transformStyle: 'preserve-3d',
+                              transform: 'rotateX(75deg)',
+                              animationDelay: `${index * 0.15 + ringIndex * 0.08}s`,
+                              animationDuration: `${rotationSpeed}s`
+                            }}
+                          >
+                            {/* 曲线光圈 - 添加波浪效果 */}
+                            <svg
+                              className="absolute inset-0 w-full h-full"
+                              viewBox="0 0 200 64"
+                              preserveAspectRatio="none"
+                            >
+                              {/* 主光圈 */}
+                              <ellipse
+                                cx="100"
+                                cy="32"
+                                rx="97"
+                                ry="30"
+                                fill="none"
+                                stroke="white"
+                                strokeWidth={0.4 + ringIndex * 0.05}
+                                opacity={opacity}
+                                style={{
+                                  filter: `blur(${ringIndex * 0.1}px)`
+                                }}
+                              />
+                              {/* 内层光晕 */}
+                              {ringIndex < 6 && (
+                                <ellipse
+                                  cx="100"
+                                  cy="32"
+                                  rx="97"
+                                  ry="30"
+                                  fill="none"
+                                  stroke="white"
+                                  strokeWidth="1.5"
+                                  opacity={opacity * 0.3}
+                                  style={{
+                                    filter: `blur(${2 + ringIndex * 0.5}px)`
+                                  }}
+                                />
+                              )}
+                            </svg>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* 星球核心(流动曲线纹理) */}
+                    <div 
+                      className="relative w-full h-full rounded-full overflow-hidden"
+                      style={{
+                        background: 'radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 20%, #d0d0d0 40%, #b0b0b0 60%, #909090 80%, #707070 100%)',
+                        boxShadow: `
+                          0 0 40px rgba(255,255,255,0.4),
+                          inset -20px -20px 50px rgba(0,0,0,0.3),
+                          inset 20px 20px 50px rgba(255,255,255,0.2)
+                        `
+                      }}
+                    >
+                      {/* 流动曲线纹理 - 顶级优化 */}
+                      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <defs>
+                          {/* 定义多个渐变层 */}
+                          <radialGradient id={`radial-grad-${phil.id}`}>
+                            <stop offset="0%" style={{ stopColor: '#000000', stopOpacity: 0.05 }} />
+                            <stop offset="30%" style={{ stopColor: '#000000', stopOpacity: 0.2 }} />
+                            <stop offset="60%" style={{ stopColor: '#000000', stopOpacity: 0.4 }} />
+                            <stop offset="100%" style={{ stopColor: '#000000', stopOpacity: 0.6 }} />
+                          </radialGradient>
+                        </defs>
+                        
+                        {/* 生成高密度不规则曲线 */}
+                        {Array.from({ length: 150 }, (_, i) => {
+                          const y = (i / 150) * 100;
+                          
+                          // 更复杂的波浪算法
+                          const baseAmplitude = 2 + Math.sin(i * 0.15) * 1.5;
+                          const turbulence = Math.sin(i * 0.5) * Math.cos(i * 0.3) * 2;
+                          const amplitude = baseAmplitude + turbulence;
+                          
+                          const frequency1 = 0.1 + (i % 7) * 0.015;
+                          const frequency2 = 0.05 + (i % 5) * 0.01;
+                          const phase1 = i * 0.08;
+                          const phase2 = i * 0.12;
+                          
+                          // 生成高度不规则的波浪路径
+                          let path = `M 0 ${y}`;
+                          for (let x = 0; x <= 100; x += 1) {
+                            // 叠加多个波浪创造不规则性
+                            const wave1 = Math.sin(x * frequency1 + phase1) * amplitude;
+                            const wave2 = Math.sin(x * frequency2 + phase2) * (amplitude * 0.5);
+                            const noise = (Math.random() - 0.5) * 0.3; // 添加微小噪声
+                            const totalWave = wave1 + wave2 + noise;
+                            path += ` L ${x} ${y + totalWave}`;
+                          }
+                          
+                          // 根据位置调整透明度和粗细，创造强烈对比
+                          const distanceFromCenter = Math.abs(50 - y);
+                          const baseOpacity = 0.15 + distanceFromCenter / 100;
+                          const opacityVariation = (i % 5) * 0.08;
+                          const opacity = Math.min(baseOpacity + opacityVariation, 0.7);
+                          
+                          const baseStrokeWidth = 0.12;
+                          const strokeVariation = (i % 6) * 0.04;
+                          const strokeWidth = baseStrokeWidth + strokeVariation;
+                          
+                          return (
+                            <path
+                              key={i}
+                              d={path}
+                              fill="none"
+                              stroke={`url(#grad-${phil.id})`}
+                              strokeWidth={strokeWidth}
+                              opacity={opacity}
+                            />
+                          );
+                        })}
+                      </svg>
+
+                      {/* 首字 */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span 
+                          className="font-bold text-black drop-shadow-lg"
+                          style={{
+                            fontSize: `${sizeInPx * 0.35}px`,
+                            textShadow: '0 2px 10px rgba(255,255,255,0.5)'
+                          }}
+                        >
+                          {phil.name.charAt(0)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 名字 */}
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 text-center whitespace-nowrap animate-fade-in">
+                    <div 
+                      className="font-bold mb-1 text-white"
+                      style={{
+                        fontSize: `${sizeInPx * 0.12}px`
+                      }}
+                    >
+                      {phil.name}
+                    </div>
+                    <div 
+                      className="text-gray-400 tracking-wider"
+                      style={{
+                        fontSize: `${sizeInPx * 0.08}px`
+                      }}
+                    >
+                      {phil.fullName}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* 底部提示 */}
+        <div className="text-center mt-32 text-gray-500 text-sm">
+          <p className="flex items-center justify-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 bg-gray-600"></span>
+            悬停星球查看详情 · 点击开始对话
+            <span className="inline-block w-1.5 h-1.5 bg-gray-600"></span>
+          </p>
+        </div>
+      </div>
+
+      <style>{`
+        /* 流动曲线动画 */
+        @keyframes flow-drift {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(2%, -2%); }
+        }
+        
+        .animate-flow-drift {
+          animation: flow-drift 20s ease-in-out infinite;
+        }
+
+        /* 星球浮动 */
+        @keyframes planet-float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        .animate-planet-float {
+          animation: planet-float 6s ease-in-out infinite;
+        }
+
+        /* 星球进入 */
+        @keyframes planet-enter {
+          0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+          60% { transform: translate(-50%, -50%) scale(1.1); }
+          100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        .animate-planet-enter {
+          animation: planet-enter 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* 光圈旋转 */
+        @keyframes ring-rotate {
+          0% { transform: rotateX(75deg) rotateZ(0deg); }
+          100% { transform: rotateX(75deg) rotateZ(360deg); }
+        }
+        
+        .animate-ring-rotate {
+          animation: ring-rotate 40s linear infinite;
+        }
+
+        /* 通用动画 */
+        @keyframes fade-in-up {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out forwards 0.5s;
+          opacity: 0;
+        }
+      `}</style>
+    </div>
+  );
+}
+
