@@ -87,7 +87,10 @@ export default function SocratesIntro() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ 
+                    duration: 0.5,
+                    ease: [0.4, 0, 0.2, 1]
+                  }}
                 />
               </AnimatePresence>
               {/* 渐变遮罩，边缘融入白色背景 */}
@@ -106,10 +109,13 @@ export default function SocratesIntro() {
               <motion.div
                 key={`text-${currentScene}`}
                 className="text-center relative w-full"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ 
+                  duration: 0.5,
+                  ease: [0.4, 0, 0.2, 1]
+                }}
               >
                 <p 
                   className="text-4xl font-normal tracking-wide leading-relaxed"
