@@ -97,7 +97,7 @@ export default function SocratesIntro() {
   const currentScript = currentScene < script.length ? script[currentScene] : script[script.length - 1];
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-white">
+    <div className="fixed inset-0 overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>
       {/* 跳过按钮 */}
       {showContent && (
         <motion.button
@@ -116,9 +116,12 @@ export default function SocratesIntro() {
       <AnimatePresence>
         {showInkTransition && (
           <motion.div
-            className="absolute inset-0 z-40 flex items-center justify-center bg-black"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.2 }}
+            className="absolute inset-0 z-40 flex items-center justify-center"
+            style={{ backgroundColor: '#000000' }}
+            exit={{ 
+              backgroundColor: '#FAFAFA',
+              transition: { duration: 1.5, ease: "easeInOut" }
+            }}
           >
             {/* 中心墨水扩散 - 黑到白 */}
             {[...Array(6)].map((_, i) => (
@@ -206,14 +209,24 @@ export default function SocratesIntro() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                <img
-                  src={currentScript.image}
-                  alt={currentScript.imageAlt}
-                  className="w-full h-auto max-w-3xl relative"
-                  style={{
-                    filter: 'grayscale(100%) contrast(1.1) brightness(0.95)',
-                  }}
-                />
+                <div className="relative">
+                  <img
+                    src={currentScript.image}
+                    alt={currentScript.imageAlt}
+                    className="w-full h-auto max-w-3xl relative"
+                    style={{
+                      filter: 'grayscale(100%) contrast(1.1) brightness(0.95)',
+                      boxShadow: '0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.06)',
+                    }}
+                  />
+                  {/* 图片边缘渐变遮罩 */}
+                  <div 
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: 'linear-gradient(to bottom, transparent 0%, transparent 85%, #FAFAFA 100%)',
+                    }}
+                  />
+                </div>
               </motion.div>
             </AnimatePresence>
 
