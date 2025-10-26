@@ -111,14 +111,14 @@ export default function SelectPhilosopher() {
     // 触发爆炸动画
     setExplodingId(id);
     
-    // 延迟跳转，让动画播放完
+    // 延迟跳转，让碎片汇聚动画播放完
     setTimeout(() => {
       if (id === 'socrates') {
         setLocation('/intro/socrates');
       } else {
         setLocation(`/chat/${id}`);
       }
-    }, 1200);
+    }, 2000);
   };
 
   return (
@@ -307,7 +307,7 @@ export default function SelectPhilosopher() {
                         top: '50%',
                         width: size + 'px',
                         height: size + 'px',
-                        animation: `explode 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+                        animation: `explodeAndGather 2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
                         animationDelay: `${i * 0.015}s`,
                         '--explode-x': `${Math.cos(angle) * distance}px`,
                         '--explode-y': `${Math.sin(angle) * distance}px`,
@@ -404,14 +404,18 @@ export default function SelectPhilosopher() {
         }
         
         /* 爆炸动画 */
-        @keyframes explode {
+        @keyframes explodeAndGather {
           0% {
-            transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            transform: translate(-50%, -50%) translate(0, 0) rotate(0deg) scale(1);
+            opacity: 1;
+          }
+          40% {
+            transform: translate(-50%, -50%) translate(var(--explode-x), var(--explode-y)) rotate(var(--explode-rotate)) scale(1);
             opacity: 1;
           }
           100% {
-            transform: translate(calc(-50% + var(--explode-x)), calc(-50% + var(--explode-y))) scale(0.5) rotate(var(--explode-rotate));
-            opacity: 0;
+            transform: translate(-50%, -50%) translate(0, 0) rotate(calc(var(--explode-rotate) * 2)) scale(0);
+            opacity: 0.8;
           }
         }
         
