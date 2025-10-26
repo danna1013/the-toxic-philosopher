@@ -576,3 +576,11 @@
 - [x] 移除 xl 断点的超大字体
 - [x] 测试并推送到 GitHub
 
+
+
+
+## 进一步减小首页字体大小
+- [x] 主标题再减小：text-6xl → text-5xl（60px → 48px）
+- [x] 副标题再减小：text-4xl → text-3xl（36px → 30px）
+- [x] 测试并推送到 GitHub
+
