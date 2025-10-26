@@ -132,7 +132,7 @@ export default function SocratesIntro() {
                   {showText && (
                     <motion.div
                       key={`text-${currentScene}`}
-                      className="text-center"
+                      className="text-center relative"
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
@@ -150,6 +150,34 @@ export default function SocratesIntro() {
                       >
                         {currentScript.text}
                       </p>
+                      
+                      {/* 按钮移到文字右下方 */}
+                      <motion.div
+                        className="absolute -bottom-16 right-0"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3, duration: 0.4 }}
+                      >
+                        {currentScene < script.length - 1 ? (
+                          // 前两页：下一页
+                          <button
+                            onClick={handleNext}
+                            className="flex items-center gap-2 text-gray-500 hover:text-black transition-colors duration-300"
+                            aria-label="下一页"
+                          >
+                            <span className="text-base font-normal">下一页</span>
+                            <ArrowRight className="w-5 h-5" />
+                          </button>
+                        ) : (
+                          // 第三页：开始对话按钮
+                          <button
+                            onClick={handleStartChat}
+                            className="text-gray-500 hover:text-black transition-colors duration-300"
+                          >
+                            <span className="text-base font-normal">开始对话</span>
+                          </button>
+                        )}
+                      </motion.div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -164,37 +192,7 @@ export default function SocratesIntro() {
               transition={{ duration: 1, delay: 0.3 }}
             />
 
-            {/* 右下角按钮 */}
-            <AnimatePresence>
-              {showText && (
-                <motion.div
-                  className="absolute bottom-12 right-12 z-50"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ delay: 0.3, duration: 0.4 }}
-                >
-                  {currentScene < script.length - 1 ? (
-                    // 前两页：向右箭头
-                    <button
-                      onClick={handleNext}
-                      className="flex items-center justify-center w-14 h-14 rounded-full bg-black text-white hover:bg-gray-800 transition-all duration-300 hover:scale-110 shadow-lg"
-                      aria-label="下一页"
-                    >
-                      <ArrowRight className="w-6 h-6" />
-                    </button>
-                  ) : (
-                    // 第三页：开始对话按钮
-                    <button
-                      onClick={handleStartChat}
-                      className="px-8 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-all duration-300 hover:scale-105 shadow-lg"
-                    >
-                      <span className="text-lg font-medium">开始对话</span>
-                    </button>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
+
           </motion.div>
         )}
       </AnimatePresence>
