@@ -25,59 +25,14 @@ const script = [
   },
 ];
 
-// 几何碎片组件
-const GeometricFragment = ({ delay = 0, duration = 2 }: { delay?: number; duration?: number }) => {
-  const shapes = ['triangle', 'circle', 'square'];
-  const shape = shapes[Math.floor(Math.random() * shapes.length)];
-  const size = Math.random() * 30 + 10;
-  const startX = Math.random() * window.innerWidth;
-  const startY = Math.random() * window.innerHeight;
-  const endX = Math.random() * 400 - 200;
-  const endY = Math.random() * 400 - 200;
-  const rotation = Math.random() * 720 - 360;
-
-  return (
-    <motion.div
-      className="absolute"
-      style={{
-        left: startX,
-        top: startY,
-        width: size,
-        height: size,
-      }}
-      initial={{ opacity: 0, scale: 0, rotate: 0 }}
-      animate={{
-        opacity: [0, 1, 1, 0],
-        scale: [0, 1, 1, 0.5],
-        x: [0, endX],
-        y: [0, endY],
-        rotate: [0, rotation],
-      }}
-      transition={{
-        duration,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
-      {shape === 'triangle' && (
-        <div className="w-full h-full border-2 border-gray-800" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }} />
-      )}
-      {shape === 'circle' && (
-        <div className="w-full h-full border-2 border-gray-800 rounded-full" />
-      )}
-      {shape === 'square' && (
-        <div className="w-full h-full border-2 border-gray-800" />
-      )}
-    </motion.div>
-  );
-};
-
 export default function SocratesIntro() {
   const [, setLocation] = useLocation();
   const [currentLine, setCurrentLine] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const [showFragments, setShowFragments] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [showText, setShowText] = useState(false);
 
   // 跳过按钮处理
   const handleSkip = () => {
@@ -87,7 +42,7 @@ export default function SocratesIntro() {
     }, 800);
   };
 
-  // 打字机效果
+  // 图片加载和文字出场的编排
   useEffect(() => {
     if (currentLine >= script.length) {
       // 所有字幕播放完毕，显示碎片过渡动画
@@ -98,12 +53,32 @@ export default function SocratesIntro() {
       return () => clearTimeout(timer);
     }
 
+    // 重置状态
+    setImageLoaded(false);
+    setShowText(false);
+    setDisplayedText('');
+    setIsTyping(false);
+
+    // 图片加载完成后，延迟显示文字
+    const imageLoadTimer = setTimeout(() => {
+      setImageLoaded(true);
+      // 图片放大动画完成后（1.5s），开始显示文字
+      const textShowTimer = setTimeout(() => {
+        setShowText(true);
+        startTyping();
+      }, 1500);
+      return () => clearTimeout(textShowTimer);
+    }, 100);
+
+    return () => clearTimeout(imageLoadTimer);
+  }, [currentLine]);
+
+  // 打字机效果
+  const startTyping = () => {
     const currentText = script[currentLine].text;
     let charIndex = 0;
-    setDisplayedText('');
     setIsTyping(true);
 
-    // 打字机效果
     const typingInterval = setInterval(() => {
       if (charIndex < currentText.length) {
         setDisplayedText(currentText.slice(0, charIndex + 1));
@@ -123,7 +98,7 @@ export default function SocratesIntro() {
       clearInterval(typingInterval);
       clearTimeout(nextLineTimer);
     };
-  }, [currentLine, setLocation]);
+  };
 
   if (currentLine >= script.length && !showFragments) {
     return null;
@@ -148,9 +123,45 @@ export default function SocratesIntro() {
       {/* 过渡碎片动画 */}
       {showFragments && (
         <div className="absolute inset-0 z-40 pointer-events-none">
-          {[...Array(30)].map((_, i) => (
-            <GeometricFragment key={i} delay={i * 0.03} duration={1.5} />
-          ))}
+          {[...Array(30)].map((_, i) => {
+            const angle = (i / 30) * Math.PI * 2;
+            const distance = 150 + Math.random() * 100;
+            const size = Math.random() * 30 + 10;
+            return (
+              <motion.div
+                key={i}
+                className="absolute"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  width: size,
+                  height: size,
+                }}
+                initial={{ opacity: 0, scale: 0, rotate: 0 }}
+                animate={{
+                  opacity: [0, 1, 1, 0],
+                  scale: [0, 1, 1, 0.5],
+                  x: [0, Math.cos(angle) * distance],
+                  y: [0, Math.sin(angle) * distance],
+                  rotate: [0, Math.random() * 720 - 360],
+                }}
+                transition={{
+                  duration: 1.5,
+                  delay: i * 0.03,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <div 
+                  className="w-full h-full"
+                  style={{
+                    clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+                    backgroundColor: '#fcd34d',
+                    boxShadow: '0 0 10px #fcd34d',
+                  }}
+                />
+              </motion.div>
+            );
+          })}
         </div>
       )}
 
@@ -163,16 +174,19 @@ export default function SocratesIntro() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.8 }}
           >
-            {/* 图片区域 */}
+            {/* 图片区域 - 先出现并放大 */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentLine}
                 className="w-full max-w-md flex items-center justify-center relative"
-                initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
-                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                exit={{ opacity: 0, scale: 0.8, rotateY: 15 }}
+                initial={{ opacity: 0, scale: 0.3 }}
+                animate={{ 
+                  opacity: imageLoaded ? 1 : 0, 
+                  scale: imageLoaded ? 1 : 0.3,
+                }}
+                exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ 
-                  duration: 1.2, 
+                  duration: 1.5, 
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
@@ -180,77 +194,51 @@ export default function SocratesIntro() {
                 <motion.div
                   className="absolute inset-0 -z-10"
                   initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 0.1, scale: 1.2 }}
-                  exit={{ opacity: 0, scale: 0.5 }}
-                  transition={{ duration: 1 }}
+                  animate={{ opacity: imageLoaded ? 0.1 : 0, scale: imageLoaded ? 1.2 : 0.5 }}
+                  transition={{ duration: 1.2 }}
                   style={{
                     background: 'radial-gradient(circle, rgba(74, 74, 74, 0.15) 0%, transparent 70%)',
                     filter: 'blur(40px)',
                   }}
                 />
                 
-                <motion.img
+                <img
                   src={currentScript.image}
                   alt={currentScript.imageAlt}
                   className="w-full h-auto max-w-sm relative z-10"
-                  initial={{ filter: 'blur(10px)' }}
-                  animate={{ filter: 'blur(0px)' }}
-                  transition={{ duration: 0.8 }}
+                  onLoad={() => setImageLoaded(true)}
                 />
-
-                {/* 图片切换时的碎片效果 */}
-                {currentLine > 0 && (
-                  <div className="absolute inset-0 pointer-events-none">
-                    {[...Array(8)].map((_, i) => (
-                      <motion.div
-                        key={`frag-${currentLine}-${i}`}
-                        className="absolute w-4 h-4 border border-gray-700"
-                        style={{
-                          left: `${Math.random() * 100}%`,
-                          top: `${Math.random() * 100}%`,
-                        }}
-                        initial={{ opacity: 1, scale: 1 }}
-                        animate={{
-                          opacity: 0,
-                          scale: 0,
-                          x: (Math.random() - 0.5) * 200,
-                          y: (Math.random() - 0.5) * 200,
-                          rotate: Math.random() * 360,
-                        }}
-                        transition={{ duration: 0.8, delay: i * 0.05 }}
-                      />
-                    ))}
-                  </div>
-                )}
               </motion.div>
             </AnimatePresence>
 
-            {/* 文字区域 */}
+            {/* 文字区域 - 图片稳定后从下方淡入 */}
             <div className="w-full max-w-3xl">
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentLine}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                  className="text-center"
-                >
-                  <p 
-                    className="text-2xl md:text-3xl lg:text-4xl font-serif leading-relaxed tracking-wide"
-                    style={{ color: '#4A4A4A' }}
+                {showText && (
+                  <motion.div
+                    key={`text-${currentLine}`}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    className="text-center"
                   >
-                    {displayedText}
-                    {isTyping && (
-                      <motion.span
-                        className="inline-block w-0.5 h-7 md:h-9 ml-1"
-                        style={{ backgroundColor: '#4A4A4A' }}
-                        animate={{ opacity: [1, 0] }}
-                        transition={{ duration: 0.8, repeat: Infinity }}
-                      />
-                    )}
-                  </p>
-                </motion.div>
+                    <p 
+                      className="text-2xl md:text-3xl lg:text-4xl font-serif leading-relaxed tracking-wide"
+                      style={{ color: '#4A4A4A' }}
+                    >
+                      {displayedText}
+                      {isTyping && (
+                        <motion.span
+                          className="inline-block w-0.5 h-7 md:h-9 ml-1"
+                          style={{ backgroundColor: '#4A4A4A' }}
+                          animate={{ opacity: [1, 0] }}
+                          transition={{ duration: 0.8, repeat: Infinity }}
+                        />
+                      )}
+                    </p>
+                  </motion.div>
+                )}
               </AnimatePresence>
             </div>
           </motion.div>

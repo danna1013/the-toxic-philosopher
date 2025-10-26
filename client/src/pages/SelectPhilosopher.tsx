@@ -76,6 +76,17 @@ export default function SelectPhilosopher() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [explodingId, setExplodingId] = useState<string | null>(null);
+  const [isReturning, setIsReturning] = useState(false);
+  
+  // 检测是否从其他页面返回
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('hasVisitedSelect');
+    if (hasVisited) {
+      setIsReturning(true);
+    } else {
+      sessionStorage.setItem('hasVisitedSelect', 'true');
+    }
+  }, []);
 
   // 预加载所有图片
   useEffect(() => {
@@ -209,10 +220,10 @@ export default function SelectPhilosopher() {
 
       {/* 标题 - 分步动画 */}
       <div className="relative z-10 text-center pt-12 pb-8">
-        <h1 className="text-5xl font-bold mb-4 tracking-wider animate-fadeInStep1">
+        <h1 className={`text-5xl font-bold mb-4 tracking-wider ${isReturning ? '' : 'animate-fadeInStep1'}`}>
           宇宙不在乎你的困惑
         </h1>
-        <p className="text-gray-400 text-2xl md:text-3xl tracking-wider font-light animate-fadeInStep2">选一个，或者OUT</p>
+        <p className={`text-gray-400 text-2xl md:text-3xl tracking-wider font-light ${isReturning ? '' : 'animate-fadeInStep2'}`}>选一个，或者OUT</p>
       </div>
 
       {/* 竖直发光连接线 */}
@@ -227,7 +238,7 @@ export default function SelectPhilosopher() {
       </div>
 
       {/* 星球容器 - 延迟显示 */}
-      <div className="relative h-[1200px] w-full animate-fadeInStep3">
+      <div className={`relative h-[1200px] w-full ${isReturning ? '' : 'animate-fadeInStep3'}`}>
         {philosophers.map((phil) => (
           <div
             key={phil.id}
@@ -283,8 +294,8 @@ export default function SelectPhilosopher() {
             {/* 爆炸碎片动画 */}
             {explodingId === phil.id && (
               <div className="absolute inset-0 pointer-events-none">
-                {[...Array(20)].map((_, i) => {
-                  const angle = (i / 20) * Math.PI * 2;
+                {[...Array(40)].map((_, i) => {
+                  const angle = (i / 40) * Math.PI * 2;
                   const distance = 150 + Math.random() * 100;
                   const size = Math.random() * 20 + 10;
                   return (
@@ -297,18 +308,33 @@ export default function SelectPhilosopher() {
                         width: size + 'px',
                         height: size + 'px',
                         animation: `explode 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
-                        animationDelay: `${i * 0.02}s`,
+                        animationDelay: `${i * 0.015}s`,
                         '--explode-x': `${Math.cos(angle) * distance}px`,
                         '--explode-y': `${Math.sin(angle) * distance}px`,
                         '--explode-rotate': `${Math.random() * 720}deg`,
                       } as React.CSSProperties}
                     >
+                      {/* 星星形状碎片 */}
                       <div 
-                        className="w-full h-full border-2"
+                        className="w-full h-full"
                         style={{
-                          borderColor: phil.color,
-                          clipPath: i % 3 === 0 ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : (i % 3 === 1 ? 'none' : 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'),
-                          borderRadius: i % 3 === 1 ? '50%' : '0',
+                          clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+                          backgroundColor: phil.color,
+                          boxShadow: `0 0 ${size * 0.8}px ${phil.color}, 0 0 ${size * 1.5}px ${phil.color}`,
+                          filter: 'brightness(1.2)',
+                        }}
+                      />
+                      {/* 流星拖尾 */}
+                      <div
+                        className="absolute"
+                        style={{
+                          width: size * 2 + 'px',
+                          height: size * 0.3 + 'px',
+                          background: `linear-gradient(to left, ${phil.color} 0%, transparent 100%)`,
+                          left: '100%',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          opacity: 0.6,
                         }}
                       />
                     </div>
