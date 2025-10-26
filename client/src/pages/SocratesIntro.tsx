@@ -3,34 +3,25 @@ import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
-// 定义三幕内容 - 优化后的时间控制
+// 定义三幕内容 - 统一样式
 const script = [
   { 
     text: "我是苏格拉底，雅典的'牛虻'。", 
-    duration: 3500, // 图片1s + 文字0.5s + 停留2s
+    duration: 3500,
     image: "/socrates-scene-1.png",
     imageAlt: "雅典广场",
-    fontSize: "text-3xl md:text-4xl",
-    fontWeight: "font-normal",
-    letterSpacing: "tracking-wide"
   },
   { 
     text: "我的使命，就是用问题戳穿所有确定的答案。", 
-    duration: 3000, // 图片1s + 文字0.5s + 停留1.5s
+    duration: 3000,
     image: "/socrates-scene-2.png",
     imageAlt: "质疑与碎片",
-    fontSize: "text-4xl md:text-5xl",
-    fontWeight: "font-bold",
-    letterSpacing: "tracking-normal"
   },
   { 
     text: "哪怕最终喝下毒酒，也要唤醒雅典对真理的诚实。", 
-    duration: 2000, // 图片1s + 文字0.5s + 停留0.5s
+    duration: 2000,
     image: "/socrates-scene-3.png",
     imageAlt: "真理之光",
-    fontSize: "text-4xl md:text-5xl lg:text-6xl",
-    fontWeight: "font-normal",
-    letterSpacing: "tracking-widest"
   },
 ];
 
@@ -39,14 +30,13 @@ export default function SocratesIntro() {
   const [currentScene, setCurrentScene] = useState(0);
   const [showInkTransition, setShowInkTransition] = useState(true);
   const [showContent, setShowContent] = useState(false);
-  const [showText, setShowText] = useState(false);
 
   // 跳过按钮
   const handleSkip = () => {
     setLocation('/chat/socrates');
   };
 
-  // 墨水扩散入场动画 - 加快到1秒
+  // 墨水扩散入场动画 - 1秒
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowInkTransition(false);
@@ -55,22 +45,14 @@ export default function SocratesIntro() {
     return () => clearTimeout(timer);
   }, []);
 
-  // 场景切换逻辑
+  // 场景切换逻辑 - 优化流畅度
   useEffect(() => {
     if (!showContent || currentScene >= script.length) return;
-
-    // 图片出现后0.5秒，文字淡入
-    const textTimer = setTimeout(() => {
-      setShowText(true);
-    }, 1000);
 
     // 当前场景结束，切换到下一场景
     const sceneTimer = setTimeout(() => {
       if (currentScene < script.length - 1) {
-        setShowText(false);
-        setTimeout(() => {
-          setCurrentScene(prev => prev + 1);
-        }, 500); // 0.5秒切换时间
+        setCurrentScene(prev => prev + 1);
       } else {
         // 最后一幕结束，淡出跳转
         setTimeout(() => {
@@ -80,7 +62,6 @@ export default function SocratesIntro() {
     }, script[currentScene].duration);
 
     return () => {
-      clearTimeout(textTimer);
       clearTimeout(sceneTimer);
     };
   }, [currentScene, showContent, setLocation]);
@@ -103,7 +84,7 @@ export default function SocratesIntro() {
         </motion.button>
       )}
 
-      {/* 黑白墨水扩散入场动画 - 加快到1秒 */}
+      {/* 黑白墨水扩散入场动画 - 1秒 */}
       <AnimatePresence>
         {showInkTransition && (
           <motion.div
@@ -174,7 +155,7 @@ export default function SocratesIntro() {
       <AnimatePresence>
         {showContent && (
           <motion.div
-            className="h-full flex flex-col items-center justify-center px-8 md:px-16 py-12 gap-16 relative"
+            className="h-full flex flex-col items-center justify-center px-8 md:px-16 py-12 gap-12 relative"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
@@ -187,57 +168,48 @@ export default function SocratesIntro() {
               transition={{ duration: 1, delay: 0.5 }}
             />
 
-            {/* 图片区域 - 黑白滤镜 - 加快到1秒 */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentScene}
-                className="w-full flex items-center justify-center relative"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ 
-                  duration: 1,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <div className="relative">
+            {/* 图片和文字容器 - 交叉淡入淡出 */}
+            <div className="w-full flex flex-col items-center justify-center gap-12">
+              {/* 图片区域 - 移除阴影和边框 */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`image-${currentScene}`}
+                  className="w-full flex items-center justify-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ 
+                    duration: 0.8,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
                   <img
                     src={currentScript.image}
                     alt={currentScript.imageAlt}
-                    className="w-full h-auto max-w-3xl relative"
+                    className="w-full h-auto max-w-3xl"
                     style={{
                       filter: 'grayscale(100%) contrast(1.1) brightness(0.95)',
-                      boxShadow: '0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.06)',
                     }}
                   />
-                  {/* 图片边缘渐变遮罩 */}
-                  <div 
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: 'linear-gradient(to bottom, transparent 0%, transparent 85%, #FAFAFA 100%)',
-                    }}
-                  />
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
 
-            {/* 文字区域 - 整句淡入0.5秒 */}
-            <div className="w-full max-w-4xl relative min-h-[120px] flex items-center justify-center">
-              <AnimatePresence mode="wait">
-                {showText && (
+              {/* 文字区域 - 统一样式，交叉淡入淡出 */}
+              <div className="w-full max-w-4xl relative min-h-[100px] flex items-center justify-center">
+                <AnimatePresence mode="wait">
                   <motion.div
                     key={`text-${currentScene}`}
                     className="text-center"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     transition={{ 
-                      duration: 0.5,
-                      ease: "easeOut",
+                      duration: 0.8,
+                      ease: [0.22, 1, 0.36, 1],
                     }}
                   >
                     <p 
-                      className={`${currentScript.fontSize} ${currentScript.fontWeight} ${currentScript.letterSpacing} leading-relaxed`}
+                      className="text-4xl font-normal tracking-wide leading-relaxed"
                       style={{ 
                         color: '#000000',
                         fontFamily: "'Noto Serif SC', 'LXGW WenKai', serif",
@@ -246,8 +218,8 @@ export default function SocratesIntro() {
                       {currentScript.text}
                     </p>
                   </motion.div>
-                )}
-              </AnimatePresence>
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* 底部装饰线 */}
