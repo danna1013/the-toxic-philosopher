@@ -111,18 +111,21 @@ export default function SelectPhilosopher() {
     // 触发爆炸动画
     setExplodingId(id);
     
-    // 延迟跳转，让碎片汇聚动画播放完
+    // 延迟跳转，让粒子爆炸和背景渐变动画播放完
     setTimeout(() => {
       if (id === 'socrates') {
         setLocation('/intro/socrates');
       } else {
         setLocation(`/chat/${id}`);
       }
-    }, 2000);
+    }, 2500);
   };
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+    <div className="min-h-screen text-white relative overflow-hidden" style={{
+      backgroundColor: explodingId ? '#FAFAFA' : '#000000',
+      transition: explodingId ? 'background-color 1.5s ease-in-out 1s' : 'none',
+    }}>
       {/* 星空背景 */}
       <div className="absolute inset-0 overflow-hidden">
         {/* 背景星星 */}
@@ -273,24 +276,24 @@ export default function SelectPhilosopher() {
             {/* 黑白墨水扩散动画 */}
             {explodingId === phil.id && (
               <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                {/* 中心黑白墨水扩散波纹 */}
-                {[...Array(6)].map((_, i) => (
+                {/* 中心黑白墨水扩散波纹 - 全屏扩散 */}
+                {[...Array(8)].map((_, i) => (
                   <div
                     key={`ink-${i}`}
                     className="absolute rounded-full"
                     style={{
-                      background: `radial-gradient(circle, rgba(255, 255, 255, ${0.9 - i * 0.15}) 0%, rgba(255, 255, 255, 0) 70%)`,
-                      animation: `inkSpreadBW 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
-                      animationDelay: `${i * 0.15}s`,
+                      background: `radial-gradient(circle, rgba(255, 255, 255, ${0.9 - i * 0.1}) 0%, rgba(255, 255, 255, 0) 60%)`,
+                      animation: `inkSpreadBWFullscreen 2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+                      animationDelay: `${i * 0.1}s`,
                     }}
                   />
                 ))}
                 
-                {/* 黑白墨点飘散 */}
-                {[...Array(40)].map((_, i) => {
-                  const angle = (i / 40) * Math.PI * 2;
-                  const distance = 200 + Math.random() * 350;
-                  const size = 2 + Math.random() * 5;
+                {/* 黑白粒子全屏爆炸 */}
+                {[...Array(60)].map((_, i) => {
+                  const angle = (i / 60) * Math.PI * 2;
+                  const distance = 800 + Math.random() * 600; // 全屏距离
+                  const size = 3 + Math.random() * 8;
                   const isWhite = Math.random() > 0.5;
                   return (
                     <div
@@ -302,9 +305,9 @@ export default function SelectPhilosopher() {
                         width: size + 'px',
                         height: size + 'px',
                         backgroundColor: isWhite ? '#FFFFFF' : '#000000',
-                        opacity: 0.6,
-                        animation: `inkDotBW 1.8s ease-out forwards`,
-                        animationDelay: `${0.6 + i * 0.015}s`,
+                        opacity: 0.8,
+                        animation: `inkDotBW 2s ease-out forwards`,
+                        animationDelay: `${0.3 + i * 0.01}s`,
                         '--dot-x': `${Math.cos(angle) * distance}px`,
                         '--dot-y': `${Math.sin(angle) * distance}px`,
                       } as React.CSSProperties}
@@ -389,6 +392,25 @@ export default function SelectPhilosopher() {
           100% {
             width: 1000px;
             height: 1000px;
+            opacity: 0;
+          }
+        }
+        
+        /* 黑白墨水全屏扩散动画 */
+        @keyframes inkSpreadBWFullscreen {
+          0% {
+            width: 0;
+            height: 0;
+            opacity: 0;
+          }
+          20% {
+            width: 1200px;
+            height: 1200px;
+            opacity: 0.9;
+          }
+          100% {
+            width: 3000px;
+            height: 3000px;
             opacity: 0;
           }
         }
