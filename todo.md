@@ -448,3 +448,17 @@
   - [x] 确保容器尺寸固定
 - [x] 优化布局，确保切换时位置固定
 
+
+
+## 恢复选择哲学家页面的入场动画
+- [x] 首次进入时，标题、副标题、星球依次淡入：
+  - [x] 添加 fadeInStep 动画定义
+  - [x] animate-fadeInStep1：0s 延迟，0.8s 时长
+  - [x] animate-fadeInStep2：0.3s 延迟，0.8s 时长
+  - [x] animate-fadeInStep3：0.6s 延迟，0.8s 时长
+  - [x] 动画效果：淡入 + 向上位移 20px
+- [x] 从对话页面返回时，不需要淡入动画，直接显示
+- [x] 使用 isReturning 状态判断是否首次进入：
+  - [x] sessionStorage.getItem('hasVisitedSelect')
+  - [x] 返回时不添加动画类名
+
