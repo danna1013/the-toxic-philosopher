@@ -536,3 +536,12 @@
 - [x] 配置静态资源缓存策略
 - [x] 推送到 GitHub 触发重新部署
 
+
+
+
+## 修复 Vercel 部署问题
+- [x] 重新生成 pnpm-lock.yaml 文件
+- [x] 确保 lockfile 与 package.json 同步
+- [x] 简化 vercel.json 配置
+- [x] 推送更新到 GitHub
+
