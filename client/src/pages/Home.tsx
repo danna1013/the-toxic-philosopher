@@ -159,11 +159,11 @@ export default function Home() {
       >
         {/* 主标题区域 - 添加渐入动画 */}
         <div className="text-center mb-12 md:mb-16 lg:mb-20 max-w-6xl animate-fade-in-up">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black tracking-tight leading-[1.1] mb-4 md:mb-6">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black tracking-tight leading-[1.1] mb-4 md:mb-6">
             真相往往不太礼貌
           </h1>
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-gray-600 tracking-tight leading-[1.2] animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-600 tracking-tight leading-[1.2] animate-fade-in-up" style={{animationDelay: '0.2s'}}>
             但总比谎言有用
           </h2>
         </div>
