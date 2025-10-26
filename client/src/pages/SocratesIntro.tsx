@@ -7,21 +7,21 @@ import { X } from 'lucide-react';
 const script = [
   { 
     text: "我是苏格拉底，雅典的'牛虻'。", 
-    duration: 4000,
-    image: "/socrates-intro-1.jpg",
-    imageAlt: "苏格拉底肖像"
+    duration: 5500, // 增加停顿时间
+    image: "/socrates-intro-1-new.png",
+    imageAlt: "苏格拉底侧面像"
   },
   { 
     text: "我的使命，就是用问题戳穿所有确定的答案。", 
-    duration: 5000,
-    image: "/socrates-intro-2.jpg",
-    imageAlt: "苏格拉底深思"
+    duration: 7000,
+    image: "/socrates-intro-2-new.png",
+    imageAlt: "苏格拉底思考"
   },
   { 
     text: "哪怕最终喝下毒酒，也要唤醒雅典对真理的诚实。", 
-    duration: 6000,
-    image: "/socrates-intro-3.jpg",
-    imageAlt: "苏格拉底之死"
+    duration: 7500,
+    image: "/socrates-intro-3-new.png",
+    imageAlt: "苏格拉底与毒酒"
   },
 ];
 
@@ -42,7 +42,7 @@ export default function SocratesIntro() {
       // 所有字幕播放完毕，跳转
       const timer = setTimeout(() => {
         setLocation('/chat/socrates');
-      }, 800);
+      }, 1200);
       return () => clearTimeout(timer);
     }
 
@@ -51,7 +51,7 @@ export default function SocratesIntro() {
     setDisplayedText('');
     setIsTyping(true);
 
-    // 打字机效果：逐字显示
+    // 打字机效果：逐字显示，速度放慢
     const typingInterval = setInterval(() => {
       if (charIndex < currentText.length) {
         setDisplayedText(currentText.slice(0, charIndex + 1));
@@ -60,7 +60,7 @@ export default function SocratesIntro() {
         clearInterval(typingInterval);
         setIsTyping(false);
       }
-    }, 80); // 每个字符显示间隔 80ms
+    }, 150); // 从80ms增加到150ms，营造庄严感
 
     // 当前行显示完成后，等待一段时间再切换到下一行
     const nextLineTimer = setTimeout(() => {
@@ -84,53 +84,60 @@ export default function SocratesIntro() {
       {/* 跳过按钮 */}
       <motion.button
         onClick={handleSkip}
-        className="absolute top-8 right-8 z-50 flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors group"
+        className="absolute top-8 right-8 z-50 flex items-center gap-2 px-4 py-2 text-gray-500 hover:text-gray-800 transition-colors group"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.8 }}
       >
         <span className="text-sm font-medium">跳过</span>
         <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
       </motion.button>
 
-      {/* 主内容区域 */}
-      <div className="h-full flex flex-col md:flex-row items-center justify-center px-8 md:px-16 gap-8 md:gap-16">
-        {/* 图片区域 */}
+      {/* 主内容区域 - 上下布局 */}
+      <div className="h-full flex flex-col items-center justify-center px-8 md:px-16 py-12 gap-12 md:gap-16">
+        {/* 图片区域 - 在上方 */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentLine}
-            className="w-full md:w-1/2 max-w-md"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="w-full max-w-md flex items-center justify-center"
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
           >
             <img
               src={currentScript.image}
               alt={currentScript.imageAlt}
-              className="w-full h-auto rounded-lg shadow-2xl grayscale"
+              className="w-full h-auto max-w-sm"
               style={{
-                filter: 'grayscale(100%) contrast(1.1)',
+                filter: 'none', // 保持原始黑白线条风格
               }}
             />
           </motion.div>
         </AnimatePresence>
 
-        {/* 文字区域 */}
-        <div className="w-full md:w-1/2 max-w-2xl">
+        {/* 文字区域 - 在下方 */}
+        <div className="w-full max-w-3xl">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentLine}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.8 }}
+              className="text-center"
             >
-              <p className="text-3xl md:text-4xl lg:text-5xl font-serif text-gray-900 leading-relaxed tracking-wide">
+              <p 
+                className="text-2xl md:text-3xl lg:text-4xl font-serif leading-relaxed tracking-wide"
+                style={{
+                  color: '#4A4A4A', // 深灰色，更柔和、更具文艺感
+                }}
+              >
                 {displayedText}
                 {isTyping && (
                   <motion.span
-                    className="inline-block w-1 h-8 md:h-10 bg-gray-900 ml-1"
+                    className="inline-block w-0.5 h-7 md:h-9 ml-1"
+                    style={{ backgroundColor: '#4A4A4A' }}
                     animate={{ opacity: [1, 0] }}
                     transition={{ duration: 0.8, repeat: Infinity }}
                   />
