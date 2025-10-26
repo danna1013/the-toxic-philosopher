@@ -545,3 +545,13 @@
 - [x] 简化 vercel.json 配置
 - [x] 推送更新到 GitHub
 
+
+
+
+## 修改构建脚本以支持 Vercel 静态部署
+- [x] 将 build 脚本改为纯静态构建（vite build）
+- [x] 将原 build 脚本重命名为 build:full（包含服务器构建）
+- [x] 更新 vercel.json 明确指定构建命令和输出目录
+- [x] Vercel 现在只构建静态文件，不包含 Express 服务器
+- [x] 推送更新到 GitHub
+
