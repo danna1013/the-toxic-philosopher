@@ -91,7 +91,7 @@ export default function SocratesIntro() {
                     alt={currentScript.imageAlt}
                     className="w-full h-auto"
                     style={{
-                      filter: 'grayscale(100%) contrast(1.1) brightness(1.05)',
+                      filter: 'grayscale(100%) contrast(1.05) brightness(1.15)',
                       mixBlendMode: 'multiply',
                     }}
                   />
@@ -99,7 +99,7 @@ export default function SocratesIntro() {
                   <div 
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: 'linear-gradient(to bottom, rgba(250,250,250,0.3) 0%, rgba(250,250,250,0) 20%, rgba(250,250,250,0) 80%, rgba(250,250,250,0.3) 100%), linear-gradient(to right, rgba(250,250,250,0.2) 0%, rgba(250,250,250,0) 15%, rgba(250,250,250,0) 85%, rgba(250,250,250,0.2) 100%)',
+                      background: 'linear-gradient(to bottom, rgba(250,250,250,0.6) 0%, rgba(250,250,250,0) 30%, rgba(250,250,250,0) 70%, rgba(250,250,250,0.6) 100%), linear-gradient(to right, rgba(250,250,250,0.5) 0%, rgba(250,250,250,0) 25%, rgba(250,250,250,0) 75%, rgba(250,250,250,0.5) 100%)',
                     }}
                   />
                 </motion.div>
