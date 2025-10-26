@@ -105,10 +105,10 @@ export default function SocratesIntro() {
 
             {/* 图片和文字容器 */}
             <div className="w-full flex flex-col items-center justify-center gap-12">
-              {/* 图片区域 - 淡入 */}
+              {/* 图片区域 - 淡入，背景融合 */}
               <motion.div
                 key={`image-${currentScene}`}
-                className="w-full flex items-center justify-center"
+                className="w-full flex items-center justify-center relative"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ 
@@ -116,14 +116,24 @@ export default function SocratesIntro() {
                   ease: "easeOut",
                 }}
               >
-                <img
-                  src={currentScript.image}
-                  alt={currentScript.imageAlt}
-                  className="w-full h-auto max-w-3xl"
-                  style={{
-                    filter: 'grayscale(100%) contrast(1.1) brightness(0.95)',
-                  }}
-                />
+                <div className="relative w-full max-w-3xl">
+                  <img
+                    src={currentScript.image}
+                    alt={currentScript.imageAlt}
+                    className="w-full h-auto"
+                    style={{
+                      filter: 'grayscale(100%) contrast(1.1) brightness(1.05)',
+                      mixBlendMode: 'multiply',
+                    }}
+                  />
+                  {/* 渐变遮罩，边缘融入白色背景 */}
+                  <div 
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: 'linear-gradient(to bottom, rgba(250,250,250,0.3) 0%, rgba(250,250,250,0) 20%, rgba(250,250,250,0) 80%, rgba(250,250,250,0.3) 100%), linear-gradient(to right, rgba(250,250,250,0.2) 0%, rgba(250,250,250,0) 15%, rgba(250,250,250,0) 85%, rgba(250,250,250,0.2) 100%)',
+                    }}
+                  />
+                </div>
               </motion.div>
 
               {/* 文字区域 - 图片出现后从下方向上浮现 */}
