@@ -66,17 +66,8 @@ export default function SocratesIntro() {
   const currentScript = currentScene < script.length ? script[currentScene] : script[script.length - 1];
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{
-      background: 'linear-gradient(to bottom, #3E2723 0%, #5D4037 30%, #D7CCC8 70%, #F5F1E8 100%)',
-    }}>
-      {/* 羊皮纸纹理叠加层 */}
-      <div 
-        className="absolute inset-0 opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'200\' height=\'200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' /%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.4\' /%3E%3C/svg%3E")',
-          backgroundSize: '200px 200px',
-        }}
-      />
+    <div className="fixed inset-0 overflow-hidden bg-white">
+
 
       {/* 跳过按钮 */}
       {showContent && (
@@ -162,7 +153,7 @@ export default function SocratesIntro() {
             className="h-full flex flex-col items-center justify-center px-8 md:px-16 py-12 gap-12 relative"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.5 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
           >
             {/* 古希腊建筑线条装饰 - 顶部 */}
             <motion.div
@@ -180,12 +171,12 @@ export default function SocratesIntro() {
               <motion.div
                 key={currentScene}
                 className="w-full flex items-center justify-center relative"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.05 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ 
-                  duration: 1.5,
-                  ease: [0.22, 1, 0.36, 1],
+                  duration: 2,
+                  ease: "easeInOut",
                 }}
               >
                 {/* 柔和的光晕 - 仅第三幕 */}
@@ -193,7 +184,7 @@ export default function SocratesIntro() {
                   <motion.div
                     className="absolute inset-0 -z-10"
                     style={{
-                      background: 'radial-gradient(circle, rgba(212, 165, 116, 0.2) 0%, transparent 60%)',
+                      background: 'radial-gradient(circle, rgba(193, 68, 14, 0.1) 0%, transparent 60%)',
                       filter: 'blur(40px)',
                     }}
                     animate={{
@@ -266,7 +257,7 @@ export default function SocratesIntro() {
                   style={{
                     width: 1 + Math.random() * 2,
                     height: 1 + Math.random() * 2,
-                    backgroundColor: '#8D6E63',
+                    backgroundColor: '#C1440E',
                     left: `${Math.random() * 100}%`,
                     top: `${Math.random() * 100}%`,
                   }}
