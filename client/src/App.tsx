@@ -7,6 +7,10 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import SelectPhilosopher from "./pages/SelectPhilosopher";
 import SocratesIntro from "./pages/SocratesIntro";
+import WittgensteinIntro from "./pages/WittgensteinIntro";
+import NietzscheIntro from "./pages/NietzscheIntro";
+import KantIntro from "./pages/KantIntro";
+import FreudIntro from "./pages/FreudIntro";
 import Chat from "./pages/Chat";
 
 function Router() {
@@ -15,6 +19,10 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path="/select" component={SelectPhilosopher} />
       <Route path="/intro/socrates" component={SocratesIntro} />
+      <Route path="/intro/wittgenstein" component={WittgensteinIntro} />
+      <Route path="/intro/nietzsche" component={NietzscheIntro} />
+      <Route path="/intro/kant" component={KantIntro} />
+      <Route path="/intro/freud" component={FreudIntro} />
       <Route path="/chat/:id" component={Chat} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}

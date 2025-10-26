@@ -113,11 +113,7 @@ export default function SelectPhilosopher() {
     
     // 延迟跳转，让粒子爆炸和背景渐变动画播放完
     setTimeout(() => {
-      if (id === 'socrates') {
-        setLocation('/intro/socrates');
-      } else {
-        setLocation(`/chat/${id}`);
-      }
+      setLocation(`/intro/${id}`);
     }, 2500);
   };
 
