@@ -37,12 +37,12 @@ export default function SocratesIntro() {
     setLocation('/chat/socrates');
   };
 
-  // 白色背景粒子收缩入场动画 - 1.2秒
+  // 白色背景粒子收缩入场动画 - 1秒
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowParticles(false);
       setShowContent(true);
-    }, 1200);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -99,7 +99,7 @@ export default function SocratesIntro() {
         </motion.button>
       )}
 
-      {/* 白色背景粒子收缩入场动画 - 1.2秒 */}
+      {/* 白色背景粒子收缩入场动画 - 1秒 */}
       <AnimatePresence>
         {showParticles && (
           <motion.div
@@ -109,12 +109,16 @@ export default function SocratesIntro() {
               transition: { duration: 0.3 }
             }}
           >
-            {/* 黑白粒子从四周向中心收缩（白色背景上） */}
-            {[...Array(50)].map((_, i) => {
-              const angle = (i / 50) * Math.PI * 2;
-              const startDistance = 700 + Math.random() * 300;
-              const size = 2 + Math.random() * 5;
-              const isBlack = Math.random() > 0.3; // 70%黑色，30%白色
+            {/* 黑白粒子从四周向中心螺旋汇聚（白色背景上） */}
+            {[...Array(60)].map((_, i) => {
+              const angle = (i / 60) * Math.PI * 2;
+              const startDistance = 700 + Math.random() * 400;
+              const size = 2 + Math.random() * 6;
+              const isBlack = Math.random() > 0.25; // 75%黑色，25%白色
+              
+              // 螺旋轨迹参数
+              const spiralFactor = 0.3 + Math.random() * 0.2;
+              const spiralDirection = Math.random() > 0.5 ? 1 : -1;
               
               return (
                 <motion.div
@@ -124,32 +128,34 @@ export default function SocratesIntro() {
                     width: size,
                     height: size,
                     backgroundColor: isBlack ? '#000000' : '#FFFFFF',
-                    boxShadow: isBlack ? 'none' : '0 0 4px rgba(0,0,0,0.3)',
+                    boxShadow: isBlack ? 'none' : '0 0 6px rgba(0,0,0,0.4)',
                   }}
                   initial={{ 
                     x: Math.cos(angle) * startDistance,
                     y: Math.sin(angle) * startDistance,
                     opacity: 0,
-                    scale: 0.3,
+                    scale: 0.2,
                   }}
                   animate={{
                     x: [
                       Math.cos(angle) * startDistance,
-                      Math.cos(angle) * (startDistance * 0.2),
+                      Math.cos(angle + spiralDirection * spiralFactor) * (startDistance * 0.5),
+                      Math.cos(angle + spiralDirection * spiralFactor * 2) * (startDistance * 0.15),
                       0
                     ],
                     y: [
                       Math.sin(angle) * startDistance,
-                      Math.sin(angle) * (startDistance * 0.2),
+                      Math.sin(angle + spiralDirection * spiralFactor) * (startDistance * 0.5),
+                      Math.sin(angle + spiralDirection * spiralFactor * 2) * (startDistance * 0.15),
                       0
                     ],
-                    opacity: [0, 1, 1, 0.5],
-                    scale: [0.3, 1.5, 1],
+                    opacity: [0, 0.8, 1, 0.6],
+                    scale: [0.2, 1.2, 1.5, 0.8],
                   }}
                   transition={{
-                    duration: 1.2,
-                    delay: i * 0.008,
-                    ease: [0.22, 1, 0.36, 1],
+                    duration: 1,
+                    delay: (i / 60) * 0.3, // 螺旋式分批出现
+                    ease: [0.65, 0, 0.35, 1], // easeInOutCubic - 慢快慢节奏
                   }}
                 />
               );
