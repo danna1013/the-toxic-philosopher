@@ -216,19 +216,19 @@
 
   /* 第一步：标题 - 立即开始 */
   .animate-fadeInStep1 {
-    animation: fadeInStep 0.8s ease-out 0s forwards;
+    animation: fadeInStep 1.2s ease-out 0s forwards;
     opacity: 0;
   }
 
-  /* 第二步：副标题 - 延迟 0.3 秒 */
+  /* 第二步：副标题 - 延迟 0.6 秒 */
   .animate-fadeInStep2 {
-    animation: fadeInStep 0.8s ease-out 0.3s forwards;
+    animation: fadeInStep 1.2s ease-out 0.6s forwards;
     opacity: 0;
   }
 
-  /* 第三步：星球容器 - 延迟 0.6 秒 */
+  /* 第三步：星球容器 - 延迟 1.2 秒 */
   .animate-fadeInStep3 {
-    animation: fadeInStep 0.8s ease-out 0.6s forwards;
+    animation: fadeInStep 1.2s ease-out 1.2s forwards;
     opacity: 0;
   }
 }
