@@ -291,53 +291,43 @@ export default function SelectPhilosopher() {
               }}
             />
             
-            {/* 爆炸碎片动画 */}
+            {/* 墨水扩散动画 */}
             {explodingId === phil.id && (
-              <div className="absolute inset-0 pointer-events-none">
-                {[...Array(40)].map((_, i) => {
-                  const angle = (i / 40) * Math.PI * 2;
-                  const distance = 150 + Math.random() * 100;
-                  const size = Math.random() * 20 + 10;
+              <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                {/* 中心墨水扩散波纹 */}
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={`ink-${i}`}
+                    className="absolute rounded-full"
+                    style={{
+                      background: `radial-gradient(circle, ${phil.color}40 0%, transparent 70%)`,
+                      animation: `inkSpread 2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+                      animationDelay: `${i * 0.15}s`,
+                    }}
+                  />
+                ))}
+                
+                {/* 墨点飘散 */}
+                {[...Array(30)].map((_, i) => {
+                  const angle = (i / 30) * Math.PI * 2;
+                  const distance = 100 + Math.random() * 150;
+                  const size = 2 + Math.random() * 4;
                   return (
                     <div
-                      key={`explode-${i}`}
-                      className="absolute"
+                      key={`dot-${i}`}
+                      className="absolute rounded-full"
                       style={{
                         left: '50%',
                         top: '50%',
                         width: size + 'px',
                         height: size + 'px',
-                        animation: `explodeAndGather 2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
-                        animationDelay: `${i * 0.015}s`,
-                        '--explode-x': `${Math.cos(angle) * distance}px`,
-                        '--explode-y': `${Math.sin(angle) * distance}px`,
-                        '--explode-rotate': `${Math.random() * 720}deg`,
+                        backgroundColor: phil.color,
+                        animation: `inkDot 1.5s ease-out forwards`,
+                        animationDelay: `${0.3 + i * 0.02}s`,
+                        '--dot-x': `${Math.cos(angle) * distance}px`,
+                        '--dot-y': `${Math.sin(angle) * distance}px`,
                       } as React.CSSProperties}
-                    >
-                      {/* 星星形状碎片 */}
-                      <div 
-                        className="w-full h-full"
-                        style={{
-                          clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
-                          backgroundColor: phil.color,
-                          boxShadow: `0 0 ${size * 0.8}px ${phil.color}, 0 0 ${size * 1.5}px ${phil.color}`,
-                          filter: 'brightness(1.2)',
-                        }}
-                      />
-                      {/* 流星拖尾 */}
-                      <div
-                        className="absolute"
-                        style={{
-                          width: size * 2 + 'px',
-                          height: size * 0.3 + 'px',
-                          background: `linear-gradient(to left, ${phil.color} 0%, transparent 100%)`,
-                          left: '100%',
-                          top: '50%',
-                          transform: 'translateY(-50%)',
-                          opacity: 0.6,
-                        }}
-                      />
-                    </div>
+                    />
                   );
                 })}
               </div>
@@ -403,19 +393,35 @@ export default function SelectPhilosopher() {
           opacity: 0;
         }
         
-        /* 爆炸动画 */
-        @keyframes explodeAndGather {
+        /* 墨水扩散动画 */
+        @keyframes inkSpread {
           0% {
-            transform: translate(-50%, -50%) translate(0, 0) rotate(0deg) scale(1);
-            opacity: 1;
+            width: 0;
+            height: 0;
+            opacity: 0;
           }
-          40% {
-            transform: translate(-50%, -50%) translate(var(--explode-x), var(--explode-y)) rotate(var(--explode-rotate)) scale(1);
-            opacity: 1;
+          50% {
+            opacity: 0.6;
           }
           100% {
-            transform: translate(-50%, -50%) translate(0, 0) rotate(calc(var(--explode-rotate) * 2)) scale(0);
+            width: 600px;
+            height: 600px;
+            opacity: 0;
+          }
+        }
+        
+        /* 墨点飘散动画 */
+        @keyframes inkDot {
+          0% {
+            transform: translate(-50%, -50%) translate(0, 0);
+            opacity: 0;
+          }
+          30% {
             opacity: 0.8;
+          }
+          100% {
+            transform: translate(-50%, -50%) translate(var(--dot-x), var(--dot-y));
+            opacity: 0;
           }
         }
         

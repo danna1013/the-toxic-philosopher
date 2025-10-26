@@ -3,455 +3,286 @@ import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
-// 定义字幕、图片和时间轴
+// 定义三幕内容
 const script = [
   { 
     text: "我是苏格拉底，雅典的'牛虻'。", 
     duration: 6000,
     image: "/socrates-scene-1.png",
-    imageAlt: "雅典广场",
-    theme: "calm" // 从容
+    imageAlt: "雅典广场"
   },
   { 
     text: "我的使命，就是用问题戳穿所有确定的答案。", 
     duration: 7000,
     image: "/socrates-scene-2.png",
-    imageAlt: "质疑与碎片",
-    theme: "intense" // 犀利
+    imageAlt: "质疑与碎片"
   },
   { 
     text: "哪怕最终喝下毒酒，也要唤醒雅典对真理的诚实。", 
     duration: 7500,
     image: "/socrates-scene-3.png",
-    imageAlt: "真理之光",
-    theme: "serene" // 平静坚定
+    imageAlt: "真理之光"
   },
 ];
 
 export default function SocratesIntro() {
   const [, setLocation] = useLocation();
   const [currentScene, setCurrentScene] = useState(0);
-  const [showPortal, setShowPortal] = useState(true);
+  const [showInkTransition, setShowInkTransition] = useState(true);
   const [showContent, setShowContent] = useState(false);
-  const [imageFragments, setImageFragments] = useState<boolean>(false);
-  const [exitAnimation, setExitAnimation] = useState(false);
 
-  // 跳过按钮处理
+  // 跳过按钮
   const handleSkip = () => {
-    setExitAnimation(true);
-    setTimeout(() => {
-      setLocation('/chat/socrates');
-    }, 1200);
+    setLocation('/chat/socrates');
   };
 
-  // 初始传送门动画
+  // 墨水扩散入场动画
   useEffect(() => {
-    const portalTimer = setTimeout(() => {
-      setShowPortal(false);
+    const timer = setTimeout(() => {
+      setShowInkTransition(false);
       setShowContent(true);
-    }, 2500);
-
-    return () => clearTimeout(portalTimer);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   // 场景切换逻辑
   useEffect(() => {
     if (!showContent || currentScene >= script.length) return;
 
-    // 如果不是第一个场景，显示碎片过渡
-    if (currentScene > 0) {
-      setImageFragments(true);
-      const fragmentTimer = setTimeout(() => {
-        setImageFragments(false);
-      }, 1500);
-      return () => clearTimeout(fragmentTimer);
-    }
-
-    const sceneTimer = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (currentScene < script.length - 1) {
         setCurrentScene(prev => prev + 1);
       } else {
-        // 最后一幕结束，开始退出动画
-        setExitAnimation(true);
+        // 最后一幕结束，淡出跳转
         setTimeout(() => {
           setLocation('/chat/socrates');
-        }, 1500);
+        }, 1000);
       }
     }, script[currentScene].duration);
 
-    return () => clearTimeout(sceneTimer);
+    return () => clearTimeout(timer);
   }, [currentScene, showContent, setLocation]);
 
   const currentScript = currentScene < script.length ? script[currentScene] : script[script.length - 1];
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-gray-900 via-gray-100 to-white overflow-hidden">
+    <div className="fixed inset-0 overflow-hidden" style={{
+      background: 'linear-gradient(to bottom, #3E2723 0%, #5D4037 30%, #D7CCC8 70%, #F5F1E8 100%)',
+    }}>
+      {/* 羊皮纸纹理叠加层 */}
+      <div 
+        className="absolute inset-0 opacity-10 pointer-events-none"
+        style={{
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'200\' height=\'200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' /%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.4\' /%3E%3C/svg%3E")',
+          backgroundSize: '200px 200px',
+        }}
+      />
+
       {/* 跳过按钮 */}
-      {!exitAnimation && (
+      {showContent && (
         <motion.button
           onClick={handleSkip}
-          className="absolute top-8 right-8 z-50 flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors group"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          className="absolute top-8 right-8 z-50 flex items-center gap-2 px-4 py-2 transition-colors group"
+          style={{ color: '#6D4C41' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
+          whileHover={{ color: '#3E2723' }}
         >
           <span className="text-sm font-medium">跳过</span>
           <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
         </motion.button>
       )}
 
-      {/* 传送门入场动画 */}
+      {/* 墨水扩散入场动画 */}
       <AnimatePresence>
-        {showPortal && (
+        {showInkTransition && (
           <motion.div
             className="absolute inset-0 z-40 flex items-center justify-center"
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 1 }}
           >
-            {/* 汇聚的星星碎片形成传送门 */}
-            <motion.div
-              className="relative w-96 h-96"
-              initial={{ scale: 0, rotate: 0 }}
-              animate={{ scale: 1, rotate: 360 }}
-              transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {/* 发光的圆形传送门 */}
+            {/* 中心墨水扩散 */}
+            {[...Array(5)].map((_, i) => (
               <motion.div
-                className="absolute inset-0 rounded-full"
+                key={i}
+                className="absolute rounded-full"
                 style={{
-                  background: 'radial-gradient(circle, rgba(252, 211, 77, 0.8) 0%, rgba(252, 211, 77, 0.3) 50%, transparent 70%)',
-                  boxShadow: '0 0 80px rgba(252, 211, 77, 0.6), inset 0 0 80px rgba(252, 211, 77, 0.4)',
+                  background: `radial-gradient(circle, rgba(193, 68, 14, ${0.3 - i * 0.05}) 0%, transparent 70%)`,
                 }}
+                initial={{ width: 0, height: 0, opacity: 0 }}
                 animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.8, 1, 0.8],
+                  width: [0, 800 + i * 200, 1200 + i * 300],
+                  height: [0, 800 + i * 200, 1200 + i * 300],
+                  opacity: [0, 0.6, 0],
                 }}
                 transition={{
                   duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
+                  delay: i * 0.2,
+                  ease: [0.22, 1, 0.36, 1],
                 }}
               />
-              
-              {/* 旋转的星星碎片 */}
-              {[...Array(20)].map((_, i) => {
-                const angle = (i / 20) * Math.PI * 2;
-                const radius = 180;
-                return (
-                  <motion.div
-                    key={i}
-                    className="absolute"
-                    style={{
-                      left: '50%',
-                      top: '50%',
-                      width: '16px',
-                      height: '16px',
-                    }}
-                    initial={{
-                      x: Math.cos(angle) * radius * 2,
-                      y: Math.sin(angle) * radius * 2,
-                      opacity: 0,
-                    }}
-                    animate={{
-                      x: Math.cos(angle) * radius,
-                      y: Math.sin(angle) * radius,
-                      opacity: [0, 1, 1],
-                      rotate: [0, 360],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      delay: i * 0.05,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
-                        backgroundColor: '#fcd34d',
-                        boxShadow: '0 0 10px #fcd34d',
-                      }}
-                    />
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {/* 速度线效果 */}
-            <motion.div
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 0.5, 0] }}
-              transition={{ duration: 2, delay: 1.5 }}
-            >
-              {[...Array(30)].map((_, i) => {
-                const angle = (i / 30) * Math.PI * 2;
-                return (
-                  <motion.div
-                    key={i}
-                    className="absolute left-1/2 top-1/2 w-1 bg-gradient-to-r from-yellow-400 to-transparent"
-                    style={{
-                      height: '2px',
-                      transformOrigin: 'left center',
-                      transform: `rotate(${angle}rad)`,
-                    }}
-                    animate={{
-                      scaleX: [0, 200, 0],
-                      opacity: [0, 1, 0],
-                    }}
-                    transition={{
-                      duration: 0.8,
-                      delay: 1.5 + i * 0.02,
-                      ease: "easeOut",
-                    }}
-                  />
-                );
-              })}
-            </motion.div>
+            ))}
+            
+            {/* 墨点飘散 */}
+            {[...Array(30)].map((_, i) => {
+              const angle = (i / 30) * Math.PI * 2;
+              const distance = 200 + Math.random() * 300;
+              return (
+                <motion.div
+                  key={`dot-${i}`}
+                  className="absolute rounded-full"
+                  style={{
+                    width: 3 + Math.random() * 6,
+                    height: 3 + Math.random() * 6,
+                    backgroundColor: '#C1440E',
+                  }}
+                  initial={{ x: 0, y: 0, opacity: 0 }}
+                  animate={{
+                    x: Math.cos(angle) * distance,
+                    y: Math.sin(angle) * distance,
+                    opacity: [0, 0.8, 0],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    delay: 0.5 + i * 0.02,
+                    ease: "easeOut",
+                  }}
+                />
+              );
+            })}
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* 主内容区域 */}
       <AnimatePresence>
-        {showContent && !exitAnimation && (
+        {showContent && (
           <motion.div
-            key="main-content"
-            className="h-full flex flex-col items-center justify-center px-8 md:px-16 py-12 gap-8 relative"
+            className="h-full flex flex-col items-center justify-center px-8 md:px-16 py-12 gap-12 relative"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 1.5 }}
           >
-            {/* 背景漂浮粒子 */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              {[...Array(50)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-1 h-1 bg-gray-400 rounded-full"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                  }}
-                  animate={{
-                    y: [0, -30, 0],
-                    opacity: [0.2, 0.5, 0.2],
-                  }}
-                  transition={{
-                    duration: 3 + Math.random() * 2,
-                    repeat: Infinity,
-                    delay: Math.random() * 2,
-                  }}
-                />
-              ))}
-            </div>
+            {/* 古希腊建筑线条装饰 - 顶部 */}
+            <motion.div
+              className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-1"
+              style={{
+                background: 'linear-gradient(to right, transparent 0%, #C1440E 50%, transparent 100%)',
+              }}
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 0.3 }}
+              transition={{ duration: 1.5, delay: 0.5 }}
+            />
 
-            {/* 场景切换的碎片动画 */}
-            <AnimatePresence>
-              {imageFragments && (
-                <div className="absolute inset-0 z-30 pointer-events-none">
-                  {[...Array(30)].map((_, i) => {
-                    const angle = (i / 30) * Math.PI * 2;
-                    const distance = 200 + Math.random() * 100;
-                    const size = 20 + Math.random() * 30;
-                    return (
-                      <motion.div
-                        key={i}
-                        className="absolute left-1/2 top-1/2"
-                        style={{
-                          width: size,
-                          height: size,
-                        }}
-                        initial={{ x: 0, y: 0, opacity: 0, rotate: 0, scale: 0 }}
-                        animate={{
-                          x: [0, Math.cos(angle) * distance, 0],
-                          y: [0, Math.sin(angle) * distance, 0],
-                          opacity: [0, 1, 1, 0],
-                          rotate: [0, Math.random() * 360, Math.random() * 720],
-                          scale: [0, 1, 1, 0.5],
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          delay: i * 0.02,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                      >
-                        <div
-                          className="w-full h-full"
-                          style={{
-                            backgroundColor: currentScene === 2 ? '#fcd34d' : '#9ca3af',
-                            clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-                            boxShadow: currentScene === 2 ? '0 0 20px #fcd34d' : 'none',
-                          }}
-                        />
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              )}
-            </AnimatePresence>
-
-            {/* 图片区域 - 电影级入场 */}
+            {/* 图片区域 - 克制的淡入和缩放 */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentScene}
-                className="w-full flex items-center justify-center relative z-20"
-                initial={{ 
-                  opacity: 0, 
-                  scale: 0.5,
-                  z: -500,
-                  filter: 'blur(20px)',
-                }}
-                animate={{ 
-                  opacity: 1, 
-                  scale: currentScene === 2 ? 1.05 : 1,
-                  z: 0,
-                  filter: 'blur(0px)',
-                }}
-                exit={{ 
-                  opacity: 0, 
-                  scale: 0.8,
-                  rotateY: currentScene < 2 ? 90 : 0,
-                }}
+                className="w-full flex items-center justify-center relative"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
                 transition={{ 
-                  duration: 2, 
+                  duration: 1.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                {/* 光晕效果 - 第三幕特别强 */}
+                {/* 柔和的光晕 - 仅第三幕 */}
                 {currentScene === 2 && (
                   <motion.div
                     className="absolute inset-0 -z-10"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ 
-                      opacity: [0.3, 0.6, 0.3], 
-                      scale: [1, 1.2, 1],
+                    style={{
+                      background: 'radial-gradient(circle, rgba(212, 165, 116, 0.2) 0%, transparent 60%)',
+                      filter: 'blur(40px)',
                     }}
-                    transition={{ 
-                      duration: 2,
+                    animate={{
+                      opacity: [0.3, 0.5, 0.3],
+                    }}
+                    transition={{
+                      duration: 3,
                       repeat: Infinity,
                       ease: "easeInOut",
-                    }}
-                    style={{
-                      background: 'radial-gradient(circle, rgba(252, 211, 77, 0.4) 0%, transparent 70%)',
-                      filter: 'blur(60px)',
                     }}
                   />
                 )}
                 
-                <motion.img
+                <img
                   src={currentScript.image}
                   alt={currentScript.imageAlt}
-                  className="w-full h-auto max-w-3xl relative z-10"
-                  animate={{
-                    scale: currentScene === 0 ? [1, 1.02, 1] : 1,
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: currentScene === 0 ? Infinity : 0,
-                    ease: "easeInOut",
+                  className="w-full h-auto max-w-3xl relative"
+                  style={{
+                    filter: 'contrast(1.05) saturate(0.9)',
                   }}
                 />
               </motion.div>
             </AnimatePresence>
 
-            {/* 文字区域 - 从图片中浮现 */}
-            <div className="w-full max-w-4xl relative z-20">
+            {/* 文字区域 - 像墨水书写般浮现 */}
+            <div className="w-full max-w-4xl relative">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`text-${currentScene}`}
-                  className="text-center relative"
-                  initial={{ opacity: 0, y: 60 }}
+                  className="text-center"
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -30 }}
+                  exit={{ opacity: 0, y: -10 }}
                   transition={{ 
-                    duration: 1.2, 
-                    delay: 1.5,
+                    duration: 1.2,
+                    delay: 1,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  {/* 文字光效 - 第三幕 */}
-                  {currentScene === 2 && (
-                    <motion.div
-                      className="absolute inset-0 -z-10"
-                      animate={{
-                        opacity: [0.2, 0.4, 0.2],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                      }}
-                      style={{
-                        background: 'radial-gradient(ellipse, rgba(252, 211, 77, 0.3) 0%, transparent 70%)',
-                        filter: 'blur(30px)',
-                      }}
-                    />
-                  )}
-                  
-                  <motion.p 
-                    className="text-3xl md:text-4xl lg:text-5xl font-serif leading-relaxed tracking-wide relative"
+                  <p 
+                    className="text-3xl md:text-4xl lg:text-5xl font-serif leading-relaxed tracking-wide"
                     style={{ 
-                      color: currentScene === 2 ? '#92400e' : '#4A4A4A',
-                      textShadow: currentScene === 2 ? '0 0 20px rgba(252, 211, 77, 0.3)' : 'none',
-                    }}
-                    animate={{
-                      scale: currentScene === 1 ? [1, 1.02, 1] : 1,
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: currentScene === 1 ? Infinity : 0,
+                      color: '#2C2416',
+                      textShadow: currentScene === 2 ? '0 2px 20px rgba(212, 165, 116, 0.3)' : 'none',
                     }}
                   >
                     {currentScript.text}
-                  </motion.p>
+                  </p>
                 </motion.div>
               </AnimatePresence>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* 退出动画 - 溶解成光粒子 */}
-      <AnimatePresence>
-        {exitAnimation && (
-          <motion.div
-            className="absolute inset-0 z-50 pointer-events-none flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {[...Array(100)].map((_, i) => {
-              const angle = (i / 100) * Math.PI * 2;
-              const distance = 50 + Math.random() * 300;
-              const size = 4 + Math.random() * 8;
-              return (
+            {/* 古希腊建筑线条装饰 - 底部 */}
+            <motion.div
+              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-1"
+              style={{
+                background: 'linear-gradient(to right, transparent 0%, #C1440E 50%, transparent 100%)',
+              }}
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 0.3 }}
+              transition={{ duration: 1.5, delay: 0.5 }}
+            />
+
+            {/* 漂浮的纸张纤维粒子 */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {[...Array(20)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute"
+                  className="absolute rounded-full"
                   style={{
-                    left: '50%',
-                    top: '50%',
-                    width: size,
-                    height: size,
-                    backgroundColor: '#fcd34d',
-                    borderRadius: '50%',
-                    boxShadow: '0 0 10px #fcd34d',
+                    width: 1 + Math.random() * 2,
+                    height: 1 + Math.random() * 2,
+                    backgroundColor: '#8D6E63',
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
                   }}
                   animate={{
-                    x: Math.cos(angle) * distance,
-                    y: Math.sin(angle) * distance,
-                    opacity: [1, 0],
-                    scale: [1, 0],
+                    y: [0, -50, 0],
+                    opacity: [0.2, 0.4, 0.2],
                   }}
                   transition={{
-                    duration: 1.2,
-                    delay: i * 0.005,
-                    ease: "easeOut",
+                    duration: 5 + Math.random() * 3,
+                    repeat: Infinity,
+                    delay: Math.random() * 3,
+                    ease: "easeInOut",
                   }}
                 />
-              );
-            })}
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
