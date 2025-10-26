@@ -28,23 +28,13 @@ const script = [
 export default function SocratesIntro() {
   const [, setLocation] = useLocation();
   const [currentScene, setCurrentScene] = useState(0);
-  const [showParticles, setShowParticles] = useState(true);
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(true);
   const [showText, setShowText] = useState(false);
 
   // 跳过按钮
   const handleSkip = () => {
     setLocation('/chat/socrates');
   };
-
-  // 白色背景粒子收缩入场动画 - 1秒
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowParticles(false);
-      setShowContent(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
 
   // 场景切换逻辑
   useEffect(() => {
@@ -86,7 +76,7 @@ export default function SocratesIntro() {
   return (
     <div className="fixed inset-0 overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>
       {/* 跳过按钮 */}
-      {(showParticles || showContent) && (
+      {showContent && (
         <motion.button
           onClick={handleSkip}
           className="absolute top-8 right-8 z-50 flex items-center gap-2 px-4 py-2 text-gray-800 hover:text-black transition-colors group"
@@ -98,71 +88,6 @@ export default function SocratesIntro() {
           <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
         </motion.button>
       )}
-
-      {/* 白色背景粒子收缩入场动画 - 1秒 */}
-      <AnimatePresence>
-        {showParticles && (
-          <motion.div
-            className="absolute inset-0 z-40 flex items-center justify-center"
-            exit={{ 
-              opacity: 0,
-              transition: { duration: 0.3 }
-            }}
-          >
-            {/* 黑白粒子从四周向中心螺旋汇聚（白色背景上） */}
-            {[...Array(60)].map((_, i) => {
-              const angle = (i / 60) * Math.PI * 2;
-              const startDistance = 700 + Math.random() * 400;
-              const size = 2 + Math.random() * 6;
-              const isBlack = Math.random() > 0.25; // 75%黑色，25%白色
-              
-              // 螺旋轨迹参数
-              const spiralFactor = 0.3 + Math.random() * 0.2;
-              const spiralDirection = Math.random() > 0.5 ? 1 : -1;
-              
-              return (
-                <motion.div
-                  key={`particle-${i}`}
-                  className="absolute rounded-full"
-                  style={{
-                    width: size,
-                    height: size,
-                    backgroundColor: isBlack ? '#000000' : '#FFFFFF',
-                    boxShadow: isBlack ? 'none' : '0 0 6px rgba(0,0,0,0.4)',
-                  }}
-                  initial={{ 
-                    x: Math.cos(angle) * startDistance,
-                    y: Math.sin(angle) * startDistance,
-                    opacity: 0,
-                    scale: 0.2,
-                  }}
-                  animate={{
-                    x: [
-                      Math.cos(angle) * startDistance,
-                      Math.cos(angle + spiralDirection * spiralFactor) * (startDistance * 0.5),
-                      Math.cos(angle + spiralDirection * spiralFactor * 2) * (startDistance * 0.15),
-                      0
-                    ],
-                    y: [
-                      Math.sin(angle) * startDistance,
-                      Math.sin(angle + spiralDirection * spiralFactor) * (startDistance * 0.5),
-                      Math.sin(angle + spiralDirection * spiralFactor * 2) * (startDistance * 0.15),
-                      0
-                    ],
-                    opacity: [0, 0.8, 1, 0.6],
-                    scale: [0.2, 1.2, 1.5, 0.8],
-                  }}
-                  transition={{
-                    duration: 1,
-                    delay: (i / 60) * 0.3, // 螺旋式分批出现
-                    ease: [0.65, 0, 0.35, 1], // easeInOutCubic - 慢快慢节奏
-                  }}
-                />
-              );
-            })}
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* 主内容区域 */}
       <AnimatePresence>
