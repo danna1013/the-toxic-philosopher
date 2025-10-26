@@ -1,25 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 
 // 定义三幕内容
 const script = [
   { 
     text: "我是苏格拉底，雅典的'牛虻'。", 
-    duration: 3500, // 图片0.6s + 文字0.6s + 展示2.3s
     image: "/socrates-scene-1.png",
     imageAlt: "雅典广场",
   },
   { 
     text: "我的使命，就是用问题戳穿所有确定的答案。", 
-    duration: 3000, // 图片0.6s + 文字0.6s + 展示1.8s
     image: "/socrates-scene-2.png",
     imageAlt: "质疑与碎片",
   },
   { 
     text: "哪怕最终喝下毒酒，也要唤醒雅典对真理的诚实。", 
-    duration: 2500, // 图片0.6s + 文字0.6s + 展示1.3s
     image: "/socrates-scene-3.png",
     imageAlt: "真理之光",
   },
@@ -36,40 +33,39 @@ export default function SocratesIntro() {
     setLocation('/chat/socrates');
   };
 
-  // 场景切换逻辑
+  // 下一页按钮
+  const handleNext = () => {
+    if (currentScene < script.length - 1) {
+      // 图片和文字同时淡出
+      setShowText(false);
+      setShowContent(false);
+      
+      // 0.5秒后切换到下一场景
+      setTimeout(() => {
+        setCurrentScene(prev => prev + 1);
+        setShowContent(true);
+      }, 500);
+    }
+  };
+
+  // 开始对话按钮
+  const handleStartChat = () => {
+    setLocation('/chat/socrates');
+  };
+
+  // 图片出现后，文字浮现
   useEffect(() => {
-    if (!showContent || currentScene >= script.length) return;
+    if (!showContent) return;
 
     // 图片出现后0.6秒，文字开始浮现
     const textTimer = setTimeout(() => {
       setShowText(true);
     }, 600);
 
-    // 当前场景结束，切换到下一场景
-    const sceneTimer = setTimeout(() => {
-      if (currentScene < script.length - 1) {
-        // 图片和文字同时淡出
-        setShowText(false);
-        setShowContent(false);
-        
-        // 0.5秒后切换到下一场景，图片和文字同时淡入
-        setTimeout(() => {
-          setCurrentScene(prev => prev + 1);
-          setShowContent(true);
-        }, 500);
-      } else {
-        // 最后一幕结束，淡出跳转
-        setTimeout(() => {
-          setLocation('/chat/socrates');
-        }, 1000);
-      }
-    }, script[currentScene].duration);
-
     return () => {
       clearTimeout(textTimer);
-      clearTimeout(sceneTimer);
     };
-  }, [currentScene, showContent, setLocation]);
+  }, [currentScene, showContent]);
 
   const currentScript = currentScene < script.length ? script[currentScene] : script[script.length - 1];
 
@@ -167,6 +163,38 @@ export default function SocratesIntro() {
               animate={{ scaleX: 1, opacity: 0.2 }}
               transition={{ duration: 1, delay: 0.3 }}
             />
+
+            {/* 右下角按钮 */}
+            <AnimatePresence>
+              {showText && (
+                <motion.div
+                  className="absolute bottom-12 right-12 z-50"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                >
+                  {currentScene < script.length - 1 ? (
+                    // 前两页：向右箭头
+                    <button
+                      onClick={handleNext}
+                      className="flex items-center justify-center w-14 h-14 rounded-full bg-black text-white hover:bg-gray-800 transition-all duration-300 hover:scale-110 shadow-lg"
+                      aria-label="下一页"
+                    >
+                      <ArrowRight className="w-6 h-6" />
+                    </button>
+                  ) : (
+                    // 第三页：开始对话按钮
+                    <button
+                      onClick={handleStartChat}
+                      className="px-8 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-all duration-300 hover:scale-105 shadow-lg"
+                    >
+                      <span className="text-lg font-medium">开始对话</span>
+                    </button>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
