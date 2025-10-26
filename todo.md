@@ -485,3 +485,16 @@
 - [ ] 更新路由配置，添加新的介绍页面路由
 - [ ] 更新选择页面，点击对应哲学家进入介绍页面
 
+
+
+## 重新绘制苏格拉底场景图片
+- [x] 重新生成苏格拉底三幕场景图片（黑白插画风格）：
+  - [x] socrates-scene-1-new.png：雅典广场场景，苏格拉底站在希腊柱廊中
+  - [x] socrates-scene-2-new.png：抽象的问号和几何碎片，象征质疑与思考
+  - [x] socrates-scene-3-new.png：毒酒杯特写+光芒，象征真理与牺牲
+- [x] 处理新图片背景为白色：
+  - [x] socrates-scene-1-white.png (186KB)
+  - [x] socrates-scene-2-white.png (148KB)
+  - [x] socrates-scene-3-white.png (150KB)
+- [x] 替换旧图片文件（自动替换，文件名相同）
+
