@@ -6,18 +6,18 @@ import { X, ArrowRight } from 'lucide-react';
 // 定义三幕内容
 const script = [
   { 
-    text: "我是苏格拉底，雅典的'牛虻'。", 
-    image: "/socrates-scene-1.png",
+    text: "我是苏格拉底，雅典的'牛虹'。", 
+    image: "/socrates-scene-1-white.png",
     imageAlt: "雅典广场",
   },
   { 
     text: "我的使命，就是用问题戳穿所有确定的答案。", 
-    image: "/socrates-scene-2.png",
+    image: "/socrates-scene-2-white.png",
     imageAlt: "质疑与碎片",
   },
   { 
     text: "哪怕最终喝下毒酒，也要唤醒雅典对真理的诚实。", 
-    image: "/socrates-scene-3.png",
+    image: "/socrates-scene-3-white.png",
     imageAlt: "真理之光",
   },
 ];
@@ -91,15 +91,7 @@ export default function SocratesIntro() {
                     alt={currentScript.imageAlt}
                     className="w-full h-auto"
                     style={{
-                      filter: 'grayscale(100%) contrast(1.05) brightness(1.15)',
-                      mixBlendMode: 'multiply',
-                    }}
-                  />
-                  {/* 渐变遮罩，边缘融入白色背景 */}
-                  <div 
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: 'linear-gradient(to bottom, rgba(250,250,250,0.6) 0%, rgba(250,250,250,0) 30%, rgba(250,250,250,0) 70%, rgba(250,250,250,0.6) 100%), linear-gradient(to right, rgba(250,250,250,0.5) 0%, rgba(250,250,250,0) 25%, rgba(250,250,250,0) 75%, rgba(250,250,250,0.5) 100%)',
+                      filter: 'grayscale(100%)',
                     }}
                   />
                 </motion.div>
