@@ -75,6 +75,7 @@ export default function SelectPhilosopher() {
   const [, setLocation] = useLocation();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [explodingId, setExplodingId] = useState<string | null>(null);
 
   // 预加载所有图片
   useEffect(() => {
@@ -96,11 +97,17 @@ export default function SelectPhilosopher() {
   }, []);
 
   const handleSelect = (id: string) => {
-    if (id === 'socrates') {
-      setLocation('/intro/socrates');
-    } else {
-      setLocation(`/chat/${id}`);
-    }
+    // 触发爆炸动画
+    setExplodingId(id);
+    
+    // 延迟跳转，让动画播放完
+    setTimeout(() => {
+      if (id === 'socrates') {
+        setLocation('/intro/socrates');
+      } else {
+        setLocation(`/chat/${id}`);
+      }
+    }, 1200);
   };
 
   return (
@@ -267,10 +274,48 @@ export default function SelectPhilosopher() {
               loading="eager"
               style={{
                 filter: hoveredId === phil.id ? 'brightness(1.2) drop-shadow(0 0 30px currentColor)' : 'brightness(1) drop-shadow(0 0 10px rgba(255,255,255,0.3))',
-                opacity: imagesLoaded ? 1 : 0,
-                transition: 'filter 0.3s ease, opacity 0.5s ease',
+                opacity: explodingId === phil.id ? 0 : (imagesLoaded ? 1 : 0),
+                transform: explodingId === phil.id ? 'scale(2)' : 'scale(1)',
+                transition: explodingId === phil.id ? 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)' : 'filter 0.3s ease, opacity 0.5s ease',
               }}
             />
+            
+            {/* 爆炸碎片动画 */}
+            {explodingId === phil.id && (
+              <div className="absolute inset-0 pointer-events-none">
+                {[...Array(20)].map((_, i) => {
+                  const angle = (i / 20) * Math.PI * 2;
+                  const distance = 150 + Math.random() * 100;
+                  const size = Math.random() * 20 + 10;
+                  return (
+                    <div
+                      key={`explode-${i}`}
+                      className="absolute"
+                      style={{
+                        left: '50%',
+                        top: '50%',
+                        width: size + 'px',
+                        height: size + 'px',
+                        animation: `explode 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+                        animationDelay: `${i * 0.02}s`,
+                        '--explode-x': `${Math.cos(angle) * distance}px`,
+                        '--explode-y': `${Math.sin(angle) * distance}px`,
+                        '--explode-rotate': `${Math.random() * 720}deg`,
+                      } as React.CSSProperties}
+                    >
+                      <div 
+                        className="w-full h-full border-2"
+                        style={{
+                          borderColor: phil.color,
+                          clipPath: i % 3 === 0 ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : (i % 3 === 1 ? 'none' : 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'),
+                          borderRadius: i % 3 === 1 ? '50%' : '0',
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
 
             {/* 信息卡片 */}
             {hoveredId === phil.id && (
@@ -330,6 +375,18 @@ export default function SelectPhilosopher() {
           /* 初始状态保持45度旋转 */
           transform: rotate(45deg);
           opacity: 0;
+        }
+        
+        /* 爆炸动画 */
+        @keyframes explode {
+          0% {
+            transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(calc(-50% + var(--explode-x)), calc(-50% + var(--explode-y))) scale(0.5) rotate(var(--explode-rotate));
+            opacity: 0;
+          }
         }
         
         /* 分步入场动画 */
