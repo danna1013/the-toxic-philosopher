@@ -33,18 +33,16 @@ export default function SocratesIntro() {
     setLocation('/chat/socrates');
   };
 
-  // 下一页按钮
+  // 下一页按钮 - 即时切换
   const handleNext = () => {
     if (currentScene < script.length - 1) {
-      // 图片和文字同时淡出
+      // 直接切换到下一场景，无淡入淡出
       setShowText(false);
-      setShowContent(false);
-      
-      // 0.5秒后切换到下一场景
+      setCurrentScene(prev => prev + 1);
+      // 立即显示内容
       setTimeout(() => {
-        setCurrentScene(prev => prev + 1);
         setShowContent(true);
-      }, 500);
+      }, 0);
     }
   };
 
@@ -57,10 +55,12 @@ export default function SocratesIntro() {
   useEffect(() => {
     if (!showContent) return;
 
-    // 图片出现后0.6秒，文字开始浮现
+    // 第一页：图片出现后0.6秒，文字开始浮现
+    // 翻页后：立即显示文字，无延迟
+    const delay = currentScene === 0 ? 600 : 0;
     const textTimer = setTimeout(() => {
       setShowText(true);
-    }, 600);
+    }, delay);
 
     return () => {
       clearTimeout(textTimer);
