@@ -348,3 +348,20 @@
 - [x] 翻页后立即显示文字，无延迟
 - [x] 避免卡顿感
 
+
+
+## 修复翻页卡顿和文字错位问题
+- [x] 分析翻页时的卡顿原因：
+  - [x] showContent 和 showText 状态冲突导致渲染问题
+  - [x] AnimatePresence 嵌套导致动画冲突
+- [x] 修复文字错位问题：
+  - [x] 文字容器设置固定高度 minHeight: 200px
+  - [x] 使用 AnimatePresence mode="wait" 确保一个元素退出后再进入
+- [x] 优化状态更新时机和渲染逻辑：
+  - [x] 移除 showContent 和 showText 状态
+  - [x] 直接通过 currentScene 控制内容
+  - [x] 简化 handleNext 逻辑，直接更新 currentScene
+- [x] 确保翻页流畅无闪烁：
+  - [x] 动画时长从 0.6s 减少到 0.3s
+  - [x] 移除外层 AnimatePresence，只在图片和文字使用
+
