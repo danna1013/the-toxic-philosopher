@@ -91,6 +91,12 @@ export default function Chat() {
     scrollToBottom();
   }, [messages, streamingContent]);
 
+  // 预加载背景图
+  useEffect(() => {
+    const img = new Image();
+    img.src = `/chat-bg-${philosopherId}.webp`;
+  }, [philosopherId]);
+
   const handleSend = async () => {
     if (!input.trim() || isTyping) return;
 
@@ -168,7 +174,7 @@ export default function Chat() {
       <div 
         className="absolute inset-0 bg-center bg-no-repeat opacity-[0.08] pointer-events-none"
         style={{
-          backgroundImage: `url(/chat-bg-${philosopherId}.png)`,
+          backgroundImage: `url(/chat-bg-${philosopherId}.webp)`,
           backgroundSize: '60%',
         }}
       />
