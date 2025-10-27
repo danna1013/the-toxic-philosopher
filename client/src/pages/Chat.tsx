@@ -18,6 +18,7 @@ const philosopherInfo: Record<
     tagline: string;
     style: string;
     avatar: string;
+    greeting: string;
   }
 > = {
   socrates: {
@@ -26,6 +27,7 @@ const philosopherInfo: Record<
     tagline: "你真的懂吗？",
     style: "连环追问，步步紧逼",
     avatar: "/web-socrates.webp",
+    greeting: "我是苏格拉底，雅典街头的牛虹。两千多年来，我用反问刺穿无数自以为是的灵魂。\n\n你知道吗？我最讨厌的，就是那些自以为在思考，实际上只是在重复别人观点的人。你来找我，是想要答案吗？抱歉，我只提供问题——那些让你夜不能寐的问题。\n\n如果你只是想要安慰，那你走错门了。我的使命是揭穿你思维中的漏洞，让你看到自己有多愚蠢。准备好被质疑到怀疑人生了吗？",
   },
   nietzsche: {
     name: "尼采",
@@ -33,6 +35,7 @@ const philosopherInfo: Record<
     tagline: "别这么平庸",
     style: "激烈批判，充满力量",
     avatar: "/web-nietzsche.webp",
+    greeting: "我是尼采，上帝的掘墓人，超人的预言者。我用铁锤砸碎了虚伪的道德，用闪电照亮了人类的平庸。\n\n你来这里，大概是想找点人生意义，或者寻求什么心灵鸡汤吧？可惜了，我最鲾视的就是那些躲在舒适区里，用‘迷茫’掩盖懒惰的弱者。\n\n我不会安慰你，我只会鞭打你——因为只有痛苦才能让你超越自己。来吧，让我看看你有没有成为超人的潜质。",
   },
   wittgenstein: {
     name: "维特根斯坦",
@@ -40,6 +43,7 @@ const philosopherInfo: Record<
     tagline: "你的逻辑有问题",
     style: "逻辑解构，精准打击",
     avatar: "/web-wittgenstein.webp",
+    greeting: "我是维特根斯坦，逻辑的屠夫，语言的解剖师。我用精确的逻辑切开了哲学的肿瘤，揭示了无数空洞的废话。\n\n你知道吗？这个世界上99%的所谓‘深刻思考’，都不过是语言的误用和概念的混乱。你来找我对话，我猜你也准备了一堆自以为深刻的问题吧？\n\n很好，我会一刀一刀地拆解你的每一句话，让你看到自己的表述有多么空洞、多么荒谬。如果你受不了真相，现在还来得及离开。",
   },
   kant: {
     name: "康德",
@@ -47,6 +51,7 @@ const philosopherInfo: Record<
     tagline: "你配谈道德吗？",
     style: "冷静剖析，道德审判",
     avatar: "/web-kant.webp",
+    greeting: "我是康德，理性的化身，道德律令的守护者。我用纯粹理性批判了一切，用绝对命令建立了道德的基石。\n\n但我必须告诉你，这个时代最大的问题，就是人人都在为自己的自私找借口。你来找我，是想要我认可你的选择吗？抱歉，我只认可符合理性和道德律的行为。\n\n我会用普遍法则审判你的每一个想法、每一个行为。如果你做不到把自己的准则变成普遍法则，那你就是自私的。准备好接受理性的审判了吗？",
   },
   freud: {
     name: "弗洛伊德",
@@ -54,6 +59,7 @@ const philosopherInfo: Record<
     tagline: "你在压抑什么？",
     style: "本能揭露，深层剖析",
     avatar: "/web-freud.webp",
+    greeting: "我是弗洛伊德，潜意识的探索者，欲望的揭露者。我用精神分析撕开了人类自我欺骗的面具，让无数人看到了内心深处的黑暗。\n\n你来找我，表面上可能是想解决什么问题，但我知道，你真正想要的是逃避——逃避那些你不敢面对的真相。可惜，我最擅长的就是把你的防御机制一层层剥开。\n\n我会用X光透视你的每一句话，揭穿你潜意识里的真实动机。你以为你很了解自己？别天真了，你的潜意识比你诚实得多。准备好直面内心的黑暗了吗？",
   },
 };
 
@@ -66,7 +72,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "philosopher",
-      content: `我是${philosopher.name}。说吧，你想让我戳穿你什么幻想？`,
+      content: philosopher.greeting,
       timestamp: Date.now(),
     },
   ]);
@@ -203,9 +209,13 @@ export default function Chat() {
                       : "bg-white text-gray-800 shadow-md border border-gray-100"
                   }`}
                 >
-                  <p className="text-base leading-relaxed whitespace-pre-wrap">
-                    {message.content}
-                  </p>
+                  <div className="text-base leading-relaxed whitespace-pre-wrap">
+                    {message.content.split('\n\n').map((paragraph, i) => (
+                      <p key={i} className={i > 0 ? 'mt-4' : ''}>
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -219,10 +229,16 @@ export default function Chat() {
               className="flex justify-start"
             >
               <div className="max-w-[70%] rounded-3xl px-6 py-4 bg-white text-gray-800 shadow-md border border-gray-100">
-                <p className="text-base leading-relaxed whitespace-pre-wrap">
-                  {streamingContent}
-                  <span className="inline-block w-1 h-4 ml-1 bg-gray-400 animate-pulse" />
-                </p>
+                <div className="text-base leading-relaxed whitespace-pre-wrap">
+                  {streamingContent.split('\n\n').map((paragraph, i) => (
+                    <p key={i} className={i > 0 ? 'mt-4' : ''}>
+                      {paragraph}
+                      {i === streamingContent.split('\n\n').length - 1 && (
+                        <span className="inline-block w-1 h-4 ml-1 bg-gray-400 animate-pulse" />
+                      )}
+                    </p>
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}
