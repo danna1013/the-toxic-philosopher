@@ -12,6 +12,7 @@ import NietzscheIntro from "./pages/NietzscheIntro";
 import KantIntro from "./pages/KantIntro";
 import FreudIntro from "./pages/FreudIntro";
 import Chat from "./pages/Chat";
+import Design from "./pages/Design";
 
 function Router() {
   return (
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/intro/kant" component={KantIntro} />
       <Route path="/intro/freud" component={FreudIntro} />
       <Route path="/chat/:id" component={Chat} />
+      <Route path="/design" component={Design} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

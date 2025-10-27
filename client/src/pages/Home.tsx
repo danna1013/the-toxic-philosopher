@@ -35,10 +35,13 @@ export default function Home() {
               首页
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="#concept" className="relative text-base text-gray-600 hover:text-black transition-colors group">
+            <button
+              onClick={() => setLocation("/design")}
+              className="relative text-base text-gray-600 hover:text-black transition-colors group"
+            >
               设计理念
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </a>
+            </button>
             <a 
               href="https://nops.woa.com/pigeon/v1/tools/add_chat?chatId=ww235627801068712&msgContent=hi%EF%BC%8C%E6%AC%A2%E8%BF%8E%E5%8A%A0%E5%85%A5%E2%80%9C%E6%AF%92%E8%88%8C%E5%93%B2%E5%AD%A6%E5%AE%B6%E2%80%9D%E5%BB%BA%E8%AE%AE%E5%8F%8D%E9%A6%88%E7%BE%A4%EF%BD%9E%20" 
               target="_blank" 
