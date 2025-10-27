@@ -40,7 +40,9 @@ export default function Design() {
             在这个充斥着心灵鸡汤和猜你喜欢的时代，我们创造了一个不同的空间——一个让你直面真相的地方。
           </p>
 
-          {/* 为什么选择"毒舌"？ */}
+          {/* 正文内容，使用更窄的宽度 */}
+          <div className="max-w-3xl mx-auto space-y-16">
+          {/* 为什么选择“毒舌”？ */}
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-900">
               为什么选择"毒舌"？
@@ -102,6 +104,7 @@ export default function Design() {
             <p className="text-sm text-gray-400">
               让哲学回归本质
             </p>
+          </div>
           </div>
         </div>
       </div>
