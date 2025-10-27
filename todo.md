@@ -740,3 +740,12 @@
 - [x] 推送更新到 GitHub
 - [ ] 等待 Vercel/Netlify 自动部署并测试
 
+
+
+
+## 调整选择页星球间距和底部文字位置
+- [x] 调整星球的垂直位置，避免重叠
+- [x] 将 "Made by" 文字改为 fixed bottom-0，固定在页面底部
+- [x] 推送更新到 GitHub
+- [ ] 等待 Vercel/Netlify 自动部署并测试
+
