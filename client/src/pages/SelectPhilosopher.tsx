@@ -67,7 +67,7 @@ const philosophers: Philosopher[] = [
     image: '/web-freud.webp',
     size: 160,
     top: '78%',
-    color: '#34d399',
+    color: '#a78bfa',
   },
 ];
 
