@@ -121,6 +121,10 @@
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* 全局缩放到 67%，让页面在 100% 缩放时完美显示 */
+    zoom: 0.67;
+    -moz-transform: scale(0.67);
+    -moz-transform-origin: 0 0;
   }
   
   html, body {
