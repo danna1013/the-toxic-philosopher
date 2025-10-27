@@ -104,16 +104,22 @@ export default function Chat() {
 
     try {
       // 构建对话历史（用于多轮对话）
-      const conversationHistory: ChatMessage[] = messages.map((msg) => ({
-        role: msg.role === "philosopher" ? ("assistant" as const) : ("user" as const),
-        content: msg.content,
-      }));
+      // 包含所有历史消息 + 当前用户消息
+      const conversationHistory: ChatMessage[] = [
+        ...messages.map((msg) => ({
+          role: msg.role === "philosopher" ? ("assistant" as const) : ("user" as const),
+          content: msg.content,
+        })),
+        {
+          role: "user" as const,
+          content: userInput,
+        },
+      ];
 
       // 流式输出
       let fullResponse = "";
       for await (const chunk of getPhilosopherResponseStream(
         philosopherId,
-        userInput,
         conversationHistory
       )) {
         fullResponse += chunk;
