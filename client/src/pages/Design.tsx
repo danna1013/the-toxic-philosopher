@@ -22,7 +22,7 @@ export default function Design() {
       </div>
 
       {/* 主要内容 */}
-      <div className="max-w-3xl mx-auto px-8 pt-32 pb-24">
+      <div className="max-w-4xl mx-auto px-8 pt-32 pb-24">
         {/* 标题 */}
         <div className="text-center mb-20">
           <h1 className="text-6xl font-bold text-gray-900 mb-6 tracking-tight">
@@ -37,7 +37,7 @@ export default function Design() {
         <div className="space-y-16 text-lg text-gray-700 leading-relaxed">
           {/* 引言 */}
           <p className="text-center text-xl">
-            在这个充斥着心灵鸡汤和虚假安慰的时代，我们创造了一个不同的空间——一个让你直面真相的地方。
+            在这个充斥着心灵鸡汤和猜你喜欢的时代，我们创造了一个不同的空间——一个让你直面真相的地方。
           </p>
 
           {/* 为什么选择"毒舌"？ */}
