@@ -1,25 +1,56 @@
 import { useLocation } from "wouter";
-import { ArrowLeft } from "lucide-react";
 
 export default function Design() {
   const [, setLocation] = useLocation();
 
   return (
     <div className="min-h-screen bg-white">
-      {/* 顶部导航 */}
-      <div className="fixed top-0 left-0 right-0 z-10 bg-white/80 backdrop-blur-sm border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-8 py-4 flex items-center justify-between">
-          <button
-            onClick={() => setLocation("/")}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="text-sm font-medium">返回</span>
-          </button>
-          <h1 className="text-sm font-medium text-gray-900">设计理念</h1>
-          <div className="w-16" /> {/* 占位 */}
+      {/* 导航栏 */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm">
+        <div className="px-8 py-5 flex items-center justify-between">
+          {/* 左侧品牌名 - 中英文组合 */}
+          <div className="flex flex-col gap-0.5">
+            <div className="text-lg font-bold tracking-wide">毒舌哲学家</div>
+            <div className="text-[10px] font-medium tracking-[0.2em] text-gray-500">THE TOXIC PHILOSOPHER</div>
+          </div>
+          
+          {/* 右侧导航 */}
+          <div className="flex items-center gap-8">
+            <button
+              onClick={() => setLocation("/")}
+              className="relative text-base text-gray-600 hover:text-black transition-colors group"
+            >
+              首页
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
+            <button
+              onClick={() => setLocation("/design")}
+              className="relative text-base text-black font-medium group"
+            >
+              设计理念
+              <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
+            </button>
+            <a 
+              href="https://nops.woa.com/pigeon/v1/tools/add_chat?chatId=ww235627801068712&msgContent=hi%EF%BC%8C%E6%AC%A2%E8%BF%8E%E5%8A%A0%E5%85%A5%E2%80%9C%E6%AF%92%E8%88%8C%E5%93%B2%E5%AD%A6%E5%AE%B6%E2%80%9D%E5%BB%BA%E8%AE%AE%E5%8F%8D%E9%A6%88%E7%BE%A4%EF%BD%9E%20" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="relative text-base text-gray-600 hover:text-black transition-colors group"
+            >
+              意见反馈 ↗
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <a 
+              href="https://teko.woa.com/event/ai-agent/246" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="relative text-base text-gray-600 hover:text-black transition-colors group"
+            >
+              求点赞评论 ↗
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </a>
+          </div>
         </div>
-      </div>
+      </nav>
 
       {/* 主要内容 */}
       <div className="px-8 pt-32 pb-24">
