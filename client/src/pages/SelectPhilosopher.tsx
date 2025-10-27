@@ -21,7 +21,7 @@ const philosophers: Philosopher[] = [
     warning: '⚠️ 你真的懂吗?',
     description: '古希腊“街头杠精”,专治各种不懂装懂。',
     image: '/web-socrates.webp',
-    size: 120,
+    size: 180,
     top: '15%',
     color: '#fcd34d',
   },
@@ -32,7 +32,7 @@ const philosophers: Philosopher[] = [
     warning: '⚠️ 别这么平庸',
     description: '宣布“上帝已死”的哲学摇滚巨星。',
     image: '/web-nietzsche.webp',
-    size: 240,
+    size: 360,
     top: '30%',
     color: '#fb923c',
   },
@@ -43,7 +43,7 @@ const philosophers: Philosopher[] = [
     warning: '⚠️ 你的逻辑有问题',
     description: '哲学界的“拆墙工”,专拆语言骗局。',
     image: '/web-wittgenstein.webp',
-    size: 300,
+    size: 450,
     top: '50%',
     color: '#d4a574',
   },
@@ -54,7 +54,7 @@ const philosophers: Philosopher[] = [
     warning: '⚠️ 你配谈道德吗?',
     description: '准时散步的“哥尼斯堡时钟”,为理性划界。',
     image: '/web-kant.webp',
-    size: 200,
+    size: 300,
     top: '72%',
     color: '#60a5fa',
   },
@@ -65,7 +65,7 @@ const philosophers: Philosopher[] = [
     warning: '⚠️ 你在压抑什么?',
     description: '告诉你“你并不完全是自己的主人”的老爷爷。',
     image: '/web-freud.webp',
-    size: 160,
+    size: 240,
     top: '88%',
     color: '#34d399',
   },
@@ -228,10 +228,10 @@ export default function SelectPhilosopher() {
         opacity: explodingId ? 0 : 1,
         transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
       }}>
-        <h1 className={`text-5xl font-bold mb-4 tracking-wider ${isReturning ? '' : 'animate-fadeInStep1'}`}>
+        <h1 className={`text-7xl font-bold mb-6 tracking-wider ${isReturning ? '' : 'animate-fadeInStep1'}`}>
           宇宙不在乎你的困惑
         </h1>
-        <p className={`text-gray-400 text-2xl md:text-3xl tracking-wider font-light ${isReturning ? '' : 'animate-fadeInStep2'}`}>选一个，或者OUT</p>
+        <p className={`text-gray-400 text-4xl tracking-wider font-light ${isReturning ? '' : 'animate-fadeInStep2'}`}>选一个，或者OUT</p>
       </div>
 
       {/* 竖直发光连接线 */}
