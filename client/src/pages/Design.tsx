@@ -24,7 +24,7 @@ export default function Design() {
       {/* 主要内容 */}
       <div className="max-w-3xl mx-auto px-8 pt-32 pb-24">
         {/* 标题 */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           <h1 className="text-6xl font-bold text-gray-900 mb-6 tracking-tight">
             设计理念
           </h1>
@@ -40,13 +40,6 @@ export default function Design() {
             在这个充斥着心灵鸡汤和虚假安慰的时代，我们创造了一个不同的空间——一个让你直面真相的地方。
           </p>
 
-          {/* 分割线 */}
-          <div className="flex items-center justify-center gap-4">
-            <div className="w-16 h-px bg-gray-300"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-            <div className="w-16 h-px bg-gray-300"></div>
-          </div>
-
           {/* 为什么选择"毒舌"？ */}
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-900">
@@ -60,13 +53,6 @@ export default function Design() {
             </p>
           </div>
 
-          {/* 分割线 */}
-          <div className="flex items-center justify-center gap-4">
-            <div className="w-16 h-px bg-gray-300"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-            <div className="w-16 h-px bg-gray-300"></div>
-          </div>
-
           {/* 我们的初衷 */}
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-900">
@@ -75,13 +61,6 @@ export default function Design() {
             <p>
               我们希望通过这个项目，让哲学回归它的本质——质疑、批判、反思。不是给你答案，而是让你学会提问。不是让你舒服，而是让你成长。
             </p>
-          </div>
-
-          {/* 分割线 */}
-          <div className="flex items-center justify-center gap-4">
-            <div className="w-16 h-px bg-gray-300"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-            <div className="w-16 h-px bg-gray-300"></div>
           </div>
 
           {/* 设计哲学 */}
@@ -105,13 +84,6 @@ export default function Design() {
             </div>
           </div>
 
-          {/* 分割线 */}
-          <div className="flex items-center justify-center gap-4">
-            <div className="w-16 h-px bg-gray-300"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-            <div className="w-16 h-px bg-gray-300"></div>
-          </div>
-
           {/* 致使用者 */}
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-900">
@@ -123,14 +95,10 @@ export default function Design() {
           </div>
 
           {/* 底部签名 */}
-          <div className="pt-12 text-center">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <div className="w-12 h-px bg-gray-300"></div>
-              <p className="text-xs tracking-[0.3em] text-gray-400 font-medium">
-                THE TOXIC PHILOSOPHER
-              </p>
-              <div className="w-12 h-px bg-gray-300"></div>
-            </div>
+          <div className="pt-16 text-center border-t border-gray-200">
+            <p className="text-xs tracking-[0.3em] text-gray-400 font-medium mb-2">
+              THE TOXIC PHILOSOPHER
+            </p>
             <p className="text-sm text-gray-400">
               让哲学回归本质
             </p>
