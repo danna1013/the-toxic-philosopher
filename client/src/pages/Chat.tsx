@@ -209,9 +209,9 @@ export default function Chat() {
                       : "bg-white text-gray-800 shadow-md border border-gray-100"
                   }`}
                 >
-                  <div className="text-base leading-relaxed whitespace-pre-wrap">
+                  <div className="whitespace-pre-wrap">
                     {message.content.split('\n\n').map((paragraph, i) => (
-                      <p key={i} className={i > 0 ? 'mt-4' : ''}>
+                      <p key={i} className={`text-[15px] leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
                         {paragraph}
                       </p>
                     ))}
@@ -229,9 +229,9 @@ export default function Chat() {
               className="flex justify-start"
             >
               <div className="max-w-[70%] rounded-3xl px-6 py-4 bg-white text-gray-800 shadow-md border border-gray-100">
-                <div className="text-base leading-relaxed whitespace-pre-wrap">
+                <div className="whitespace-pre-wrap">
                   {streamingContent.split('\n\n').map((paragraph, i) => (
-                    <p key={i} className={i > 0 ? 'mt-4' : ''}>
+                    <p key={i} className={`text-[15px] leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
                       {paragraph}
                       {i === streamingContent.split('\n\n').length - 1 && (
                         <span className="inline-block w-1 h-4 ml-1 bg-gray-400 animate-pulse" />
@@ -274,7 +274,7 @@ export default function Chat() {
             onKeyPress={handleKeyPress}
             placeholder="说点什么..."
             disabled={isTyping}
-            className="flex-1 px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all"
+            className="flex-1 px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all text-gray-900 placeholder:text-gray-400"
           />
           <button
             onClick={handleSend}
