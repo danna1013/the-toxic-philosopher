@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useRoute } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { getPhilosopherResponse } from "@/lib/ai-service";
+import { getPhilosopherResponseStream, type ChatMessage } from "@/lib/ai-service";
 import { ArrowLeft, Send } from "lucide-react";
 
 interface Message {
@@ -62,6 +62,7 @@ export default function Chat() {
   const philosopherId = params?.id || "socrates";
   const philosopher = philosopherInfo[philosopherId] || philosopherInfo.socrates;
 
+  // 页面刷新后重新开始对话
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "philosopher",
@@ -71,6 +72,7 @@ export default function Chat() {
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [streamingContent, setStreamingContent] = useState(""); // 流式输出的内容
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [, setLocation] = useLocation();
 
@@ -80,7 +82,7 @@ export default function Chat() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, streamingContent]);
 
   const handleSend = async () => {
     if (!input.trim() || isTyping) return;
@@ -92,30 +94,40 @@ export default function Chat() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const userInput = input.trim();
     setInput("");
     setIsTyping(true);
+    setStreamingContent("");
 
     // 模拟1-2秒的"沉默"（思考）
     await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 1000));
 
     try {
-      const conversationHistory = messages.map((msg) => ({
+      // 构建对话历史（用于多轮对话）
+      const conversationHistory: ChatMessage[] = messages.map((msg) => ({
         role: msg.role === "philosopher" ? ("assistant" as const) : ("user" as const),
         content: msg.content,
       }));
 
-      const response = await getPhilosopherResponse(
+      // 流式输出
+      let fullResponse = "";
+      for await (const chunk of getPhilosopherResponseStream(
         philosopherId,
-        input,
+        userInput,
         conversationHistory
-      );
+      )) {
+        fullResponse += chunk;
+        setStreamingContent(fullResponse);
+      }
 
+      // 流式输出完成后，将完整回复添加到消息列表
       const philosopherMessage: Message = {
         role: "philosopher",
-        content: response,
+        content: fullResponse,
         timestamp: Date.now(),
       };
       setMessages((prev) => [...prev, philosopherMessage]);
+      setStreamingContent("");
     } catch (error) {
       console.error("Failed to get response:", error);
       const errorMessage: Message = {
@@ -124,6 +136,7 @@ export default function Chat() {
         timestamp: Date.now(),
       };
       setMessages((prev) => [...prev, errorMessage]);
+      setStreamingContent("");
     } finally {
       setIsTyping(false);
     }
@@ -192,30 +205,34 @@ export default function Chat() {
             ))}
           </AnimatePresence>
 
-          {/* 正在输入提示 */}
-          {isTyping && (
+          {/* 流式输出中的消息 */}
+          {isTyping && streamingContent && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex justify-start"
             >
-              <div className="bg-gray-100 rounded-2xl px-5 py-3 shadow-sm">
-                <div className="flex gap-1.5">
-                  <motion.div
-                    className="w-2 h-2 bg-gray-400 rounded-full"
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1.5, repeat: Infinity, delay: 0 }}
-                  />
-                  <motion.div
-                    className="w-2 h-2 bg-gray-400 rounded-full"
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-                  />
-                  <motion.div
-                    className="w-2 h-2 bg-gray-400 rounded-full"
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
-                  />
+              <div className="max-w-[70%] rounded-3xl px-6 py-4 bg-white text-gray-800 shadow-md border border-gray-100">
+                <p className="text-base leading-relaxed whitespace-pre-wrap">
+                  {streamingContent}
+                  <span className="inline-block w-1 h-4 ml-1 bg-gray-400 animate-pulse" />
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {/* 正在输入提示（还没开始流式输出时） */}
+          {isTyping && !streamingContent && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex justify-start"
+            >
+              <div className="max-w-[70%] rounded-3xl px-6 py-4 bg-white text-gray-800 shadow-md border border-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             </motion.div>
@@ -225,22 +242,22 @@ export default function Chat() {
         </div>
       </div>
 
-      {/* 底部输入区 */}
+      {/* 底部输入区域 */}
       <div className="relative z-10 border-t border-gray-200 bg-white/80 backdrop-blur-sm px-6 py-4">
-        <div className="max-w-3xl mx-auto flex gap-3">
+        <div className="max-w-3xl mx-auto flex items-center gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="输入你的想法..."
+            placeholder="说点什么..."
             disabled={isTyping}
-            className="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 disabled:opacity-50 disabled:cursor-not-allowed text-base transition-all"
+            className="flex-1 px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isTyping}
-            className="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
+            className="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all hover:shadow-lg"
           >
             <Send className="w-5 h-5" />
           </button>
