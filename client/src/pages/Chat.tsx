@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation, useRoute } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { getPhilosopherResponseStream, type ChatMessage } from "@/lib/ai-service";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft, Send, RotateCcw } from "lucide-react";
 
 interface Message {
   role: "user" | "philosopher";
@@ -79,6 +79,7 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [streamingContent, setStreamingContent] = useState(""); // 流式输出的内容
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false); // 显示确认对话框
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [, setLocation] = useLocation();
 
@@ -187,7 +188,14 @@ export default function Chat() {
           <p className="text-xs text-gray-500 mt-0.5">{philosopher.style}</p>
         </div>
         
-        <div className="w-16" /> {/* 占位，保持标题居中 */}
+        <button
+          onClick={() => setShowConfirmDialog(true)}
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          title="清除对话"
+        >
+          <RotateCcw className="w-5 h-5" />
+          <span className="text-sm font-medium">重新开始</span>
+        </button>
       </div>
 
       {/* 对话区域 */}
@@ -285,6 +293,43 @@ export default function Chat() {
           </button>
         </div>
       </div>
+
+      {/* 自定义确认对话框 */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm mx-4"
+          >
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">重新开始对话</h3>
+            <p className="text-gray-600 mb-6">确定要清除对话历史并重新开始吗？</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowConfirmDialog(false)}
+                className="flex-1 px-4 py-2.5 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+              >
+                取消
+              </button>
+              <button
+                onClick={() => {
+                  setMessages([{
+                    role: 'philosopher',
+                    content: philosopher.greeting,
+                    timestamp: Date.now(),
+                  }]);
+                  setInput('');
+                  setStreamingContent('');
+                  setShowConfirmDialog(false);
+                }}
+                className="flex-1 px-4 py-2.5 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition-colors font-medium"
+              >
+                确定
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
