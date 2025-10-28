@@ -130,7 +130,7 @@ export default function SelectPhilosopher() {
   };
 
   return (
-    <div className="min-h-screen text-white relative overflow-hidden" style={{
+    <div className="min-h-screen text-white relative overflow-hidden flex flex-col" style={{
       backgroundColor: explodingId ? '#FAFAFA' : '#000000',
       transition: explodingId ? 'background-color 1.8s ease-in-out 0.5s' : 'none',
     }}>
@@ -261,10 +261,9 @@ export default function SelectPhilosopher() {
       </div>
 
       {/* 星球容器 - 延迟显示 */}
-      <div className={`relative w-full ${isReturning ? '' : 'animate-fadeInStep3'}`} style={{
+      <div className={`relative w-full flex-1 ${isReturning ? '' : 'animate-fadeInStep3'}`} style={{
         minHeight: '600px',
-        height: 'calc(100vh - 320px)',
-        maxHeight: '800px',
+        maxHeight: '1000px',
         opacity: explodingId ? 0 : 1,
         transition: explodingId ? 'opacity 1s ease-out 0.6s' : 'none',
       }}>
