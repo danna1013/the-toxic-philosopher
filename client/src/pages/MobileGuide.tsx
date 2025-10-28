@@ -1,120 +1,89 @@
-import { useEffect, useState } from 'react';
-import { Monitor } from 'lucide-react';
-
 export default function MobileGuide() {
-  const [stars, setStars] = useState<Array<{ x: number; y: number; size: number; delay: number }>>([]);
-
-  useEffect(() => {
-    // 生成随机星星
-    const newStars = Array.from({ length: 100 }, () => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() > 0.7 ? 3 : Math.random() > 0.4 ? 2 : 1,
-      delay: Math.random() * 3,
-    }));
-    setStars(newStars);
-  }, []);
-
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden flex flex-col items-center justify-center p-6">
-      {/* 星空背景 */}
-      <div className="absolute inset-0 overflow-hidden">
-        {stars.map((star, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white animate-twinkle"
-            style={{
-              left: `${star.x}%`,
-              top: `${star.y}%`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              animationDelay: `${star.delay}s`,
-            }}
-          />
-        ))}
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#000',
+      color: '#fff',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '24px',
+      textAlign: 'center'
+    }}>
+      <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '16px' }}>
+        毒舌哲学家
+      </h1>
+      <p style={{ fontSize: '12px', color: '#999', marginBottom: '48px', letterSpacing: '0.2em' }}>
+        THE TOXIC PHILOSOPHER
+      </p>
+      
+      <div style={{
+        width: '96px',
+        height: '96px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #9333ea, #3b82f6)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '32px'
+      }}>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
       </div>
-
-      {/* 主内容 */}
-      <div className="relative z-10 text-center max-w-md animate-fadeIn">
-        {/* Logo区域 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-wide mb-2">毒舌哲学家</h1>
-          <p className="text-xs tracking-[0.3em] text-gray-400">THE TOXIC PHILOSOPHER</p>
+      
+      <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', lineHeight: '1.4' }}>
+        请在电脑上<br />体验完整版
+      </h2>
+      
+      <p style={{ color: '#999', fontSize: '14px', lineHeight: '1.6', marginBottom: '32px' }}>
+        为了获得最佳的视觉效果和交互体验，<br />
+        我们建议您使用电脑浏览器访问。
+      </p>
+      
+      <div style={{
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '16px',
+        padding: '24px',
+        marginBottom: '32px',
+        width: '100%',
+        maxWidth: '400px'
+      }}>
+        <div style={{ marginBottom: '16px' }}>
+          <span style={{ color: '#fcd34d', marginRight: '12px' }}>●</span>
+          <span style={{ fontSize: '14px' }}>沉浸式星空选择界面</span>
         </div>
-
-        {/* 图标 */}
-        <div className="mb-8 flex justify-center">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center animate-pulse-slow">
-            <Monitor className="w-12 h-12" />
-          </div>
+        <div style={{ marginBottom: '16px' }}>
+          <span style={{ color: '#fb923c', marginRight: '12px' }}>●</span>
+          <span style={{ fontSize: '14px' }}>5位哲学家的深度对话</span>
         </div>
-
-        {/* 主标题 */}
-        <h2 className="text-2xl font-bold mb-4 leading-tight">
-          请在电脑上<br />体验完整版
-        </h2>
-
-        {/* 说明文字 */}
-        <p className="text-gray-400 text-sm leading-relaxed mb-6">
-          为了获得最佳的视觉效果和交互体验，<br />
-          我们建议您使用电脑浏览器访问。
-        </p>
-
-        {/* 特性列表 */}
-        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 mb-8">
-          <div className="space-y-4 text-left">
-            <div className="flex items-start gap-3">
-              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 mt-2 flex-shrink-0" />
-              <p className="text-sm text-gray-300">沉浸式星空选择界面</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-1.5 h-1.5 rounded-full bg-orange-400 mt-2 flex-shrink-0" />
-              <p className="text-sm text-gray-300">5位哲学家的深度对话</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0" />
-              <p className="text-sm text-gray-300">精心设计的视觉动画</p>
-            </div>
-          </div>
+        <div>
+          <span style={{ color: '#a78bfa', marginRight: '12px' }}>●</span>
+          <span style={{ fontSize: '14px' }}>精心设计的视觉动画</span>
         </div>
-
-        {/* 网址提示 */}
-        <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-xl p-4">
-          <p className="text-xs text-gray-400 mb-2">PC端访问地址</p>
-          <p className="text-sm font-mono text-white break-all">
-            {window.location.origin}
-          </p>
-        </div>
-
-        {/* 底部提示 */}
-        <p className="text-xs text-gray-500 mt-8">
-          移动端版本正在开发中，敬请期待
+      </div>
+      
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(147,51,234,0.2), rgba(59,130,246,0.2))',
+        border: '1px solid rgba(147,51,234,0.3)',
+        borderRadius: '12px',
+        padding: '16px',
+        width: '100%',
+        maxWidth: '400px'
+      }}>
+        <p style={{ fontSize: '12px', color: '#999', marginBottom: '8px' }}>PC端访问地址</p>
+        <p style={{ fontSize: '14px', fontFamily: 'monospace', wordBreak: 'break-all' }}>
+          {typeof window !== 'undefined' ? window.location.origin : ''}
         </p>
       </div>
-
-      <style>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes pulse-slow {
-          0%, 100% { transform: scale(1); opacity: 0.8; }
-          50% { transform: scale(1.05); opacity: 1; }
-        }
-        .animate-twinkle {
-          animation: twinkle 3s ease-in-out infinite;
-        }
-        .animate-fadeIn {
-          animation: fadeIn 1s ease-out;
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 3s ease-in-out infinite;
-        }
-      `}</style>
+      
+      <p style={{ fontSize: '12px', color: '#666', marginTop: '32px' }}>
+        移动端版本正在开发中，敬请期待
+      </p>
     </div>
   );
 }
