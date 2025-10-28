@@ -231,7 +231,7 @@ export default function Chat() {
                 >
                   <div className="whitespace-pre-wrap">
                     {message.content.split('\n\n').map((paragraph, i) => (
-                      <p key={i} className={`text-lg leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
+                      <p key={i} className={`text-xl leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
                         {paragraph}
                       </p>
                     ))}
@@ -251,7 +251,7 @@ export default function Chat() {
               <div className="max-w-[75%] rounded-3xl px-7 py-5 bg-white text-gray-800 shadow-md border border-gray-100">
                 <div className="whitespace-pre-wrap">
                   {streamingContent.split('\n\n').map((paragraph, i) => (
-                    <p key={i} className={`text-lg leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
+                    <p key={i} className={`text-xl leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
                       {paragraph}
                       {i === streamingContent.split('\n\n').length - 1 && (
                         <span className="inline-block w-1 h-4 ml-1 bg-gray-400 animate-pulse" />
