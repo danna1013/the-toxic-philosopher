@@ -22,7 +22,7 @@ const philosophers: Philosopher[] = [
     description: '古希腊“街头杠精”,专治各种不懂装懂。',
     image: '/web-socrates.webp',
     size: 120,
-    top: '5%',
+    top: '8%',
     color: '#fcd34d',
   },
   {
@@ -33,7 +33,7 @@ const philosophers: Philosopher[] = [
     description: '宣布“上帝已死”的哲学摇滚巨星。',
     image: '/web-nietzsche.webp',
     size: 240,
-    top: '22%',
+    top: '28%',
     color: '#fb923c',
   },
   {
@@ -44,7 +44,7 @@ const philosophers: Philosopher[] = [
     description: '哲学界的“拆墙工”,专拆语言骗局。',
     image: '/web-wittgenstein.webp',
     size: 300,
-    top: '40%',
+    top: '50%',
     color: '#d4a574',
   },
   {
@@ -55,7 +55,7 @@ const philosophers: Philosopher[] = [
     description: '准时散步的“哥尼斯堡时钟”,为理性划界。',
     image: '/web-kant.webp',
     size: 200,
-    top: '62%',
+    top: '72%',
     color: '#60a5fa',
   },
   {
@@ -66,7 +66,7 @@ const philosophers: Philosopher[] = [
     description: '告诉你“你并不完全是自己的主人”的老爷爷。',
     image: '/web-freud.webp',
     size: 160,
-    top: '82%',
+    top: '92%',
     color: '#a78bfa',
   },
 ];
@@ -262,7 +262,9 @@ export default function SelectPhilosopher() {
 
       {/* 星球容器 - 延迟显示 */}
       <div className={`relative w-full ${isReturning ? '' : 'animate-fadeInStep3'}`} style={{
-        height: 'calc(100vh - 280px)',
+        minHeight: '600px',
+        height: 'calc(100vh - 320px)',
+        maxHeight: '800px',
         opacity: explodingId ? 0 : 1,
         transition: explodingId ? 'opacity 1s ease-out 0.6s' : 'none',
       }}>
@@ -365,7 +367,7 @@ export default function SelectPhilosopher() {
       </div>
 
       {/* 底部信息 */}
-      <footer className="fixed bottom-0 left-0 right-0 z-10 text-center pb-8 text-xs text-gray-500" style={{
+      <footer className="relative z-10 text-center py-8 text-xs text-gray-500" style={{
         opacity: explodingId ? 0 : 1,
         transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
       }}>
