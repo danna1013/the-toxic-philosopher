@@ -42,14 +42,24 @@ function Router() {
 // - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
 function App() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isChecking, setIsChecking] = useState(true);
+  const [isMobile, setIsMobile] = useState(() => {
+    // 初始化时就检测，避免白屏
+    try {
+      return typeof window !== 'undefined' && window.innerWidth < 768;
+    } catch {
+      return false; // 错误时默认为PC端
+    }
+  });
 
   useEffect(() => {
     // 检测设备类型
     const checkDevice = () => {
-      setIsMobile(isMobileDevice());
-      setIsChecking(false);
+      try {
+        setIsMobile(isMobileDevice());
+      } catch (error) {
+        console.error('Device detection error:', error);
+        setIsMobile(false);
+      }
     };
     
     checkDevice();
@@ -58,11 +68,6 @@ function App() {
     window.addEventListener('resize', checkDevice);
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
-
-  // 加载中，不显示任何内容
-  if (isChecking) {
-    return null;
-  }
 
   // 移动设备显示引导页
   if (isMobile) {
