@@ -261,7 +261,8 @@ export default function SelectPhilosopher() {
       </div>
 
       {/* 星球容器 - 延迟显示 */}
-      <div className={`relative min-h-[calc(100vh-280px)] w-full ${isReturning ? '' : 'animate-fadeInStep3'}`} style={{
+      <div className={`relative w-full ${isReturning ? '' : 'animate-fadeInStep3'}`} style={{
+        height: 'calc(100vh - 280px)',
         opacity: explodingId ? 0 : 1,
         transition: explodingId ? 'opacity 1s ease-out 0.6s' : 'none',
       }}>
