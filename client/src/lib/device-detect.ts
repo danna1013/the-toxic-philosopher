@@ -2,29 +2,8 @@
  * 检测是否为移动设备
  */
 export function isMobileDevice(): boolean {
-  // 检测屏幕宽度
-  const isMobileWidth = window.innerWidth < 768;
-  
-  // 检测User Agent
-  const userAgent = navigator.userAgent.toLowerCase();
-  const mobileKeywords = [
-    'android',
-    'webos',
-    'iphone',
-    'ipad',
-    'ipod',
-    'blackberry',
-    'windows phone',
-    'mobile'
-  ];
-  
-  const isMobileUA = mobileKeywords.some(keyword => userAgent.includes(keyword));
-  
-  // 检测触摸支持
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  
-  // 综合判断：屏幕宽度小于768px 或 (是移动UA 且 支持触摸)
-  return isMobileWidth || (isMobileUA && isTouchDevice);
+  // 优先使用屏幕宽度判断，简单可靠
+  return window.innerWidth < 768;
 }
 
 /**
