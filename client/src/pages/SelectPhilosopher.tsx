@@ -229,7 +229,7 @@ export default function SelectPhilosopher() {
         </div>
         <div className="flex items-center gap-8 text-sm">
           <a href="/" className="hover:text-gray-300 transition-colors">首页</a>
-          <a href="/about" className="hover:text-gray-300 transition-colors">设计理念</a>
+          <a href="/design" className="hover:text-gray-300 transition-colors">设计理念</a>
           <a href="/select" className="hover:text-gray-300 transition-colors">查见反馈 ↗</a>
           <a href="/chat/socrates" className="hover:text-gray-300 transition-colors">求点赞评论 ↗</a>
         </div>

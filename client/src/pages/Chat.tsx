@@ -81,6 +81,7 @@ export default function Chat() {
   const [streamingContent, setStreamingContent] = useState(""); // 流式输出的内容
   const [showConfirmDialog, setShowConfirmDialog] = useState(false); // 显示确认对话框
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [, setLocation] = useLocation();
 
   const scrollToBottom = () => {
@@ -147,6 +148,11 @@ export default function Chat() {
       };
       setMessages((prev) => [...prev, philosopherMessage]);
       setStreamingContent("");
+      
+      // 恢复输入框焦点
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
     } catch (error) {
       console.error("Failed to get response:", error);
       const errorMessage: Message = {
@@ -225,7 +231,7 @@ export default function Chat() {
                 >
                   <div className="whitespace-pre-wrap">
                     {message.content.split('\n\n').map((paragraph, i) => (
-                      <p key={i} className={`text-[15px] leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
+                      <p key={i} className={`text-lg leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
                         {paragraph}
                       </p>
                     ))}
@@ -242,10 +248,10 @@ export default function Chat() {
               animate={{ opacity: 1, y: 0 }}
               className="flex justify-start"
             >
-              <div className="max-w-[70%] rounded-3xl px-6 py-4 bg-white text-gray-800 shadow-md border border-gray-100">
+              <div className="max-w-[75%] rounded-3xl px-7 py-5 bg-white text-gray-800 shadow-md border border-gray-100">
                 <div className="whitespace-pre-wrap">
                   {streamingContent.split('\n\n').map((paragraph, i) => (
-                    <p key={i} className={`text-[15px] leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
+                    <p key={i} className={`text-lg leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
                       {paragraph}
                       {i === streamingContent.split('\n\n').length - 1 && (
                         <span className="inline-block w-1 h-4 ml-1 bg-gray-400 animate-pulse" />
@@ -264,7 +270,7 @@ export default function Chat() {
               animate={{ opacity: 1, y: 0 }}
               className="flex justify-start"
             >
-              <div className="max-w-[70%] rounded-3xl px-6 py-4 bg-white text-gray-800 shadow-md border border-gray-100">
+              <div className="max-w-[75%] rounded-3xl px-7 py-5 bg-white text-gray-800 shadow-md border border-gray-100">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -282,13 +288,14 @@ export default function Chat() {
       <div className="relative z-10 border-t border-gray-200 bg-white/80 backdrop-blur-sm px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center gap-3">
           <input
+            ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="说点什么..."
             disabled={isTyping}
-            className="flex-1 px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all text-gray-900 placeholder:text-gray-400"
+            className="flex-1 px-5 py-4 text-base rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all text-gray-900 placeholder:text-gray-400"
           />
           <button
             onClick={handleSend}
