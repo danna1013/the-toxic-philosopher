@@ -90,6 +90,12 @@ export default function SelectPhilosopher() {
 
   // 预加载所有图片
   useEffect(() => {
+    // 设置超时，确保即使图片加载失败也能显示
+    const timeout = setTimeout(() => {
+      console.log('Image preload timeout, showing images anyway');
+      setImagesLoaded(true);
+    }, 2000); // 2秒超时
+
     const imagePromises = philosophers.map((phil) => {
       return new Promise((resolve, reject) => {
         const img = new Image();
@@ -100,11 +106,17 @@ export default function SelectPhilosopher() {
     });
 
     Promise.all(imagePromises)
-      .then(() => setImagesLoaded(true))
+      .then(() => {
+        clearTimeout(timeout);
+        setImagesLoaded(true);
+      })
       .catch((err) => {
         console.error('Failed to preload images:', err);
+        clearTimeout(timeout);
         setImagesLoaded(true); // 即使失败也显示
       });
+
+    return () => clearTimeout(timeout);
   }, []);
 
   const handleSelect = (id: string) => {
@@ -276,6 +288,14 @@ export default function SelectPhilosopher() {
               alt={phil.name}
               className="relative w-full h-full object-contain z-10"
               loading="eager"
+              onError={(e) => {
+                // WebP加载失败时，尝试加载PNG格式
+                const target = e.target as HTMLImageElement;
+                if (target.src.endsWith('.webp')) {
+                  console.log(`WebP failed for ${phil.id}, trying PNG`);
+                  target.src = phil.image.replace('.webp', '.png');
+                }
+              }}
               style={{
                 filter: hoveredId === phil.id ? 'brightness(1.2) drop-shadow(0 0 30px currentColor)' : 'brightness(1) drop-shadow(0 0 10px rgba(255,255,255,0.3))',
                 opacity: explodingId === phil.id ? 0 : (imagesLoaded ? 1 : 0),
