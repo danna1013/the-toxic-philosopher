@@ -13,6 +13,9 @@ import KantIntro from "./pages/KantIntro";
 import FreudIntro from "./pages/FreudIntro";
 import Chat from "./pages/Chat";
 import Design from "./pages/Design";
+import MobileGuide from "./pages/MobileGuide";
+import { useState, useEffect } from "react";
+import { isMobileDevice } from "./lib/device-detect";
 
 function Router() {
   return (
@@ -39,6 +42,40 @@ function Router() {
 // - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
 function App() {
+  const [isMobile, setIsMobile] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    // 检测设备类型
+    const checkDevice = () => {
+      setIsMobile(isMobileDevice());
+      setIsChecking(false);
+    };
+    
+    checkDevice();
+    
+    // 监听窗口大小变化
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  // 加载中，不显示任何内容
+  if (isChecking) {
+    return null;
+  }
+
+  // 移动设备显示引导页
+  if (isMobile) {
+    return (
+      <ErrorBoundary>
+        <ThemeProvider defaultTheme="dark">
+          <MobileGuide />
+        </ThemeProvider>
+      </ErrorBoundary>
+    );
+  }
+
+  // PC端显示完整应用
   return (
     <ErrorBoundary>
       <ThemeProvider
