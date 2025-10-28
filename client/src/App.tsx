@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
+import MobileDetector from "./components/MobileDetector";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import SelectPhilosopher from "./pages/SelectPhilosopher";
@@ -13,9 +14,6 @@ import KantIntro from "./pages/KantIntro";
 import FreudIntro from "./pages/FreudIntro";
 import Chat from "./pages/Chat";
 import Design from "./pages/Design";
-import MobileGuide from "./pages/MobileGuide";
-import { useState, useEffect } from "react";
-import { isMobileDevice } from "./lib/device-detect";
 
 function Router() {
   return (
@@ -42,55 +40,15 @@ function Router() {
 // - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
 function App() {
-  const [isMobile, setIsMobile] = useState(() => {
-    // 初始化时就检测，避免白屏
-    try {
-      return typeof window !== 'undefined' && window.innerWidth < 768;
-    } catch {
-      return false; // 错误时默认为PC端
-    }
-  });
-
-  useEffect(() => {
-    // 检测设备类型
-    const checkDevice = () => {
-      try {
-        setIsMobile(isMobileDevice());
-      } catch (error) {
-        console.error('Device detection error:', error);
-        setIsMobile(false);
-      }
-    };
-    
-    checkDevice();
-    
-    // 监听窗口大小变化
-    window.addEventListener('resize', checkDevice);
-    return () => window.removeEventListener('resize', checkDevice);
-  }, []);
-
-  // 移动设备显示引导页
-  if (isMobile) {
-    return (
-      <ErrorBoundary>
-        <ThemeProvider defaultTheme="dark">
-          <MobileGuide />
-        </ThemeProvider>
-      </ErrorBoundary>
-    );
-  }
-
-  // PC端显示完整应用
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="dark"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+      <ThemeProvider defaultTheme="dark">
+        <MobileDetector>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </MobileDetector>
       </ThemeProvider>
     </ErrorBoundary>
   );
