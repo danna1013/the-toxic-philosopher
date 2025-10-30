@@ -130,7 +130,7 @@ export default function SelectPhilosopher() {
   };
 
   return (
-    <div className="min-h-screen text-white relative overflow-hidden flex flex-col" style={{
+    <div className="h-screen text-white relative overflow-hidden flex flex-col" style={{
       backgroundColor: explodingId ? '#FAFAFA' : '#000000',
       transition: explodingId ? 'background-color 1.8s ease-in-out 0.5s' : 'none',
     }}>

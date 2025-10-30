@@ -121,10 +121,6 @@
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* 全局缩放到60%，让所有内容在一屏内完整显示 */
-    zoom: 0.6;
-    -moz-transform: scale(0.6);
-    -moz-transform-origin: 0 0;
   }
   
   html, body {
@@ -132,11 +128,8 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* 防止横向滚动 */
-  }
-  
-  body {
-    background-color: #000000; /* 设置body背景色为黑色，避免露出白边 */
+    overflow: hidden; /* 防止滚动条 */
+    background-color: #000000; /* 黑色背景，避免露出空白 */
   }
   
   * {
@@ -146,15 +139,16 @@
   
   body {
     @apply text-foreground;
-    min-height: 100vh;
-    min-height: 100dvh; /* 使用动态视口高度 */
-    background-color: #000000; /* 默认黑色背景，避免露出空白 */
   }
   
   #root {
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
+    /* 使用transform scale代替zoom，确保跨浏览器一致性 */
+    width: 166.67vw; /* 100 / 0.6 = 166.67 */
+    height: 166.67vh;
+    transform: scale(0.6);
+    transform-origin: 0 0; /* 从左上角开始缩放 */
+    overflow-y: auto; /* 允许内容滚动 */
+    overflow-x: hidden;
   }
   
   button:not(:disabled),
