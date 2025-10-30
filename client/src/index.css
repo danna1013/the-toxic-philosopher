@@ -116,11 +116,13 @@
 @layer base {
   /* 全局样式重置 - 确保正确的缩放和布局 */
   html {
-    font-size: 16px; /* 确保基础字体大小为16px */
-    -webkit-text-size-adjust: 100%; /* 防止iOS自动调整字体大小 */
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* 使用zoom进行全局缩放 */
+    zoom: 0.6;
   }
   
   html, body {
@@ -128,27 +130,22 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* 防止滚动条 */
-    background-color: #000000; /* 黑色背景，避免露出空白 */
+    overflow-x: hidden;
   }
   
   * {
     @apply border-border outline-ring/50;
-    box-sizing: border-box; /* 确保所有元素使用border-box */
+    box-sizing: border-box;
   }
   
   body {
-    @apply text-foreground;
+    @apply bg-background text-foreground;
+    min-height: 100vh;
   }
   
   #root {
-    /* 使用transform scale代替zoom，确保跨浏览器一致性 */
-    width: 166.67vw; /* 100 / 0.6 = 166.67 */
-    height: 166.67vh;
-    transform: scale(0.6);
-    transform-origin: 0 0; /* 从左上角开始缩放 */
-    overflow-y: auto; /* 允许内容滚动 */
-    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
   }
   
   button:not(:disabled),

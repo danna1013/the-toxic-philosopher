@@ -5,10 +5,18 @@ export default function Home() {
   const [isExploding, setIsExploding] = useState(false);
   const [, setLocation] = useLocation();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [containerHeight, setContainerHeight] = useState('100vh');
 
   useEffect(() => {
     // 页面加载动画
     setTimeout(() => setIsLoaded(true), 100);
+    
+    // 检测浏览器对zoom的支持：Chrome/Edge需要166.67vh，Safari使用100vh
+    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    const isEdge = /Edg/.test(navigator.userAgent);
+    if (isChrome || isEdge) {
+      setContainerHeight('166.67vh');
+    }
   }, []);
 
   const handleLogoClick = () => {
@@ -19,7 +27,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`h-screen bg-white flex flex-col relative overflow-hidden transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`bg-white flex flex-col relative overflow-hidden transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ height: containerHeight }}>
       {/* 导航栏 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm">
         <div className="px-8 py-5 flex items-center justify-between">
