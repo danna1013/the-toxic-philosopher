@@ -135,15 +135,20 @@
     overflow-x: hidden; /* 防止横向滚动 */
   }
   
+  body {
+    background-color: #000000; /* 设置body背景色为黑色，避免露出白边 */
+  }
+  
   * {
     @apply border-border outline-ring/50;
     box-sizing: border-box; /* 确保所有元素使用border-box */
   }
   
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     min-height: 100vh;
     min-height: 100dvh; /* 使用动态视口高度 */
+    background-color: #000000; /* 默认黑色背景，避免露出空白 */
   }
   
   #root {
