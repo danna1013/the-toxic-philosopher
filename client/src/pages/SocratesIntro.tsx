@@ -50,13 +50,13 @@ export default function SocratesIntro() {
       {/* 跳过按钮 */}
       <motion.button
         onClick={handleSkip}
-        className="absolute top-8 right-8 z-50 flex items-center gap-2 px-4 py-2 text-gray-800 hover:text-black transition-colors group"
+        className="absolute top-8 right-8 z-50 flex items-center gap-3 px-6 py-3 text-gray-800 hover:text-black transition-colors group bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 hover:border-black shadow-sm"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        <span className="text-sm font-medium">跳过</span>
-        <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+        <span className="text-lg font-medium">跳过</span>
+        <X className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
       </motion.button>
 
       {/* 主内容区域 */}
@@ -132,19 +132,19 @@ export default function SocratesIntro() {
                     // 前两页：下一页
                     <button
                       onClick={handleNext}
-                      className="flex items-center gap-2 text-gray-400 hover:text-black transition-all duration-300 group"
+                      className="flex items-center gap-3 px-6 py-3 text-gray-800 hover:text-black transition-all duration-300 group bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 hover:border-black shadow-sm"
                       aria-label="下一页"
                     >
-                      <span className="text-sm font-light tracking-wider">下一页</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      <span className="text-lg font-medium tracking-wider">下一页</span>
+                      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
                     </button>
                   ) : (
                     // 第三页：开始对话按钮
                     <button
                       onClick={handleStartChat}
-                      className="text-gray-400 hover:text-black transition-colors duration-300"
+                      className="px-6 py-3 text-gray-800 hover:text-black transition-colors duration-300 bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 hover:border-black shadow-sm"
                     >
-                      <span className="text-sm font-light tracking-wider">开始对话</span>
+                      <span className="text-lg font-medium tracking-wider">开始对话</span>
                     </button>
                   )}
                 </div>

@@ -233,10 +233,10 @@ export default function SelectPhilosopher() {
         transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
       }}>
         <div className="flex flex-col gap-0.5">
-          <h1 className="text-lg font-bold tracking-wide">毒舌哲学家</h1>
-          <p className="text-[10px] font-medium tracking-[0.2em] text-gray-400">THE TOXIC PHILOSOPHER</p>
+          <h1 className="text-xl md:text-2xl font-bold tracking-wide">毒舌哲学家</h1>
+          <p className="text-xs md:text-sm font-medium tracking-[0.2em] text-gray-400">THE TOXIC PHILOSOPHER</p>
         </div>
-        <div className="flex items-center gap-8 text-sm">
+        <div className="flex items-center gap-8 text-lg md:text-xl">
           <a href="/" className="hover:text-gray-300 transition-colors">首页</a>
           <a href="/design" className="hover:text-gray-300 transition-colors">设计理念</a>
           <a href="/select" className="hover:text-gray-300 transition-colors">查见反馈 ↗</a>

@@ -33,19 +33,19 @@ export default function Home() {
         <div className="px-8 py-5 flex items-center justify-between">
           {/* 左侧品牌名 - 中英文组合 */}
           <div className="flex flex-col gap-0.5">
-            <div className="text-lg font-bold tracking-wide">毒舌哲学家</div>
-            <div className="text-[10px] font-medium tracking-[0.2em] text-gray-500">THE TOXIC PHILOSOPHER</div>
+            <div className="text-xl md:text-2xl font-bold tracking-wide">毒舌哲学家</div>
+            <div className="text-xs md:text-sm font-medium tracking-[0.2em] text-gray-500">THE TOXIC PHILOSOPHER</div>
           </div>
           
           {/* 右侧导航 */}
           <div className="flex items-center gap-8">
-            <a href="#home" className="relative text-base text-gray-600 hover:text-black transition-colors group">
+            <a href="#home" className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
               首页
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </a>
             <button
               onClick={() => setLocation("/design")}
-              className="relative text-base text-gray-600 hover:text-black transition-colors group"
+              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
             >
               设计理念
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
@@ -54,7 +54,7 @@ export default function Home() {
               href="https://nops.woa.com/pigeon/v1/tools/add_chat?chatId=ww235627801068712&msgContent=hi%EF%BC%8C%E6%AC%A2%E8%BF%8E%E5%8A%A0%E5%85%A5%E2%80%9C%E6%AF%92%E8%88%8C%E5%93%B2%E5%AD%A6%E5%AE%B6%E2%80%9D%E5%BB%BA%E8%AE%AE%E5%8F%8D%E9%A6%88%E7%BE%A4%EF%BD%9E%20" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="relative text-base text-gray-600 hover:text-black transition-colors group"
+              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
             >
               意见反馈 ↗
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
@@ -63,7 +63,7 @@ export default function Home() {
               href="https://teko.woa.com/event/ai-agent/246" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="relative text-base text-gray-600 hover:text-black transition-colors group"
+              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
             >
               求点赞评论 ↗
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
@@ -170,17 +170,17 @@ export default function Home() {
       >
         {/* 主标题区域 - 添加渐入动画 */}
         <div className="text-center mb-12 md:mb-16 lg:mb-20 max-w-6xl animate-fade-in-up">
-          <h1 className="font-bold text-black tracking-tight leading-[1.1] mb-4 md:mb-6" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
+          <h1 className="font-bold text-black tracking-tight leading-[1.1] mb-4 md:mb-6" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}>
             真相往往不太礼貌
           </h1>
           
-          <h2 className="font-light text-gray-600 tracking-tight leading-[1.2] animate-fade-in-up" style={{ fontSize: 'clamp(1.25rem, 2.5vw, 2rem)', animationDelay: '0.2s' }}>
+          <h2 className="font-light text-gray-600 tracking-tight leading-[1.2] animate-fade-in-up" style={{ fontSize: 'clamp(1.75rem, 3.5vw, 3rem)', animationDelay: '0.2s' }}>
             但总比谎言有用
           </h2>
         </div>
 
         {/* 副标题 - 哲学家名字 */}
-        <p className="text-base md:text-lg lg:text-xl text-gray-500 mb-12 md:mb-16 lg:mb-20 text-center leading-relaxed tracking-wide animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+        <p className="text-lg md:text-xl lg:text-2xl text-gray-500 mb-12 md:mb-16 lg:mb-20 text-center leading-relaxed tracking-wide animate-fade-in-up" style={{animationDelay: '0.4s'}}>
           苏格拉底、尼采、维特根斯坦、康德、弗洛伊德
           <br className="hidden md:block" />
           <span className="md:inline-block md:ml-2">在此等你</span>

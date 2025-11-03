@@ -50,10 +50,10 @@ export default function NietzscheIntro() {
       {/* 跳过按钮 */}
       <button
         onClick={handleSkip}
-        className="fixed top-8 right-8 z-50 flex items-center gap-2 px-4 py-2 text-gray-500 hover:text-black transition-colors"
+        className="fixed top-8 right-8 z-50 flex items-center gap-3 px-6 py-3 text-gray-800 hover:text-black transition-colors bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 hover:border-black shadow-sm"
       >
-        <span className="text-sm">跳过</span>
-        <X className="w-4 h-4" />
+        <span className="text-lg font-medium">跳过</span>
+        <X className="w-6 h-6" />
       </button>
 
       {/* 主内容区域 */}
@@ -103,15 +103,15 @@ export default function NietzscheIntro() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
               onClick={currentScene < script.length - 1 ? handleNext : handleStartChat}
-              className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-sm font-light tracking-wider text-gray-400 hover:text-black transition-colors"
+              className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 flex items-center gap-3 px-6 py-3 text-gray-800 hover:text-black transition-colors bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 hover:border-black shadow-sm"
             >
               {currentScene < script.length - 1 ? (
                 <>
-                  <span>下一页</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  <span className="text-lg font-medium tracking-wider">下一页</span>
+                  <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-1" />
                 </>
               ) : (
-                <span>开始对话</span>
+                <span className="text-lg font-medium tracking-wider">开始对话</span>
               )}
             </motion.button>
           </AnimatePresence>

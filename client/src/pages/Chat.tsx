@@ -189,24 +189,24 @@ export default function Chat() {
       <div className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
         <button
           onClick={() => setLocation("/select")}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors bg-white border border-gray-300 rounded-full hover:bg-gray-50 shadow-sm"
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span className="text-sm font-medium">返回</span>
+          <ArrowLeft className="w-6 h-6" />
+          <span className="text-lg font-medium">返回</span>
         </button>
         
         <div className="text-center">
-          <h1 className="text-lg font-semibold text-gray-900">与{philosopher.name}对话</h1>
-          <p className="text-xs text-gray-500 mt-0.5">{philosopher.style}</p>
+          <h1 className="text-xl md:text-2xl font-semibold text-gray-900">与{philosopher.name}对话</h1>
+          <p className="text-sm md:text-base text-gray-500 mt-0.5">{philosopher.style}</p>
         </div>
         
         <button
           onClick={() => setShowConfirmDialog(true)}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors bg-white border border-gray-300 rounded-full hover:bg-gray-50 shadow-sm"
           title="清除对话"
         >
-          <RotateCcw className="w-5 h-5" />
-          <span className="text-sm font-medium">重新开始</span>
+          <RotateCcw className="w-6 h-6" />
+          <span className="text-lg font-medium">重新开始</span>
         </button>
       </div>
 
