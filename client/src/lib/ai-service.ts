@@ -363,8 +363,8 @@ export async function* getPhilosopherResponseStream(
 ): AsyncGenerator<string, void, unknown> {
   const systemPrompt = PHILOSOPHER_PROMPTS[philosopherId] || PHILOSOPHER_PROMPTS.socrates;
 
-  // 保留最近15轮对话（30条消息）
-  const recentMessages = conversationHistory.slice(-30);
+  // 保留最近100轮对话（200条消息）
+  const recentMessages = conversationHistory.slice(-200);
   
   // 提取最近8条AI回复用于反重复检测
   const recentAIReplies = extractRecentAIReplies(conversationHistory, 8);
