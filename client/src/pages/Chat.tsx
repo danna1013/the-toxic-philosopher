@@ -223,7 +223,7 @@ export default function Chat() {
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-3xl px-8 py-6 ${
+                  className={`max-w-[70%] rounded-3xl px-6 py-4 ${
                     message.role === "user"
                       ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-lg"
                       : "bg-white text-gray-800 shadow-md border border-gray-100"
@@ -231,7 +231,7 @@ export default function Chat() {
                 >
                   <div className="whitespace-pre-wrap">
                     {message.content.split('\n\n').map((paragraph, i) => (
-                      <p key={i} className={`text-2xl leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
+                      <p key={i} className={`text-xl leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
                         {paragraph}
                       </p>
                     ))}
@@ -248,10 +248,10 @@ export default function Chat() {
               animate={{ opacity: 1, y: 0 }}
               className="flex justify-start"
             >
-              <div className="max-w-[80%] rounded-3xl px-8 py-6 bg-white text-gray-800 shadow-md border border-gray-100">
+              <div className="max-w-[75%] rounded-3xl px-7 py-5 bg-white text-gray-800 shadow-md border border-gray-100">
                 <div className="whitespace-pre-wrap">
                   {streamingContent.split('\n\n').map((paragraph, i) => (
-                    <p key={i} className={`text-2xl leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
+                    <p key={i} className={`text-xl leading-[1.8] ${i > 0 ? 'mt-5' : ''} ${i === 0 ? 'font-medium' : ''}`}>
                       {paragraph}
                       {i === streamingContent.split('\n\n').length - 1 && (
                         <span className="inline-block w-1 h-4 ml-1 bg-gray-400 animate-pulse" />
@@ -270,7 +270,7 @@ export default function Chat() {
               animate={{ opacity: 1, y: 0 }}
               className="flex justify-start"
             >
-              <div className="max-w-[80%] rounded-3xl px-8 py-6 bg-white text-gray-800 shadow-md border border-gray-100">
+              <div className="max-w-[75%] rounded-3xl px-7 py-5 bg-white text-gray-800 shadow-md border border-gray-100">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -295,12 +295,12 @@ export default function Chat() {
             onKeyPress={handleKeyPress}
             placeholder="说点什么..."
             disabled={isTyping}
-            className="flex-1 px-5 py-4 text-base rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all text-gray-900 placeholder:text-gray-400"
+            className="flex-1 px-6 py-5 text-lg rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all text-gray-900 placeholder:text-gray-400"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isTyping}
-            className="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all hover:shadow-lg"
+            className="w-14 h-14 rounded-full bg-gray-900 text-white flex items-center justify-center hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all hover:shadow-lg"
           >
             <Send className="w-5 h-5" />
           </button>
