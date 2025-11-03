@@ -6,7 +6,7 @@ import { X, ArrowRight } from 'lucide-react';
 // 定义三幕内容
 const script = [
   { 
-    text: "我是苏格拉底，雅典的'牛虹'。", 
+    text: "我是苏格拉底，雅典的'牛虻'。", 
     image: "/socrates-scene-1-white.png",
     imageAlt: "雅典广场",
   },
