@@ -366,8 +366,8 @@ export async function* getPhilosopherResponseStream(
   // 保留最近100轮对话（200条消息）
   const recentMessages = conversationHistory.slice(-200);
   
-  // 提取最近8条AI回复用于反重复检测
-  const recentAIReplies = extractRecentAIReplies(conversationHistory, 8);
+  // 提取所有AI回复用于反重复检测（最多100轮）
+  const recentAIReplies = extractRecentAIReplies(conversationHistory, 100);
   
   // 生成对话阶段提示
   const stagePrompt = getStagePrompt(conversationHistory.length);
