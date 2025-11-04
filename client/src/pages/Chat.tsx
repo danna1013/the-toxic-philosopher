@@ -2,7 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation, useRoute } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { getPhilosopherResponseStream, type ChatMessage } from "@/lib/ai-service";
-import { ArrowLeft, Send, RotateCcw } from "lucide-react";
+import { ArrowLeft, Send, RotateCcw, Share2 } from "lucide-react";
+import { PosterCanvas } from "@/components/PosterCanvas";
+import { SharePosterModal } from "@/components/SharePosterModal";
+import { generatePoster } from "@/lib/poster-generator";
 
 interface Message {
   role: "user" | "philosopher";
@@ -80,6 +83,11 @@ export default function Chat() {
   const [isTyping, setIsTyping] = useState(false);
   const [streamingContent, setStreamingContent] = useState(""); // 流式输出的内容
   const [showConfirmDialog, setShowConfirmDialog] = useState(false); // 显示确认对话框
+  const [isSelectionMode, setIsSelectionMode] = useState(false); // 选择模式
+  const [selectedMessages, setSelectedMessages] = useState<number[]>([]); // 选中的消息索引
+  const [showPosterModal, setShowPosterModal] = useState(false); // 显示海报预览
+  const [posterDataUrl, setPosterDataUrl] = useState(""); // 海报图片URL
+  const [isGenerating, setIsGenerating] = useState(false); // 正在生成海报
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [, setLocation] = useLocation();
@@ -200,14 +208,25 @@ export default function Chat() {
           <p className="text-sm md:text-base text-gray-500 mt-0.5">{philosopher.style}</p>
         </div>
         
-        <button
-          onClick={() => setShowConfirmDialog(true)}
-          className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors bg-white border border-gray-300 rounded-full hover:bg-gray-50 shadow-sm"
-          title="清除对话"
-        >
-          <RotateCcw className="w-6 h-6" />
-          <span className="text-lg font-medium">重新开始</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsSelectionMode(true)}
+            className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors bg-white border border-gray-300 rounded-full hover:bg-gray-50 shadow-sm"
+            title="分享对话"
+          >
+            <Share2 className="w-6 h-6" />
+            <span className="text-lg font-medium">分享对话</span>
+          </button>
+          
+          <button
+            onClick={() => setShowConfirmDialog(true)}
+            className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors bg-white border border-gray-300 rounded-full hover:bg-gray-50 shadow-sm"
+            title="清除对话"
+          >
+            <RotateCcw className="w-6 h-6" />
+            <span className="text-lg font-medium">重新开始</span>
+          </button>
+        </div>
       </div>
 
       {/* 对话区域 */}
@@ -220,13 +239,48 @@ export default function Chat() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex items-center gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
+                {/* 左侧选择框（哲学家消息） */}
+                {isSelectionMode && message.role === "philosopher" && (
+                  <button
+                    onClick={() => {
+                      setSelectedMessages(prev => 
+                        prev.includes(index) 
+                          ? prev.filter(i => i !== index)
+                          : [...prev, index]
+                      );
+                    }}
+                    className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
+                      selectedMessages.includes(index)
+                        ? "bg-gray-900 border-gray-900"
+                        : "border-gray-400 hover:border-gray-600"
+                    }`}
+                  >
+                    {selectedMessages.includes(index) && (
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </button>
+                )}
+                
                 <div
+                  onClick={() => {
+                    if (isSelectionMode) {
+                      setSelectedMessages(prev => 
+                        prev.includes(index) 
+                          ? prev.filter(i => i !== index)
+                          : [...prev, index]
+                      );
+                    }
+                  }}
                   className={`max-w-[70%] rounded-3xl px-6 py-4 ${
                     message.role === "user"
                       ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-lg"
                       : "bg-white text-gray-800 shadow-md border border-gray-100"
+                  } ${
+                    isSelectionMode ? "cursor-pointer hover:opacity-80 transition-opacity" : ""
                   }`}
                 >
                   <div className="whitespace-pre-wrap">
@@ -237,6 +291,30 @@ export default function Chat() {
                     ))}
                   </div>
                 </div>
+                
+                {/* 右侧选择框（用户消息） */}
+                {isSelectionMode && message.role === "user" && (
+                  <button
+                    onClick={() => {
+                      setSelectedMessages(prev => 
+                        prev.includes(index) 
+                          ? prev.filter(i => i !== index)
+                          : [...prev, index]
+                      );
+                    }}
+                    className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
+                      selectedMessages.includes(index)
+                        ? "bg-gray-900 border-gray-900"
+                        : "border-gray-400 hover:border-gray-600"
+                    }`}
+                  >
+                    {selectedMessages.includes(index) && (
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </button>
+                )}
               </motion.div>
             ))}
           </AnimatePresence>
@@ -306,6 +384,94 @@ export default function Chat() {
           </button>
         </div>
       </div>
+
+      {/* 选择模式顶部栏 */}
+      {isSelectionMode && (
+        <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 p-5 flex justify-between items-center z-50 shadow-md">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => {
+                setIsSelectionMode(false);
+                setSelectedMessages([]);
+              }}
+              className="px-5 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-lg font-medium"
+            >
+              取消
+            </button>
+            <button 
+              onClick={() => {
+                if (selectedMessages.length === messages.length) {
+                  setSelectedMessages([]);
+                } else {
+                  setSelectedMessages(messages.map((_, i) => i));
+                }
+              }}
+              className="px-5 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-lg font-medium border border-gray-300"
+            >
+              {selectedMessages.length === messages.length ? '取消全选' : '全选'}
+            </button>
+          </div>
+          <span className="text-xl font-medium text-gray-900">
+            已选择 {selectedMessages.length} 条对话
+          </span>
+          <button 
+            onClick={async () => {
+              if (selectedMessages.length === 0) {
+                alert('请至少选择一条对话');
+                return;
+              }
+              if (selectedMessages.length > 10) {
+                alert('最多只能选择10条对话');
+                return;
+              }
+              
+              setIsGenerating(true);
+              try {
+                // 等待DOM渲染
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // 生成海报
+                const dataUrl = await generatePoster('poster-canvas');
+                setPosterDataUrl(dataUrl);
+                setShowPosterModal(true);
+                
+                // 退出选择模式
+                setIsSelectionMode(false);
+                setSelectedMessages([]);
+              } catch (error) {
+                console.error('生成海报失败:', error);
+                alert('生成海报失败，请重试');
+              } finally {
+                setIsGenerating(false);
+              }
+            }}
+            disabled={selectedMessages.length === 0 || isGenerating}
+            className="px-6 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-lg font-medium"
+          >
+            {isGenerating ? '生成中...' : '生成海报'}
+          </button>
+        </div>
+      )}
+
+      {/* 隐藏的海报画布 */}
+      {isSelectionMode && selectedMessages.length > 0 && (
+        <PosterCanvas
+          philosopherId={philosopherId}
+          philosopherName={philosopher.name}
+          philosopherTagline={philosopher.tagline}
+          messages={selectedMessages.map(index => ({
+            role: messages[index].role === 'user' ? 'user' : 'assistant',
+            content: messages[index].content
+          }))}
+        />
+      )}
+
+      {/* 海报预览模态框 */}
+      <SharePosterModal
+        isOpen={showPosterModal}
+        onClose={() => setShowPosterModal(false)}
+        posterDataUrl={posterDataUrl}
+      />
 
       {/* 自定义确认对话框 */}
       {showConfirmDialog && (

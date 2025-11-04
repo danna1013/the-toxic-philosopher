@@ -1,0 +1,110 @@
+import React, { useState } from 'react';
+import { X, Download, Copy, Check } from 'lucide-react';
+import { downloadImage, copyImageToClipboard } from '../lib/poster-generator';
+
+interface SharePosterModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  posterDataUrl: string;
+}
+
+export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePosterModalProps) {
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [copyError, setCopyError] = useState(false);
+  
+  if (!isOpen) return null;
+  
+  const handleDownload = () => {
+    downloadImage(posterDataUrl, `毒舌哲学家-${Date.now()}.png`);
+  };
+  
+  const handleCopy = async () => {
+    const success = await copyImageToClipboard(posterDataUrl);
+    if (success) {
+      setCopySuccess(true);
+      setCopyError(false);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } else {
+      setCopyError(true);
+      setTimeout(() => setCopyError(false), 3000);
+    }
+  };
+  
+  return (
+    <div 
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-2xl p-8 max-w-3xl w-full max-h-[95vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 标题和关闭按钮 */}
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-2xl font-bold text-gray-900">分享海报</h3>
+          <button 
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X className="w-5 h-5 text-gray-600" />
+          </button>
+        </div>
+        
+        {/* 海报预览 */}
+        <div className="mb-4 rounded-lg overflow-hidden shadow-lg">
+          <img 
+            src={posterDataUrl} 
+            alt="分享海报" 
+            className="w-full"
+          />
+        </div>
+        
+        {/* 操作按钮 */}
+        <div className="flex gap-3">
+          <button 
+            onClick={handleDownload}
+            className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-colors font-medium text-lg"
+          >
+            <Download className="w-5 h-5" />
+            下载图片
+          </button>
+          
+          <button 
+            onClick={handleCopy}
+            className={`flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg transition-colors font-medium text-lg ${
+              copySuccess 
+                ? 'bg-green-500 text-white' 
+                : copyError
+                ? 'bg-red-500 text-white'
+                : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+            }`}
+            disabled={copySuccess}
+          >
+            {copySuccess ? (
+              <>
+                <Check className="w-5 h-5" />
+                已复制
+              </>
+            ) : copyError ? (
+              <>
+                <X className="w-5 h-5" />
+                不支持
+              </>
+            ) : (
+              <>
+                <Copy className="w-5 h-5" />
+                复制图片
+              </>
+            )}
+          </button>
+        </div>
+        
+        {copyError && (
+          <p className="mt-3 text-sm text-gray-600 text-center">
+            您的浏览器不支持复制图片，请下载后分享
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
