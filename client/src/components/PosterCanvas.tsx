@@ -206,8 +206,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
               <div
                 style={{
                   padding: message.role === 'user' ? '12px 16px' : '20px 24px',
-                  width: 'auto',
-                  maxWidth: '85%',
+                  display: 'inline-block',
                   background: message.role === 'user' 
                     ? 'linear-gradient(to bottom right, rgb(31, 41, 55) 0%, rgb(17, 24, 39) 100%)' 
                     : '#ffffff',
