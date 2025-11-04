@@ -61,7 +61,7 @@ export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePoster
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl p-8 max-w-3xl w-full max-h-[95vh] overflow-y-auto"
+        className="bg-white rounded-2xl p-8 max-w-3xl w-full max-h-[98vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 标题和关闭按钮 */}
@@ -76,7 +76,7 @@ export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePoster
         </div>
         
         {/* 海报预览 */}
-        <div className="mb-4 rounded-lg overflow-hidden shadow-lg">
+        <div className="mb-4 overflow-hidden shadow-lg">
           <img 
             src={posterDataUrl} 
             alt="分享海报" 

@@ -205,9 +205,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             >
               <div
                 style={{
-                  maxWidth: '85%', // 最大宽度85%
-                  display: 'inline-block', // 使用inline-block让宽度自适应内容
                   padding: '20px 24px',
+                  width: 'auto',
+                  maxWidth: message.content.length > 50 ? '85%' : 'max-content',
                   background: message.role === 'user' 
                     ? 'linear-gradient(to bottom right, rgb(31, 41, 55) 0%, rgb(17, 24, 39) 100%)' 
                     : '#ffffff',
