@@ -205,9 +205,8 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             >
               <div
                 style={{
-                  maxWidth: message.role === 'user' ? '85%' : '100%', // 用户消息最大85%，哲学家消息100%
-                  minWidth: message.role === 'user' ? 'auto' : undefined, // 用户消息自适应宽度
-                  width: message.role === 'user' ? 'fit-content' : undefined, // 用户消息根据内容调整宽度
+                  maxWidth: '85%', // 最大宽度85%
+                  display: 'inline-block', // 使用inline-block让宽度自适应内容
                   padding: '20px 24px',
                   background: message.role === 'user' 
                     ? 'linear-gradient(to bottom right, rgb(31, 41, 55) 0%, rgb(17, 24, 39) 100%)' 
