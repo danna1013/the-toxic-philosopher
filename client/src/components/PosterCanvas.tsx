@@ -149,6 +149,11 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
                 height: '100%',
                 objectFit: 'cover',
               }}
+              onError={(e) => {
+                // 如果图片加载失败，显示占位符
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
             />
           </div>
 
@@ -200,7 +205,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             >
               <div
                 style={{
-                  maxWidth: '75%',
+                  maxWidth: message.role === 'user' ? '85%' : '100%', // 用户消息最大85%，哲学家消息100%
+                  minWidth: message.role === 'user' ? 'auto' : undefined, // 用户消息自适应宽度
+                  width: message.role === 'user' ? 'fit-content' : undefined, // 用户消息根据内容调整宽度
                   padding: '20px 24px',
                   background: message.role === 'user' 
                     ? 'linear-gradient(to bottom right, rgb(31, 41, 55) 0%, rgb(17, 24, 39) 100%)' 
@@ -235,7 +242,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
         </div>
       </div>
 
-      {/* 底部区域 */}
+      {/* 底部区域 - 移除所有装饰框框 */}
       <div
         style={{
           background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 50%, #000000 100%)',
@@ -244,26 +251,10 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
           flexDirection: 'column',
           alignItems: 'center',
           gap: '16px',
-          borderTop: '3px solid rgba(255, 255, 255, 0.1)',
-          boxShadow: '0 -6px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
           position: 'relative',
           zIndex: 1,
         }}
       >
-        {/* 顶部装饰 */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '200px',
-            height: '3px',
-            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
-            filter: 'blur(2px)',
-          }}
-        />
-
         {/* Agent大赛链接 */}
         <div
           style={{
@@ -310,23 +301,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
         >
           你的评论是我最大的动力！
         </div>
-
-        {/* 底部装饰 */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '60px',
-            height: '3px',
-            background: 'rgba(255, 255, 255, 0.2)',
-            borderRadius: '2px 2px 0 0',
-          }}
-        />
       </div>
     </div>
   );
 };
-
-
