@@ -112,7 +112,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
       {/* 内容区域 */}
       <div
         style={{
-          padding: '40px 52px 20px 52px',
+          padding: '40px 52px 32px 52px',
           position: 'relative',
           zIndex: 1,
         }}
@@ -250,7 +250,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
       <div
         style={{
           background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 50%, #000000 100%)',
-          padding: '20px 52px',
+          padding: '32px 52px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
