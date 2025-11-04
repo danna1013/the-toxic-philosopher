@@ -52,7 +52,7 @@ export default function FreudIntro() {
         onClick={handleSkip}
         className="fixed top-8 right-8 z-50 flex items-center gap-3 px-6 py-3 text-gray-800 hover:text-black transition-colors bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 hover:border-black shadow-sm"
       >
-        <span className="text-sm">跳过</span>
+        <span className="text-lg font-medium">跳过</span>
         <X className="w-6 h-6" />
       </button>
 
@@ -107,11 +107,11 @@ export default function FreudIntro() {
             >
               {currentScene < script.length - 1 ? (
                 <>
-                  <span>下一页</span>
+                  <span className="text-lg font-medium">下一页</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </>
               ) : (
-                <span>开始对话</span>
+                <span className="text-lg font-medium">开始对话</span>
               )}
             </motion.button>
           </AnimatePresence>
