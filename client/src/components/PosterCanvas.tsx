@@ -37,6 +37,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
 
   return (
     <div
+      id="poster-canvas"
       style={{
         width: '750px',
         minHeight: `${totalHeight}px`,
@@ -44,7 +45,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
         display: 'flex',
         flexDirection: 'column',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        position: 'relative',
+        position: 'absolute',
+        left: '-9999px',
+        top: 0,
         border: '12px solid #000000',
         boxSizing: 'border-box',
       }}
