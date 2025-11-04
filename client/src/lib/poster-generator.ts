@@ -15,21 +15,37 @@ export async function generatePoster(elementId: string = 'poster-canvas'): Promi
   try {
     // 等待所有图片加载完成
     const images = element.querySelectorAll('img');
+    console.log('开始等待图片加载:', images.length, '张');
+    
     await Promise.all(
-      Array.from(images).map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = () => {
-            console.warn('图片加载失败:', img.src);
-            resolve(); // 即使加载失败也继续
-          };
+      Array.from(images).map((img, index) => {
+        return new Promise((resolve) => {
+          if (img.complete && img.naturalHeight !== 0) {
+            console.log(`图片 ${index + 1} 已加载:`, img.src);
+            resolve(null);
+          } else {
+            console.log(`等待图片 ${index + 1} 加载:`, img.src);
+            img.onload = () => {
+              console.log(`图片 ${index + 1} 加载完成:`, img.src);
+              resolve(null);
+            };
+            img.onerror = () => {
+              console.warn(`图片 ${index + 1} 加载失败:`, img.src);
+              resolve(null); // 即使加载失败也继续
+            };
+            // 设置超时，避免无限等待
+            setTimeout(() => {
+              console.warn(`图片 ${index + 1} 加载超时:`, img.src);
+              resolve(null);
+            }, 3000);
+          }
         });
       })
     );
     
-    // 等待一小段时间确保渲染完成
-    await new Promise(resolve => setTimeout(resolve, 500));
+    console.log('所有图片加载完成，等待渲染...');
+    // 增加等待时间确保渲染完成
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // 获取元素的实际宽高（使用scrollHeight确保获取完整高度）
     const width = element.offsetWidth || 750;
@@ -87,24 +103,41 @@ export function downloadImage(dataUrl: string, filename: string = '毒舌哲学�
  */
 export async function copyImageToClipboard(dataUrl: string): Promise<boolean> {
   try {
+    console.log('开始复制图片到剪贴板...');
+    
     // 检查浏览器是否支持Clipboard API
-    if (!navigator.clipboard || !navigator.clipboard.write) {
-      console.warn('浏览器不支持复制图片到剪贴板');
+    if (!navigator.clipboard) {
+      console.warn('navigator.clipboard 不存在');
       return false;
     }
     
+    if (!navigator.clipboard.write) {
+      console.warn('navigator.clipboard.write 不存在');
+      return false;
+    }
+    
+    console.log('浏览器支持 Clipboard API');
+    
     // 将Data URL转换为Blob
+    console.log('开始将 Data URL 转换为 Blob...');
     const response = await fetch(dataUrl);
     const blob = await response.blob();
+    console.log('Blob 转换成功，大小:', blob.size, 'bytes, 类型:', blob.type);
     
     // 复制到剪贴板
+    console.log('开始写入剪贴板...');
     await navigator.clipboard.write([
       new ClipboardItem({ 'image/png': blob })
     ]);
     
+    console.log('复制成功！');
     return true;
   } catch (error) {
-    console.error('复制失败:', error);
+    console.error('复制失败，错误详情:', error);
+    if (error instanceof Error) {
+      console.error('错误消息:', error.message);
+      console.error('错误堆栈:', error.stack);
+    }
     return false;
   }
 }

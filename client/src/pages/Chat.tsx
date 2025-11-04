@@ -388,6 +388,9 @@ export default function Chat() {
       {/* 选择模式顶部栏 */}
       {isSelectionMode && (
         <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 p-5 flex justify-between items-center z-50 shadow-md">
+          <span className="text-xl font-medium text-gray-900">
+            已选择 {selectedMessages.length} 条对话
+          </span>
           <div className="flex items-center gap-4">
             <button 
               onClick={() => {
@@ -410,11 +413,7 @@ export default function Chat() {
             >
               {selectedMessages.length === messages.length ? '取消全选' : '全选'}
             </button>
-          </div>
-          <span className="text-xl font-medium text-gray-900">
-            已选择 {selectedMessages.length} 条对话
-          </span>
-          <button 
+            <button 
             onClick={async () => {
               if (selectedMessages.length === 0) {
                 alert('请至少选择一条对话');
@@ -450,6 +449,7 @@ export default function Chat() {
           >
             {isGenerating ? '生成中...' : '生成海报'}
           </button>
+          </div>
         </div>
       )}
 

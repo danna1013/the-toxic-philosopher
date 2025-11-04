@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import { X, Download, Copy, Check } from 'lucide-react';
 import { downloadImage, copyImageToClipboard } from '../lib/poster-generator';
 
@@ -12,6 +13,14 @@ export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePoster
   const [copySuccess, setCopySuccess] = useState(false);
   const [copyError, setCopyError] = useState(false);
   
+  // 当模态框打开时重置状态
+  useEffect(() => {
+    if (isOpen) {
+      setCopySuccess(false);
+      setCopyError(false);
+    }
+  }, [isOpen]);
+  
   if (!isOpen) return null;
   
   const handleDownload = () => {
@@ -19,14 +28,30 @@ export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePoster
   };
   
   const handleCopy = async () => {
+    console.log('handleCopy 被调用');
     const success = await copyImageToClipboard(posterDataUrl);
+    console.log('复制结果:', success);
     if (success) {
-      setCopySuccess(true);
-      setCopyError(false);
-      setTimeout(() => setCopySuccess(false), 2000);
+      console.log('设置 copySuccess = true');
+      flushSync(() => {
+        setCopySuccess(true);
+        setCopyError(false);
+      });
+      setTimeout(() => {
+        flushSync(() => {
+          setCopySuccess(false);
+        });
+      }, 2000);
     } else {
-      setCopyError(true);
-      setTimeout(() => setCopyError(false), 3000);
+      console.log('设置 copyError = true');
+      flushSync(() => {
+        setCopyError(true);
+      });
+      setTimeout(() => {
+        flushSync(() => {
+          setCopyError(false);
+        });
+      }, 3000);
     }
   };
   
