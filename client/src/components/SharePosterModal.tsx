@@ -75,17 +75,8 @@ export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePoster
           </button>
         </div>
         
-        {/* 海报预览 */}
-        <div className="mb-4 overflow-hidden shadow-lg">
-          <img 
-            src={posterDataUrl} 
-            alt="分享海报" 
-            className="w-full"
-          />
-        </div>
-        
-        {/* 操作按钮 */}
-        <div className="flex gap-3">
+        {/* 操作按钮 - 移到图片上方 */}
+        <div className="flex gap-3 mb-4">
           <button 
             onClick={handleDownload}
             className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium text-lg"
@@ -125,10 +116,19 @@ export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePoster
         </div>
         
         {copyError && (
-          <p className="mt-3 text-sm text-gray-600 text-center">
+          <p className="mb-3 text-sm text-gray-600 text-center">
             您的浏览器不支持复制图片，请下载后分享
           </p>
         )}
+        
+        {/* 海报预览 */}
+        <div className="overflow-hidden shadow-lg">
+          <img 
+            src={posterDataUrl} 
+            alt="分享海报" 
+            className="w-full"
+          />
+        </div>
       </div>
     </div>
   );
