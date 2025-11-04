@@ -205,9 +205,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             >
               <div
                 style={{
-                  padding: '20px 24px',
+                  padding: message.role === 'user' ? '12px 16px' : '20px 24px',
                   width: 'auto',
-                  maxWidth: message.content.length > 50 ? '85%' : 'max-content',
+                  maxWidth: '85%',
                   background: message.role === 'user' 
                     ? 'linear-gradient(to bottom right, rgb(31, 41, 55) 0%, rgb(17, 24, 39) 100%)' 
                     : '#ffffff',
@@ -216,7 +216,8 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
                   boxShadow: message.role === 'user' 
                     ? '0 4px 12px rgba(0, 0, 0, 0.15)' 
                     : '0 2px 8px rgba(0, 0, 0, 0.08)',
-                  border: message.role === 'user' ? 'none' : '1px solid #e5e7eb',
+                  border: 'none',
+                  outline: 'none',
                 }}
               >
                 {message.content.split('\n\n').map((paragraph, i) => (
