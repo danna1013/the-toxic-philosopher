@@ -191,7 +191,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '20px',
+            gap: '32px',
           }}
         >
           {messages.map((message, index) => (
@@ -201,8 +201,8 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
                 display: 'flex',
                 justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
                 width: '100%',
-                paddingLeft: message.role === 'user' ? '60px' : '0',
-                paddingRight: message.role === 'user' ? '0' : '60px',
+                paddingLeft: message.role === 'user' ? '80px' : '0',
+                paddingRight: message.role === 'user' ? '0' : '80px',
               }}
             >
               <div
