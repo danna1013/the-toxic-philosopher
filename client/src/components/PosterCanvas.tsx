@@ -113,7 +113,6 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
       {/* 内容区域 */}
       <div
         style={{
-          flex: 1,
           padding: '40px 52px 16px 52px',
           position: 'relative',
           zIndex: 1,
