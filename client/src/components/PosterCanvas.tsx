@@ -40,7 +40,6 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
       id="poster-canvas"
       style={{
         width: '750px',
-        minHeight: `${totalHeight}px`,
         background: '#f8f9fa',
         display: 'flex',
         flexDirection: 'column',
