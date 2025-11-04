@@ -3,9 +3,9 @@
  */
 
 // DeepSeek API 配置
-const DEEPSEEK_API_URL = "https://api.deepseek.com/v1";
-const DEEPSEEK_API_KEY = "sk-83f3cb9e7ecc486b84626ce35aa7213b";
-const DEEPSEEK_MODEL = "deepseek-chat";
+const DEEPSEEK_API_URL = "https://api.haihub.cn/v1";
+const DEEPSEEK_API_KEY = "sk-60177c6b-64cd-491a-8f59-bcc4585a1cce";
+const DEEPSEEK_MODEL = "DeepSeek-V3.1";
 
 // 高级毒舌版哲学家提示词（攻击思维，不侮辱人格）
 const PHILOSOPHER_PROMPTS: Record<string, string> = {
