@@ -88,7 +88,7 @@ export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePoster
         <div className="flex gap-3">
           <button 
             onClick={handleDownload}
-            className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-colors font-medium text-lg"
+            className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium text-lg"
           >
             <Download className="w-5 h-5" />
             下载图片
@@ -101,7 +101,7 @@ export function SharePosterModal({ isOpen, onClose, posterDataUrl }: SharePoster
                 ? 'bg-green-500 text-white' 
                 : copyError
                 ? 'bg-red-500 text-white'
-                : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+                : 'bg-gray-300 hover:bg-gray-400 text-gray-700'
             }`}
             disabled={copySuccess}
           >

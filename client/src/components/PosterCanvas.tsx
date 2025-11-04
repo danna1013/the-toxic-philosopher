@@ -6,79 +6,78 @@ interface Message {
 }
 
 interface PosterCanvasProps {
+  messages: Message[];
   philosopherId: string;
   philosopherName: string;
   philosopherTagline: string;
-  messages: Message[];
 }
 
-export function PosterCanvas({ 
+export const PosterCanvas: React.FC<PosterCanvasProps> = ({
+  messages,
   philosopherId,
-  philosopherName, 
+  philosopherName,
   philosopherTagline,
-  messages 
-}: PosterCanvasProps) {
-  // 计算内容高度 - 根据实际消息长度动态计算
-  const topHeight = 320; // 顶部品牌区(120px) + 哲学家信息区(180px) + padding
-  
-  // 根据消息内容长度计算高度
-  let totalMessageHeight = 0;
-  messages.forEach(msg => {
-    const charCount = msg.content.length;
-    // 容器宽度：750px * 70% - padding(24*2) = 525 - 48 = 477px
-    // 字号20px，中文字符宽度约20px，每行约23个字符
-    const estimatedLines = Math.ceil(charCount / 23);
-    // 行高 = 字号 * 行高系数 = 20 * 1.8 = 36px
-    const contentHeight = estimatedLines * 36;
-    // 加上内边距 24px * 2 = 48px
-    const messageHeight = contentHeight + 48;
-    totalMessageHeight += messageHeight;
-  });
-  
-  // 消息间距
-  const messageGap = (messages.length - 1) * 28;
-  
-  const bottomHeight = 180; // 底部区域高度（两行文字，增加高度）
-  
-  const totalHeight = topHeight + totalMessageHeight + messageGap + bottomHeight + 300; // 额外加300px缓冲确保底部不被截断
+}) => {
+  // 计算海报高度
+  const topHeight = 160; // 顶部标题区域
+  const philosopherInfoHeight = 150; // 哲学家信息区域
+  const messageGap = 28; // 消息间距
+  const bottomHeight = 180; // 底部区域
+
+  // 估算消息内容高度
+  const totalMessageHeight = messages.reduce((total, message) => {
+    const charCount = message.content.length;
+    const estimatedLines = Math.ceil(charCount / 23); // 每行约23个字符
+    const lineHeight = 36; // 行高 (20px * 1.8)
+    const padding = 48; // 上下padding (24px * 2)
+    return total + (estimatedLines * lineHeight) + padding + messageGap;
+  }, 0);
+
+  const totalHeight = topHeight + philosopherInfoHeight + totalMessageHeight + messageGap + bottomHeight + 300;
 
   return (
-    <div 
-      id="poster-canvas" 
+    <div
       style={{
-        position: 'absolute',
-        left: '-9999px',
         width: '750px',
-        height: `${totalHeight}px`,
-        background: '#ffffff',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", "Noto Sans CJK SC", sans-serif',
-        WebkitFontSmoothing: 'antialiased',
-        MozOsxFontSmoothing: 'grayscale',
-        padding: '0',
-        margin: '0',
-        boxSizing: 'border-box',
+        minHeight: `${totalHeight}px`,
+        background: '#f8f9fa',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'visible',
-        // 添加海报边框
-        border: '8px solid #1a1a1a',
-        boxShadow: '0 0 0 2px #ffffff, 0 0 0 10px #f5f5f5, 0 20px 60px rgba(0, 0, 0, 0.25)',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        position: 'relative',
+        border: '12px solid #000000',
+        boxSizing: 'border-box',
       }}
     >
-      {/* 顶部装饰线 */}
+      {/* 背景图案 */}
       <div
         style={{
-          height: '5px',
-          background: 'linear-gradient(90deg, #000000 0%, #2a2a2a 50%, #000000 100%)',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            linear-gradient(135deg, #f5f5f5 25%, transparent 25%),
+            linear-gradient(225deg, #f5f5f5 25%, transparent 25%),
+            linear-gradient(45deg, #f5f5f5 25%, transparent 25%),
+            linear-gradient(315deg, #f5f5f5 25%, #ffffff 25%)
+          `,
+          backgroundSize: '40px 40px',
+          backgroundPosition: '0 0, 20px 0, 20px -20px, 0 20px',
+          opacity: 0.5,
+          zIndex: 0,
         }}
       />
 
-      {/* 顶部品牌区 */}
+      {/* 顶部标题区域 */}
       <div
         style={{
-          padding: '32px 52px 24px',
+          padding: '42px 52px 32px',
           textAlign: 'center',
-          borderBottom: '1.5px solid #eeeeee',
+          position: 'relative',
+          zIndex: 1,
+          borderBottom: '3px solid rgba(0, 0, 0, 0.08)',
         }}
       >
         <h1
@@ -86,8 +85,8 @@ export function PosterCanvas({
             fontSize: '36px',
             fontWeight: '900',
             color: '#1a1a1a',
-            margin: '0 0 8px 0',
-            letterSpacing: '2px',
+            margin: '0 0 12px 0',
+            letterSpacing: '3px',
             lineHeight: '1',
           }}
         >
@@ -96,49 +95,34 @@ export function PosterCanvas({
         <p
           style={{
             fontSize: '14px',
-            fontWeight: '500',
+            fontWeight: '600',
             color: '#666666',
             margin: 0,
-            letterSpacing: '1.5px',
+            letterSpacing: '4px',
             textTransform: 'uppercase',
+            lineHeight: '1',
           }}
         >
           THE TOXIC PHILOSOPHER
         </p>
       </div>
 
-      {/* 主内容区域 */}
+      {/* 内容区域 */}
       <div
         style={{
-          flex: '1',
-          padding: '42px 52px',
+          flex: 1,
+          padding: '40px 52px',
           position: 'relative',
-          // 使用可重复的几何图案背景
-          background: `
-            linear-gradient(135deg, #f5f5f5 25%, transparent 25%),
-            linear-gradient(225deg, #f5f5f5 25%, transparent 25%),
-            linear-gradient(45deg, #f5f5f5 25%, transparent 25%),
-            linear-gradient(315deg, #f5f5f5 25%, #ffffff 25%)
-          `,
-          backgroundPosition: '20px 0, 20px 0, 0 0, 0 0',
-          backgroundSize: '40px 40px',
-          backgroundRepeat: 'repeat',
+          zIndex: 1,
         }}
       >
-        {/* 哲学家信息区 */}
+        {/* 哲学家信息 - 简化版，不要白色框 */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '24px',
-            marginBottom: '38px',
-            paddingBottom: '28px',
-            borderBottom: '1.5px solid #eeeeee',
-            position: 'relative',
-            zIndex: 1,
-            background: 'rgba(255, 255, 255, 0.95)',
-            padding: '20px',
-            borderRadius: '16px',
+            gap: '20px',
+            marginBottom: '36px',
           }}
         >
           {/* 头像 */}
@@ -199,9 +183,7 @@ export function PosterCanvas({
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '28px',
-            position: 'relative',
-            zIndex: 1,
+            gap: '20px',
           }}
         >
           {messages.map((message, index) => (
@@ -209,34 +191,34 @@ export function PosterCanvas({
               key={index}
               style={{
                 display: 'flex',
-                flexDirection: 'column',
-                alignItems: message.role === 'user' ? 'flex-end' : 'flex-start',
+                justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
+                width: '100%',
               }}
             >
               <div
                 style={{
-                  maxWidth: '70%',
-                  padding: '24px',
+                  maxWidth: '75%',
+                  padding: '20px 24px',
                   background: message.role === 'user' 
                     ? 'linear-gradient(to bottom right, rgb(31, 41, 55) 0%, rgb(17, 24, 39) 100%)' 
                     : '#ffffff',
                   color: message.role === 'user' ? '#ffffff' : 'rgb(31, 41, 55)',
-                  borderRadius: '24px',
+                  borderRadius: message.role === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
                   boxShadow: message.role === 'user' 
-                    ? '0 8px 16px rgba(0, 0, 0, 0.15)' 
-                    : '0 4px 12px rgba(0, 0, 0, 0.08)',
-                  border: message.role === 'user' ? 'none' : '1px solid #f3f4f6',
+                    ? '0 4px 12px rgba(0, 0, 0, 0.15)' 
+                    : '0 2px 8px rgba(0, 0, 0, 0.08)',
+                  border: message.role === 'user' ? 'none' : '1px solid #e5e7eb',
                 }}
               >
                 {message.content.split('\n\n').map((paragraph, i) => (
                   <p
                     key={i}
                     style={{
-                      fontSize: '20px',
+                      fontSize: '18px',
                       fontWeight: i === 0 ? '500' : '400',
-                      lineHeight: '1.8',
+                      lineHeight: '1.7',
                       letterSpacing: '0px',
-                      margin: i > 0 ? '20px 0 0 0' : '0',
+                      margin: i > 0 ? '16px 0 0 0' : '0',
                       whiteSpace: 'pre-wrap',
                       wordBreak: 'break-word',
                     }}
@@ -258,15 +240,14 @@ export function PosterCanvas({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
+          gap: '16px',
           borderTop: '3px solid rgba(255, 255, 255, 0.1)',
           boxShadow: '0 -6px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
           position: 'relative',
-          minHeight: '160px',
-          gap: '16px',
+          zIndex: 1,
         }}
       >
-        {/* 顶部光晕装饰 */}
+        {/* 顶部装饰 */}
         <div
           style={{
             position: 'absolute',
@@ -280,62 +261,69 @@ export function PosterCanvas({
           }}
         />
 
-        {/* Agent大赛链接 - 单行显示 */}
+        {/* Agent大赛链接 */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
-            fontSize: '20px',
-            fontWeight: '800',
-            color: '#ffffff',
-            letterSpacing: '0.5px',
-            textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
             flexWrap: 'nowrap',
             whiteSpace: 'nowrap',
           }}
         >
-          <span>Agent 大赛链接</span>
           <span
             style={{
+              fontSize: '19px',
+              fontWeight: '700',
+              color: '#ffffff',
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+            }}
+          >
+            Agent 大赛链接
+          </span>
+          <span
+            style={{
+              fontSize: '17px',
+              fontWeight: '700',
+              color: '#ffffff',
               fontFamily: 'monospace',
-              fontSize: '18px',
-              opacity: 0.95,
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
             }}
           >
             teko.woa.com/event/ai-agent/246
           </span>
         </div>
 
-        {/* 引导文案 - 强制单行 */}
+        {/* 评论文案 */}
         <div
           style={{
-            fontSize: '19px',
-            fontWeight: '800',
+            fontSize: '17px',
+            fontWeight: '700',
             color: '#ffffff',
-            letterSpacing: '1px',
-            textShadow: '0 2px 6px rgba(0, 0, 0, 0.4)',
             textAlign: 'center',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
             whiteSpace: 'nowrap',
           }}
         >
           你的评论是我最大的动力！
         </div>
 
-        {/* 底部微妙装饰 */}
+        {/* 底部装饰 */}
         <div
           style={{
             position: 'absolute',
-            bottom: '8px',
+            bottom: 0,
             left: '50%',
             transform: 'translateX(-50%)',
             width: '60px',
             height: '3px',
-            background: 'rgba(255, 255, 255, 0.15)',
-            borderRadius: '2px',
+            background: 'rgba(255, 255, 255, 0.2)',
+            borderRadius: '2px 2px 0 0',
           }}
         />
       </div>
     </div>
   );
-}
+};
+
+
