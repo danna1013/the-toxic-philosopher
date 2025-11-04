@@ -419,8 +419,8 @@ export default function Chat() {
                 alert('请至少选择一条对话');
                 return;
               }
-              if (selectedMessages.length > 10) {
-                alert('最多只能选择10条对话');
+              if (selectedMessages.length > 50) {
+                alert('最多只能选择50条对话');
                 return;
               }
               
