@@ -251,7 +251,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
       <div
         style={{
           background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 50%, #000000 100%)',
-          padding: '32px 52px',
+          padding: '24px 52px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -268,6 +268,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             gap: '12px',
             flexWrap: 'nowrap',
             whiteSpace: 'nowrap',
+            background: 'transparent',
+            border: 'none',
+            boxShadow: 'none',
           }}
         >
           <span
@@ -276,6 +279,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
               fontWeight: '700',
               color: '#ffffff',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+              background: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
             }}
           >
             Agent 大赛链接
@@ -287,6 +293,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
               color: '#ffffff',
               fontFamily: 'monospace',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+              background: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
             }}
           >
             teko.woa.com/event/ai-agent/246
