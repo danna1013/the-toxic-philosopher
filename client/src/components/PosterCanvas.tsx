@@ -201,6 +201,8 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
                 display: 'flex',
                 justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
                 width: '100%',
+                paddingLeft: message.role === 'user' ? '60px' : '0',
+                paddingRight: message.role === 'user' ? '0' : '60px',
               }}
             >
               <div
