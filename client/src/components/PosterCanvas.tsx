@@ -306,12 +306,15 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
         {/* 评论文案 */}
         <div
           style={{
-            fontSize: '17px',
+            fontSize: '19px',
             fontWeight: '700',
             color: '#ffffff',
             textAlign: 'center',
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
             whiteSpace: 'nowrap',
+            background: 'transparent',
+            border: 'none',
+            boxShadow: 'none',
           }}
         >
           你的评论是我最大的动力！
