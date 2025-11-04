@@ -230,6 +230,10 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
                       margin: i > 0 ? '16px 0 0 0' : '0',
                       whiteSpace: 'pre-wrap',
                       wordBreak: 'break-word',
+                      background: 'transparent',
+                      border: 'none',
+                      boxShadow: 'none',
+                      padding: '0',
                     }}
                   >
                     {paragraph}
