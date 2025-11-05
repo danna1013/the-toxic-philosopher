@@ -100,6 +100,10 @@ export default function ArenaCampSetup() {
   const [userSide, setUserSide] = useState<'pro' | 'con' | 'audience'>('audience');
   const [isGenerating, setIsGenerating] = useState(false);
   const [topic, setTopic] = useState<string>('');
+  
+  // 检查是否为基础模式
+  const arenaMode = sessionStorage.getItem('arenaMode') || 'basic';
+  const isBasicMode = arenaMode === 'basic';
 
   useEffect(() => {
     const initializeStances = async () => {
@@ -281,11 +285,13 @@ export default function ArenaCampSetup() {
     return (
       <div
         key={id}
-        draggable
-        onDragStart={() => handleDragStart(id)}
-        onDragEnd={handleDragEnd}
-        className="flex flex-col items-center p-5 bg-white border border-gray-300 cursor-move hover:border-black hover:shadow-sm transition-all"
-        title="拖动到其他阵营"
+        draggable={!isBasicMode}
+        onDragStart={!isBasicMode ? () => handleDragStart(id) : undefined}
+        onDragEnd={!isBasicMode ? handleDragEnd : undefined}
+        className={`flex flex-col items-center p-5 bg-white border border-gray-300 transition-all ${
+          !isBasicMode ? 'cursor-move hover:border-black hover:shadow-sm' : 'cursor-default'
+        }`}
+        title={!isBasicMode ? "拖动到其他阵营" : ""}
       >
         <img 
           src={philosopher.image} 
@@ -328,7 +334,12 @@ export default function ArenaCampSetup() {
     sessionStorage.setItem('arenaUnassigned', JSON.stringify(unassigned));
     sessionStorage.setItem('arenaUserSide', userSide);
 
-    setLocation('/arena/debate/custom');
+    // 根据模式跳转到不同的辩论页
+    if (isBasicMode) {
+      setLocation('/arena/debate/basic');
+    } else {
+      setLocation('/arena/debate/custom');
+    }
   };
 
   // 计算人数
@@ -398,8 +409,8 @@ export default function ArenaCampSetup() {
           </div>
         )}
 
-        {/* 拖拽说明 */}
-        {!isGenerating && (
+        {/* 拖拽说明 (只在完整模式显示) */}
+        {!isGenerating && !isBasicMode && (
           <div className="w-full max-w-7xl mb-8">
             <p className="text-lg text-gray-600 text-center">
               💡 提示:拖动哲学家卡片到不同阵营,自由配置辩论双方
@@ -483,7 +494,8 @@ export default function ArenaCampSetup() {
           </div>
         </div>
 
-        {/* 用户角色选择区域 */}
+        {/* 用户角色选择区域 (只在完整模式显示) */}
+        {!isBasicMode && (
         <div className="w-full max-w-7xl mb-12">
           <h3 className="text-2xl font-bold text-black text-center mb-6">选择你的角色</h3>
           <div className="border-2 border-black p-8 bg-white">
@@ -532,6 +544,7 @@ export default function ArenaCampSetup() {
             </div>
           </div>
         </div>
+        )}
 
         {/* 底部按钮区 */}
         <div className="w-full max-w-7xl flex flex-col items-center gap-4">

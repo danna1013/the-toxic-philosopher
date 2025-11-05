@@ -58,12 +58,8 @@ export default function ArenaTopicSelect() {
 
     sessionStorage.setItem('arenaTopic', topic);
     
-    // 立即跳转
-    if (arenaMode === 'full') {
-      setLocation('/arena/camp');
-    } else {
-      setLocation('/arena/debate/basic');
-    }
+    // 立即跳转到阵营配置页
+    setLocation('/arena/camp');
   };
 
   return (

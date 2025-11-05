@@ -57,9 +57,11 @@ export default function ArenaMode() {
       {/* 主内容 */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 pt-32 pb-16">
         {/* 标题 */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-black mb-4">哲学"奇葩说"</h1>
-          <p className="text-xl text-gray-600">选择你的辩论模式</p>
+        <div className="text-center mb-16 max-w-5xl">
+          <h1 className="text-4xl font-bold text-black mb-4 leading-relaxed">
+            如果苏格拉底、尼采、康德、弗洛伊德、维特根斯坦同台辩论，会发生什么？
+          </h1>
+          <p className="text-xl text-gray-600 mt-6">选择你的辩论模式</p>
         </div>
 
         {/* 模式卡片 */}
@@ -74,32 +76,52 @@ export default function ArenaMode() {
             }`}
           >
             <div className="flex items-start justify-between mb-6">
-              <h2 className="text-2xl font-bold">基础模式</h2>
-              <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium">免费</span>
+              <h2 className="text-3xl font-bold">基础模式</h2>
+              <span className="px-4 py-1.5 bg-gray-800 text-white text-sm font-medium">快速体验</span>
             </div>
-            
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              选择辩题，AI自动分配阵营，快速开启一场辩论。适合初次体验。
-            </p>
 
-            <ul className="space-y-3">
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                选择预设辩题
+            <ul className="space-y-3 text-lg mb-6">
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>预设辩题</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                AI智能分配哲学家阵营
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>AI自动分配阵营</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                观众视角观看辩论
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>观众视角观看</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                1位AI裁判评判
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>1位AI主持人</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>1位AI裁判判定胜负</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-red-600 flex-shrink-0">❌</span>
+                <span className="text-gray-400">自定义话题</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-red-600 flex-shrink-0">❌</span>
+                <span className="text-gray-400">参与讨论</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-red-600 flex-shrink-0">❌</span>
+                <span className="text-gray-400">调整阵营</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-red-600 flex-shrink-0">❌</span>
+                <span className="text-gray-400">观众投票</span>
               </li>
             </ul>
+
+            <p className="text-center text-gray-600 text-lg font-medium mt-8">
+              基础模式肯定也好玩！
+            </p>
           </div>
 
           {/* 完整模式 */}
@@ -112,36 +134,52 @@ export default function ArenaMode() {
             }`}
           >
             <div className="flex items-start justify-between mb-6">
-              <h2 className="text-2xl font-bold">完整模式</h2>
-              <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium">内测中</span>
+              <h2 className="text-3xl font-bold">完整模式</h2>
+              <span className="px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium">限量内测</span>
             </div>
-            
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              完全自定义辩题、身份、阵营配置。可以作为辩手参与，与哲学家同台对决。
-            </p>
 
-            <ul className="space-y-3">
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                自定义辩论话题
+            <ul className="space-y-3 text-lg mb-6">
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>预设辩题</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                自由配置哲学家阵营
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>AI自动分配阵营</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                选择观众或辩手身份
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>观众视角观看</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                50位AI观众全程投票
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span>1位AI主持人</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                1位AI主持人引导辩论
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span className="font-semibold">自定义话题</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span className="font-semibold">观众或参与讨论</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span className="font-semibold">上帝之手调整阵营</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span className="font-semibold">50位AI观众</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-3 text-green-600 flex-shrink-0">✅</span>
+                <span className="font-semibold">奇葩说投票赛制</span>
               </li>
             </ul>
+
+            <p className="text-center text-black text-lg font-bold mt-8">
+              完整模式能力更多！57个AI同时运行
+            </p>
           </div>
         </div>
 
@@ -156,9 +194,6 @@ export default function ArenaMode() {
 
         {/* 底部说明 */}
         <div className="mt-16 text-center text-gray-500 max-w-4xl">
-          <p className="text-sm leading-relaxed mb-4">
-            <strong>完整模式</strong>包含57个AI同时运行：5位哲学家 + 50位观众 + 1位主持人 + 你
-          </p>
           <p className="text-sm leading-relaxed text-gray-400">
             💡 <a href="https://teko.woa.com/event/ai-agent/246" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">评论10字以上</a>，获取体验码，即可体验完整模式
           </p>
