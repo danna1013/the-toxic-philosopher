@@ -20,29 +20,38 @@ const philosophers: Philosopher[] = [
 
 // 预设辩题的正反方定义
 const topicStances: Record<string, { pro: string, con: string }> = {
-  'AI会取代人类吗?': { pro: 'AI会取代人类', con: 'AI不会取代人类' },
-  '内卷是必然的吗?': { pro: '内卷是必然的', con: '内卷不是必然的' },
-  '道德是相对的吗?': { pro: '道德是相对的', con: '道德不是相对的' },
-  '自由意志真的存在吗?': { pro: '自由意志存在', con: '自由意志不存在' },
+  '996是奋斗还是剥削?': { pro: '996是奋斗的必经之路', con: '996是对员工的剥削' },
+  '35岁程序员真的没有出路吗?': { pro: '35岁是程序员的职业分水岭', con: '35岁焦虑是伪命题' },
+  '远程办公会取代坐班吗?': { pro: '远程办公是未来趋势', con: '坐班制度无法被取代' },
+  '大厂还是创业公司?': { pro: '大厂能提供更好的职业发展', con: '创业公司更有成长空间' },
+  'AI会抢走程序员的饭碗吗?': { pro: 'AI将取代大部分程序员', con: 'AI只是程序员的工具' },
+  '内卷是个人选择还是系统问题?': { pro: '内卷源于个人的过度竞争', con: '内卷是系统性问题' },
 };
 
 // 模拟AI判断哲学家立场(基于辩题)
 const getAIStance = (philosopherId: string, topic: string): { stance: 'pro' | 'con', reason: string } => {
   // 这里是简化版本,实际应该调用后端AI
   const stanceMap: Record<string, Record<string, { stance: 'pro' | 'con', reason: string }>> = {
-    'AI会取代人类吗?': {
-      'socrates': { stance: 'con', reason: '人类的智慧和灵魂是独特的' },
-      'nietzsche': { stance: 'con', reason: '人类的意志力不可替代' },
-      'wittgenstein': { stance: 'pro', reason: '语言和逻辑可以被机器掌握' },
-      'kant': { stance: 'con', reason: '人类的理性和道德不可替代' },
-      'freud': { stance: 'pro', reason: '人类的无意识可以被模拟' },
+    '996是奋斗还是剥削?': {
+      'socrates': { stance: 'con', reason: '真正的智慧需要闲暇时间思考' },
+      'nietzsche': { stance: 'pro', reason: '超人通过奋斗超越自我' },
+      'wittgenstein': { stance: 'con', reason: '工作的意义不在于时长' },
+      'kant': { stance: 'con', reason: '人不应被当作工具使用' },
+      'freud': { stance: 'con', reason: '过度工作是对欲望的压抑' },
     },
-    '道德是相对的吗?': {
-      'socrates': { stance: 'con', reason: '存在绝对的善' },
-      'nietzsche': { stance: 'pro', reason: '道德是权力意志的产物' },
-      'wittgenstein': { stance: 'pro', reason: '道德语言依赖于语境' },
-      'kant': { stance: 'con', reason: '存在绝对的道德律令' },
-      'freud': { stance: 'pro', reason: '道德源于文化和超我' },
+    'AI会抢走程序员的饭碗吗?': {
+      'socrates': { stance: 'con', reason: '人类的智慧和创造力不可替代' },
+      'nietzsche': { stance: 'con', reason: '创造性源于人类的意志力' },
+      'wittgenstein': { stance: 'pro', reason: '编程本质上是语言游戏' },
+      'kant': { stance: 'con', reason: '理性和道德判断是AI无法掌握的' },
+      'freud': { stance: 'pro', reason: '程序员的工作可被算法化' },
+    },
+    '内卷是个人选择还是系统问题?': {
+      'socrates': { stance: 'pro', reason: '美德源于个人的自我认知' },
+      'nietzsche': { stance: 'pro', reason: '个人的权力意志驱动竞争' },
+      'wittgenstein': { stance: 'con', reason: '语言游戏由社会规则决定' },
+      'kant': { stance: 'con', reason: '理性的人会选择普遍的道德律' },
+      'freud': { stance: 'con', reason: '内卷是社会超我的压迫' },
     },
   };
 

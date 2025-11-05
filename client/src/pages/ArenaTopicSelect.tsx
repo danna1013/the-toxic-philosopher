@@ -3,40 +3,40 @@ import { useLocation } from "wouter";
 
 const PRESET_TOPICS = [
   {
-    id: "ai-replace-human",
-    title: "AI会取代人类吗？",
-    category: "科技哲学",
-    description: "探讨人工智能的发展是否会导致人类被取代的哲学问题"
+    id: "996-struggle-or-exploitation",
+    title: "996是奋斗还是剥削？",
+    category: "职场伦理",
+    description: "互联网行业的加班文化,究竟是个人奋斗的选择还是对员工的剥削?"
   },
   {
-    id: "involution",
-    title: "内卷是必然的吗？",
-    category: "社会哲学",
-    description: "分析社会竞争加剧的根本原因及其必然性"
+    id: "programmer-35-crisis",
+    title: "35岁程序员真的没有出路吗？",
+    category: "职业发展",
+    description: "35岁是程序员的职业分水岭,还是社会制造的焦虑?"
   },
   {
-    id: "truth-vs-happiness",
-    title: "真相重要还是幸福重要？",
-    category: "伦理学",
-    description: "在真相与幸福之间,哪个更值得追求?"
+    id: "remote-vs-office",
+    title: "远程办公会取代坐班吗？",
+    category: "工作方式",
+    description: "后疫情时代,远程办公是未来趋势还是坐班制度无法被取代?"
   },
   {
-    id: "free-will",
-    title: "自由意志真的存在吗",
-    category: "形而上学",
-    description: "人类的选择是真正自由的,还是被因果链条决定的?"
+    id: "bigtech-vs-startup",
+    title: "大厂还是创业公司？",
+    category: "职业选择",
+    description: "大厂的稳定平台和创业公司的成长空间,哪个更值得选择?"
   },
   {
-    id: "meaning-of-life",
-    title: "生命的意义是什么？",
-    category: "存在主义",
-    description: "在虚无的宇宙中,生命的意义从何而来?"
+    id: "ai-replace-programmer",
+    title: "AI会抢走程序员的饭碗吗？",
+    category: "技术焦虑",
+    description: "AI编程工具的崛起,会取代程序员还是只是提升效率的工具?"
   },
   {
-    id: "moral-relativity",
-    title: "道德是相对的吗？",
-    category: "伦理学",
-    description: "道德标准是普遍的还是因文化而异的?"
+    id: "involution-personal-or-system",
+    title: "内卷是个人选择还是系统问题？",
+    category: "社会现象",
+    description: "互联网行业的内卷,源于个人的过度竞争还是系统性问题?"
   }
 ];
 
