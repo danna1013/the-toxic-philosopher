@@ -376,11 +376,13 @@ export default function ArenaCampSetup() {
       {/* 主内容 */}
       <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16">
         {/* 辩题 */}
-        <div className="w-full max-w-7xl mb-8">
-          <h1 className="text-5xl font-bold text-black text-center">
-            {topic}
-          </h1>
-        </div>
+        {!isGenerating && topic && (
+          <div className="w-full max-w-7xl mb-8">
+            <h1 className="text-5xl font-bold text-black text-center">
+              {topic}
+            </h1>
+          </div>
+        )}
 
         {/* AI生成中的提示 */}
         {isGenerating && (
