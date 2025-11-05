@@ -1,10 +1,14 @@
 import { useLocation } from "wouter";
 import { useState, useEffect } from "react";
+import { useAccessControl } from "../hooks/access-control/useAccessControl";
+import AccessCodeModal from "../components/access-code/AccessCodeModal";
 
 export default function ArenaMode() {
   const [, setLocation] = useLocation();
+  const { hasAccess } = useAccessControl();
   const [selectedMode, setSelectedMode] = useState<"basic" | "full" | null>(null);
   const [containerHeight, setContainerHeight] = useState('100vh');
+  const [showAccessModal, setShowAccessModal] = useState(false);
 
   useEffect(() => {
     // 检测浏览器对zoom的支持：Chrome/Edge需要166.67vh，Safari使用100vh
@@ -18,6 +22,12 @@ export default function ArenaMode() {
   const handleContinue = () => {
     if (!selectedMode) {
       alert("请选择一个辩论模式!");
+      return;
+    }
+
+    // 检查完整模式权限
+    if (selectedMode === "full" && !hasAccess) {
+      setShowAccessModal(true);
       return;
     }
     
@@ -134,7 +144,13 @@ export default function ArenaMode() {
 
           {/* 完整模式 */}
           <div 
-            onClick={() => setSelectedMode("full")}
+            onClick={() => {
+            setSelectedMode("full");
+            // 如果没有权限，立即显示提示
+            if (!hasAccess) {
+              // 不立即显示，等用户点击继续时再显示
+            }
+          }}
             className={`w-96 border-2 p-8 cursor-pointer transition-all duration-300 ${
               selectedMode === "full" 
                 ? "bg-white text-black border-black shadow-lg" 
@@ -207,6 +223,9 @@ export default function ArenaMode() {
           </p>
         </div>
       </div>
+
+      {/* 体验码弹窗 */}
+      <AccessCodeModal isOpen={showAccessModal} onClose={() => setShowAccessModal(false)} />
     </div>
   );
 }

@@ -1,9 +1,16 @@
+import dotenv from 'dotenv';
+const result = dotenv.config();
+console.log('dotenv result:', result);
+console.log('ADMIN_PASSWORD from env:', process.env.ADMIN_PASSWORD);
+
 import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { exec } from "child_process";
 import { promisify } from "util";
+import accessCodeRoutes from "./routes/access-code.js";
+import adminRoutes from "./routes/admin.js";
 
 const execAsync = promisify(exec);
 
@@ -16,6 +23,11 @@ async function startServer() {
 
   // Parse JSON bodies
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  // Mount access code routes
+  app.use("/api", accessCodeRoutes);
+  app.use("/api/admin", adminRoutes);
 
   // API endpoint for generating custom topic stances
   // MUST be before static file serving
