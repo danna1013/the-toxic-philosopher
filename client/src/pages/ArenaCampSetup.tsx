@@ -206,6 +206,14 @@ export default function ArenaCampSetup() {
             <button onClick={() => setLocation('/select')} className="text-black hover:text-gray-600 transition-colors">一对一开怼</button>
             <button className="text-black font-medium underline">哲学"奇葩说"</button>
             <button onClick={() => setLocation('/design')} className="text-black hover:text-gray-600 transition-colors">设计理念</button>
+            <button onClick={() => window.open("https://forms.gle/feedback", "_blank")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
+              意见反馈
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
+            <button onClick={() => window.open("https://forms.gle/review", "_blank")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
+              求点赞评论
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
           </div>
         </div>
       </nav>
