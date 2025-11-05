@@ -165,9 +165,9 @@ export default function ArenaCampSetup() {
       const data = await response.json();
       
       // 使用AI凝练后的标题
-      if (data.refined_title) {
-        setTopic(data.refined_title);
-        sessionStorage.setItem('arenaTopic', data.refined_title);
+      if (data.topic) {
+        setTopic(data.topic);
+        sessionStorage.setItem('arenaTopic', data.topic);
       }
       
       // 设置正反方立场
