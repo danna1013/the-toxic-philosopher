@@ -22,7 +22,7 @@ export default function Home() {
   const handleArenaClick = () => {
     setIsExploding(true);
     setTimeout(() => {
-      setLocation("/arena");
+      setLocation("/arena/mode");
     }, 1500);
   };
 
@@ -51,7 +51,7 @@ export default function Home() {
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </a>
             <button
-              onClick={() => setLocation("/arena")}
+              onClick={() => setLocation("/arena/mode")}
               className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
             >
               思维擂台

@@ -13,9 +13,13 @@ import KantIntro from "./pages/KantIntro";
 import FreudIntro from "./pages/FreudIntro";
 import Chat from "./pages/Chat";
 import Design from "./pages/Design";
-import ArenaEntry from "./pages/arena/ArenaEntry";
-import ArenaDebate from "./pages/arena/ArenaDebate";
-import ArenaResult from "./pages/arena/ArenaResult";
+import ArenaMode from "./pages/ArenaMode";
+import ArenaTopicSelect from "./pages/ArenaTopicSelect";
+import ArenaRoleSelect from "./pages/ArenaRoleSelect";
+import ArenaCampSetup from "./pages/ArenaCampSetup";
+import ArenaAudienceSelect from "./pages/ArenaAudienceSelect";
+import ArenaDebate from "./pages/ArenaDebate";
+import ArenaResult from "./pages/ArenaResult";
 
 function Router() {
   return (
@@ -29,7 +33,11 @@ function Router() {
       <Route path="/intro/freud" component={FreudIntro} />
       <Route path="/chat/:id" component={Chat} />
       <Route path="/design" component={Design} />
-      <Route path="/arena" component={ArenaEntry} />
+      <Route path="/arena/mode" component={ArenaMode} />
+      <Route path="/arena/topic" component={ArenaTopicSelect} />
+      <Route path="/arena/role" component={ArenaRoleSelect} />
+      <Route path="/arena/camp" component={ArenaCampSetup} />
+      <Route path="/arena/audience" component={ArenaAudienceSelect} />
       <Route path="/arena/debate/:id" component={ArenaDebate} />
       <Route path="/arena/result/:id" component={ArenaResult} />
       <Route path={"/404"} component={NotFound} />
