@@ -1,9 +1,19 @@
 import { useLocation } from "wouter";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ArenaMode() {
   const [, setLocation] = useLocation();
   const [selectedMode, setSelectedMode] = useState<"basic" | "full" | null>(null);
+  const [containerHeight, setContainerHeight] = useState('100vh');
+
+  useEffect(() => {
+    // 检测浏览器对zoom的支持：Chrome/Edge需要166.67vh，Safari使用100vh
+    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    const isEdge = /Edg/.test(navigator.userAgent);
+    if (isChrome || isEdge) {
+      setContainerHeight('166.67vh');
+    }
+  }, []);
 
   const handleContinue = () => {
     if (!selectedMode) {
@@ -16,7 +26,7 @@ export default function ArenaMode() {
   };
 
   return (
-    <div className="bg-white flex flex-col" style={{ height: '100vh' }}>
+    <div className="bg-white flex flex-col" style={{ height: containerHeight }}>
       {/* 导航栏 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="px-8 py-5 flex items-center justify-between">
@@ -35,7 +45,7 @@ export default function ArenaMode() {
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </button>
             <button onClick={() => setLocation("/arena/mode")} className="relative text-lg md:text-xl text-black font-medium group">
-              哲学“奇葩说”
+              哲学"奇葩说"
               <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
             </button>
             <button onClick={() => setLocation("/design")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
