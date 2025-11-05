@@ -24,6 +24,20 @@ export default function Design() {
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </button>
             <button
+              onClick={() => setLocation("/arena")}
+              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+            >
+              思维擂台
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
+            <button
+              onClick={() => setLocation("/select")}
+              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+            >
+              一对一开怼
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
+            <button
               onClick={() => setLocation("/design")}
               className="relative text-lg md:text-xl text-black font-medium group"
             >

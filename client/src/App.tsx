@@ -13,6 +13,9 @@ import KantIntro from "./pages/KantIntro";
 import FreudIntro from "./pages/FreudIntro";
 import Chat from "./pages/Chat";
 import Design from "./pages/Design";
+import ArenaEntry from "./pages/arena/ArenaEntry";
+import ArenaDebate from "./pages/arena/ArenaDebate";
+import ArenaResult from "./pages/arena/ArenaResult";
 
 function Router() {
   return (
@@ -26,6 +29,9 @@ function Router() {
       <Route path="/intro/freud" component={FreudIntro} />
       <Route path="/chat/:id" component={Chat} />
       <Route path="/design" component={Design} />
+      <Route path="/arena" component={ArenaEntry} />
+      <Route path="/arena/debate/:id" component={ArenaDebate} />
+      <Route path="/arena/result/:id" component={ArenaResult} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
