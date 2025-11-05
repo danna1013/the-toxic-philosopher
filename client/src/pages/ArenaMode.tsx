@@ -55,69 +55,69 @@ export default function ArenaMode() {
       </nav>
 
       {/* 主内容 */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 pt-32 pb-16">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 pt-24 pb-16">
         {/* 标题 */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-black mb-3">思想的角斗场</h1>
-          <p className="text-2xl text-gray-600">没有和局</p>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-black mb-2">思想的角斗场，没有和局</h1>
+          <p className="text-lg text-gray-500">请选择你的思想擂台</p>
         </div>
 
         {/* 模式卡片 */}
-        <div className="flex gap-8 max-w-5xl mb-12">
+        <div className="flex gap-6 mb-10">
           {/* 基础模式 */}
           <div 
             onClick={() => setSelectedMode("basic")}
-            className={`flex-1 border-2 p-8 cursor-pointer transition-all duration-300 ${
+            className={`w-80 border-2 p-6 cursor-pointer transition-all duration-300 ${
               selectedMode === "basic" 
                 ? "bg-white text-black border-black shadow-lg" 
                 : "bg-white text-black border-gray-300 hover:border-black"
             }`}
           >
-            <div className="flex items-start justify-between mb-6">
-              <h2 className="text-3xl font-bold">基础模式</h2>
-              <span className="px-3 py-1 bg-gray-800 text-white text-sm">快速体验</span>
+            <div className="flex items-start justify-between mb-5">
+              <h2 className="text-2xl font-bold">基础模式</h2>
+              <span className="px-2.5 py-1 bg-gray-800 text-white text-xs">快速体验</span>
             </div>
 
-            <ul className="space-y-2.5 text-base mb-8">
+            <ul className="space-y-2 text-sm mb-6">
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>预设辩题</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>AI自动分配阵营</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>观众视角观看</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>1位AI主持人</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>1位AI裁判判定胜负</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-red-600 font-bold">✗</span>
+                <span className="mr-2 text-red-600">✗</span>
                 <span className="text-gray-400">自定义话题</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-red-600 font-bold">✗</span>
+                <span className="mr-2 text-red-600">✗</span>
                 <span className="text-gray-400">参与讨论</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-red-600 font-bold">✗</span>
+                <span className="mr-2 text-red-600">✗</span>
                 <span className="text-gray-400">调整阵营</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-red-600 font-bold">✗</span>
+                <span className="mr-2 text-red-600">✗</span>
                 <span className="text-gray-400">观众投票</span>
               </li>
             </ul>
 
-            <p className="text-center text-gray-600 text-base font-medium">
+            <p className="text-center text-gray-600 text-sm">
               基础模式肯定也好玩！
             </p>
           </div>
@@ -125,58 +125,58 @@ export default function ArenaMode() {
           {/* 完整模式 */}
           <div 
             onClick={() => setSelectedMode("full")}
-            className={`flex-1 border-2 p-8 cursor-pointer transition-all duration-300 ${
+            className={`w-80 border-2 p-6 cursor-pointer transition-all duration-300 ${
               selectedMode === "full" 
                 ? "bg-white text-black border-black shadow-lg" 
                 : "bg-white text-black border-gray-300 hover:border-black"
             }`}
           >
-            <div className="flex items-start justify-between mb-6">
-              <h2 className="text-3xl font-bold">完整模式</h2>
-              <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm">限量内测</span>
+            <div className="flex items-start justify-between mb-5">
+              <h2 className="text-2xl font-bold">完整模式</h2>
+              <span className="px-2.5 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">限量内测</span>
             </div>
 
-            <ul className="space-y-2.5 text-base mb-8">
+            <ul className="space-y-2 text-sm mb-6">
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>预设辩题</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>AI自动分配阵营</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>观众视角观看</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
+                <span className="mr-2 text-green-600">✓</span>
                 <span>1位AI主持人</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
-                <span className="font-semibold">自定义话题</span>
+                <span className="mr-2 text-green-600">✓</span>
+                <span>自定义话题</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
-                <span className="font-semibold">观众或参与讨论</span>
+                <span className="mr-2 text-green-600">✓</span>
+                <span>观众或参与讨论</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
-                <span className="font-semibold">上帝之手调整阵营</span>
+                <span className="mr-2 text-green-600">✓</span>
+                <span>上帝之手调整阵营</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
-                <span className="font-semibold">50位AI观众</span>
+                <span className="mr-2 text-green-600">✓</span>
+                <span>50位AI观众</span>
               </li>
               <li className="flex items-start">
-                <span className="mr-2 text-green-600 font-bold">✓</span>
-                <span className="font-semibold">奇葩说投票赛制</span>
+                <span className="mr-2 text-green-600">✓</span>
+                <span>奇葩说投票赛制</span>
               </li>
             </ul>
 
-            <p className="text-center text-black text-base font-bold">
-              完整模式能力更多！57个AI同时运行
+            <p className="text-center text-gray-600 text-sm">
+              57个AI同时运行
             </p>
           </div>
         </div>
@@ -185,14 +185,14 @@ export default function ArenaMode() {
         <button
           onClick={handleContinue}
           disabled={!selectedMode}
-          className="px-16 py-4 bg-black text-white text-xl font-medium hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors mb-8"
+          className="px-12 py-3 bg-black text-white text-lg hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors mb-6"
         >
           继续
         </button>
 
         {/* 底部说明 */}
         <div className="text-center text-gray-500">
-          <p className="text-sm text-gray-400">
+          <p className="text-xs text-gray-400">
             💡 <a href="https://teko.woa.com/event/ai-agent/246" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">评论10字以上</a>，获取体验码，即可体验完整模式
           </p>
         </div>

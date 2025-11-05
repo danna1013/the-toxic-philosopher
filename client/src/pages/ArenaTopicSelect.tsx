@@ -101,7 +101,7 @@ export default function ArenaTopicSelect() {
             选择辩论话题
           </h1>
           <p className="text-2xl text-gray-600">
-            预设辩题或自定义你感兴趣的哲学问题
+            {arenaMode === "basic" ? "从预设辩题中选择一个开始" : "预设辩题或自定义你感兴趣的哲学问题"}
           </p>
         </div>
 
