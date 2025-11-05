@@ -3,43 +3,15 @@ import os
 import sys
 import json
 from openai import OpenAI
-import concurrent.futures
 
-client = OpenAI()
-
-def refine_topic(topic: str) -> str:
-    """如果辩题太长,调用AI凝练成简短标题"""
-    # 如果辩题长度小于等于15字,直接使用
-    if len(topic) <= 15:
-        return topic
-    
-    # 否则调用AI凝练
-    refine_prompt = f"""
-请将以下辩题凝练成一个简短的标题,要求:
-1. 保留核心观点和争议点
-2. 不超过15个字
-3. 尽量使用疑问句形式
-4. 直接返回标题,不要其他说明
-
-原辩题: {topic}
-"""
-    
-    response = client.chat.completions.create(
-        model="gpt-4.1-nano",
-        messages=[{"role": "user", "content": refine_prompt}],
-        temperature=0.7
-    )
-    
-    refined = response.choices[0].message.content.strip()
-    # 去掉可能的引号
-    refined = refined.strip('"').strip('"').strip('"')
-    return refined
+# 使用用户提供的DeepSeek配置
+client = OpenAI(
+    api_key="sk-60177c6b-64cd-491a-8f59-bcc4585a1cce",
+    base_url="https://api.haihub.cn/v1/"
+)
 
 def generate_stances_for_custom_topic(topic: str):
-    """为自定义辩题生成正反方立场和每个哲学家的观点"""
-    
-    # 第一步:凝练辩题标题
-    refined_topic = refine_topic(topic)
+    """为自定义辩题生成正反方立场和每个哲学家的观点(单次API调用)"""
     
     philosophers = [
         {"id": "socrates", "name": "苏格拉底", "philosophy": "认识你自己,未经审视的生活不值得过"},
@@ -49,88 +21,89 @@ def generate_stances_for_custom_topic(topic: str):
         {"id": "freud", "name": "弗洛伊德", "philosophy": "本我、自我、超我,无意识,精神分析"}
     ]
     
-    # 第二步:生成正反方立场(使用DeepSeek)
-    stance_prompt = f"""
-你是一个辩论专家。对于辩题"{refined_topic}",请生成明确对立的正反方立场。
+    # 单次API调用生成所有内容
+    prompt = f"""
+你是一个辩论专家和哲学家顾问。对于用户输入的辩题"{topic}",请完成以下任务:
 
-要求:
-1. 正方立场要支持辩题中的观点
-2. 反方立场要反对辩题中的观点
-3. 立场要简洁明确,不超过12个字
-4. 正反方立场要有明显对立性
+1. **辩题标题凝练**:
+   - 如果辩题长度≤15字:直接使用原标题
+   - 如果辩题长度>15字:凝练成简短标题(不超过15字,保留核心争议点,尽量用疑问句)
+
+2. **正反方立场生成**:
+   - 正方立场:支持辩题中的观点(不超过12字)
+   - 反方立场:反对辩题中的观点(不超过12字)
+   - 正反方立场要明确对立
+
+3. **哲学家观点生成**:
+   为以下5位哲学家生成观点:
+   - 苏格拉底:认识你自己,未经审视的生活不值得过
+   - 尼采:上帝已死,超人哲学,权力意志
+   - 维特根斯坦:语言的界限就是世界的界限,语言游戏
+   - 康德:绝对命令,人是目的而非工具,理性批判
+   - 弗洛伊德:本我、自我、超我,无意识,精神分析
+   
+   每位哲学家需要:
+   - 基于其哲学思想判断支持正方(pro)还是反方(con)
+   - 用其哲学思想解释理由(不超过20字)
+   - **确保正反方至少各有1人**
 
 请以JSON格式返回:
 {{
-  "pro": "正方立场",
-  "con": "反方立场"
+  "refined_topic": "凝练后的标题(如果不需要凝练则与原标题相同)",
+  "original_topic": "原标题(如果凝练了才填写,否则为null)",
+  "pro_stance": "正方立场",
+  "con_stance": "反方立场",
+  "philosophers": [
+    {{
+      "id": "socrates",
+      "name": "苏格拉底",
+      "stance": "pro或con",
+      "reason": "理由"
+    }},
+    ...共5位哲学家
+  ]
 }}
 """
     
-    stance_response = client.chat.completions.create(
-        model="gpt-4.1-nano",
-        messages=[{"role": "user", "content": stance_prompt}],
-        response_format={"type": "json_object"},
-        temperature=0.7
+    response = client.chat.completions.create(
+        model="DeepSeek-V3.1",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.7,
+        max_tokens=1000
     )
     
-    stances = json.loads(stance_response.choices[0].message.content)
+    content = response.choices[0].message.content
     
-    # 第三步:并行为每个哲学家生成观点(使用DeepSeek)
-    def generate_philosopher_view(p):
-        view_prompt = f"""
-你是{p['name']},核心哲学思想是:{p['philosophy']}
-
-辩题:"{refined_topic}"
-正方立场:{stances['pro']}
-反方立场:{stances['con']}
-
-请基于你的哲学思想,回答:
-1. 你支持正方还是反方?(回答"pro"或"con")
-2. 你的理由是什么?(用你的哲学思想解释,不超过20个字)
-
-请以JSON格式返回:
-{{
-  "stance": "pro或con",
-  "reason": "你的理由"
-}}
-"""
-        
-        view_response = client.chat.completions.create(
-            model="gpt-4.1-nano",
-            messages=[{"role": "user", "content": view_prompt}],
-            response_format={"type": "json_object"},
-            temperature=0.7
-        )
-        
-        view_data = json.loads(view_response.choices[0].message.content)
-        return {
-            "id": p["id"],
-            "name": p["name"],
-            "stance": view_data["stance"],
-            "reason": view_data["reason"]
-        }
+    # 去除可能的代码块标记
+    content = content.strip()
+    if content.startswith('```json'):
+        content = content[7:]
+    if content.startswith('```'):
+        content = content[3:]
+    if content.endswith('```'):
+        content = content[:-3]
+    content = content.strip()
     
-    # 使用线程池并行生成,大幅提升速度
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        philosopher_views = list(executor.map(generate_philosopher_view, philosophers))
+    result = json.loads(content)
     
     # 确保正反方至少各有一人
-    pro_count = sum(1 for p in philosopher_views if p["stance"] == "pro")
-    con_count = sum(1 for p in philosopher_views if p["stance"] == "con")
+    pro_count = sum(1 for p in result["philosophers"] if p["stance"] == "pro")
+    con_count = sum(1 for p in result["philosophers"] if p["stance"] == "con")
     
     if pro_count == 0:
         # 强制第一个哲学家支持正方
-        philosopher_views[0]["stance"] = "pro"
+        result["philosophers"][0]["stance"] = "pro"
     elif con_count == 0:
         # 强制最后一个哲学家支持反方
-        philosopher_views[-1]["stance"] = "con"
+        result["philosophers"][-1]["stance"] = "con"
     
+    # 格式化返回结果
     return {
-        "topic": refined_topic,
-        "original_topic": topic if topic != refined_topic else None,
-        "pro_stance": stances["pro"],
-        "con_stance": stances["con"],
-        "philosophers": philosopher_views
+        "topic": result["refined_topic"],
+        "original_topic": result.get("original_topic"),
+        "pro_stance": result["pro_stance"],
+        "con_stance": result["con_stance"],
+        "philosophers": result["philosophers"]
     }
 
 if __name__ == "__main__":
