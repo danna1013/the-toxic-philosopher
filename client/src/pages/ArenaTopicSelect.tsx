@@ -22,7 +22,7 @@ const PRESET_TOPICS = [
   },
   {
     id: "free-will",
-    title: "自由意志真的存在吗？",
+    title: "自由意志真的存在吗",
     category: "形而上学",
     description: "人类的选择是真正自由的,还是被因果链条决定的?"
   },
@@ -106,18 +106,24 @@ export default function ArenaTopicSelect() {
               }}
               className={`border-2 p-6 cursor-pointer transition-all duration-300 hover:shadow-xl ${
                 selectedTopic === topic.id && !showCustomInput
-                  ? "border-black bg-gray-50"
-                  : "border-gray-300 hover:border-black"
+                  ? "border-black bg-black"
+                  : "border-gray-300 hover:border-black bg-white"
               }`}
             >
               <div className="flex items-start justify-between mb-3">
-                <h3 className="text-xl font-bold text-black">{topic.title}</h3>
+                <h3 className={`text-xl font-bold ${
+                  selectedTopic === topic.id && !showCustomInput ? "text-white" : "text-black"
+                }`}>{topic.title}</h3>
                 {selectedTopic === topic.id && !showCustomInput && (
-                  <span className="text-black text-xl">✓</span>
+                  <span className="text-white text-xl">✓</span>
                 )}
               </div>
-              <p className="text-sm text-gray-500 mb-3">{topic.category}</p>
-              <p className="text-gray-600 text-sm leading-relaxed">{topic.description}</p>
+              <p className={`text-sm mb-3 ${
+                selectedTopic === topic.id && !showCustomInput ? "text-gray-300" : "text-gray-500"
+              }`}>{topic.category}</p>
+              <p className={`text-sm leading-relaxed ${
+                selectedTopic === topic.id && !showCustomInput ? "text-gray-200" : "text-gray-600"
+              }`}>{topic.description}</p>
             </div>
           ))}
         </div>
@@ -130,15 +136,19 @@ export default function ArenaTopicSelect() {
               setSelectedTopic("");
             }}
             className={`w-full border-2 p-6 transition-all duration-300 hover:shadow-xl ${
-              showCustomInput ? "border-black bg-gray-50" : "border-gray-300 hover:border-black"
+              showCustomInput ? "border-black bg-black" : "border-gray-300 hover:border-black bg-white"
             }`}
           >
             <div className="flex items-center justify-between">
               <div className="text-left">
-                <h3 className="text-xl font-bold text-black mb-2">自定义话题</h3>
-                <p className="text-gray-600 text-sm">输入你想要辩论的任何哲学问题</p>
+                <h3 className={`text-xl font-bold mb-2 ${
+                  showCustomInput ? "text-white" : "text-black"
+                }`}>自定义话题</h3>
+                <p className={`text-sm ${
+                  showCustomInput ? "text-gray-200" : "text-gray-600"
+                }`}>输入你想要辩论的任何哲学问题</p>
               </div>
-              {showCustomInput && <span className="text-black text-xl">✓</span>}
+              {showCustomInput && <span className="text-white text-xl">✓</span>}
             </div>
           </button>
 
