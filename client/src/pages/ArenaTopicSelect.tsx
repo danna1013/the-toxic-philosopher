@@ -58,13 +58,19 @@ export default function ArenaTopicSelect() {
 
     sessionStorage.setItem('arenaTopic', topic);
     
-    // 完整模式直接跳转到阵营配置页（身份选择已合并）
-    if (arenaMode === 'full') {
-      setLocation('/arena/camp');
-    } else {
-      // 基础模式直接开始辩论
-      setLocation('/arena/debate/basic');
-    }
+    // 设置3秒自动跳转
+    const autoJumpTimer = setTimeout(() => {
+      // 完整模式直接跳转到阵营配置页（身份选择已合并）
+      if (arenaMode === 'full') {
+        setLocation('/arena/camp');
+      } else {
+        // 基础模式直接开始辩论
+        setLocation('/arena/debate/basic');
+      }
+    }, 3000);
+    
+    // 如果用户在3秒内手动跳转,清除定时器
+    return () => clearTimeout(autoJumpTimer);
   };
 
   return (

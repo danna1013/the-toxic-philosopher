@@ -283,7 +283,7 @@ export default function ArenaCampSetup() {
           className="w-24 h-24 rounded-full mb-4 object-cover"
         />
         <span className="text-lg font-medium text-black mb-3">{philosopher.name}</span>
-        {philosopher.aiReason && (
+        {philosopher.aiReason && !isGenerating && (
           <p className="text-sm text-gray-600 text-center leading-relaxed">{philosopher.aiReason}</p>
         )}
       </div>
@@ -327,19 +327,7 @@ export default function ArenaCampSetup() {
   const audienceCount = unassigned.length + (userSide === 'audience' ? 1 : 0);
 
   // 检查是否满足开始条件
-  const canStart = proCount > 0 && conCount > 0;
-
-  if (isGenerating) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-6 animate-pulse">🤔</div>
-          <p className="text-2xl text-black font-bold mb-2">AI正在分析辩题</p>
-          <p className="text-lg text-gray-600">生成正反方立场和哲学家观点...</p>
-        </div>
-      </div>
-    );
-  }
+  const canStart = proCount > 0 && conCount > 0 && !isGenerating;
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -389,12 +377,23 @@ export default function ArenaCampSetup() {
           </h1>
         </div>
 
+        {/* AI生成中的提示 */}
+        {isGenerating && (
+          <div className="w-full max-w-7xl mb-8 p-6 bg-gray-50 border border-gray-200 text-center">
+            <div className="text-4xl mb-4 animate-pulse">🤔</div>
+            <p className="text-xl text-black font-bold mb-2">AI正在分析辩题</p>
+            <p className="text-base text-gray-600">生成正反方立场和哲学家观点...</p>
+          </div>
+        )}
+
         {/* 拖拽说明 */}
-        <div className="w-full max-w-7xl mb-8">
-          <p className="text-lg text-gray-600 text-center">
-            💡 提示:拖动哲学家卡片到不同阵营,自由配置辩论双方
-          </p>
-        </div>
+        {!isGenerating && (
+          <div className="w-full max-w-7xl mb-8">
+            <p className="text-lg text-gray-600 text-center">
+              💡 提示:拖动哲学家卡片到不同阵营,自由配置辩论双方
+            </p>
+          </div>
+        )}
 
         {/* 阵营配置区 */}
         <div className="w-full max-w-7xl mb-12">
@@ -412,7 +411,7 @@ export default function ArenaCampSetup() {
                   <h2 className="text-3xl font-bold">正方</h2>
                   <span className="text-2xl">({proCount})</span>
                 </div>
-                <p className="text-base mt-2 opacity-90">{proStance}</p>
+                <p className="text-base mt-2 opacity-90">{proStance || '生成中...'}</p>
               </div>
               <div className="p-5 min-h-[450px] space-y-4">
                 {proSide.map(id => renderPhilosopher(id))}
@@ -462,7 +461,7 @@ export default function ArenaCampSetup() {
                   <h2 className="text-3xl font-bold">反方</h2>
                   <span className="text-2xl">({conCount})</span>
                 </div>
-                <p className="text-base mt-2 opacity-90">{conStance}</p>
+                <p className="text-base mt-2 opacity-90">{conStance || '生成中...'}</p>
               </div>
               <div className="p-5 min-h-[450px] space-y-4">
                 {conSide.map(id => renderPhilosopher(id))}
@@ -480,24 +479,26 @@ export default function ArenaCampSetup() {
               {/* 正方选项 */}
               <button
                 onClick={() => setUserSide('pro')}
+                disabled={isGenerating}
                 className={`p-8 border-2 transition-all ${
                   userSide === 'pro'
                     ? 'border-green-600 bg-green-600 text-white'
                     : 'border-gray-300 bg-white text-black hover:border-green-600'
-                }`}
+                } ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="text-2xl font-bold mb-3">正方辩手</div>
-                <div className="text-base opacity-80">{proStance}</div>
+                <div className="text-base opacity-80">{proStance || '立场生成中...'}</div>
               </button>
 
               {/* 观众选项 */}
               <button
                 onClick={() => setUserSide('audience')}
+                disabled={isGenerating}
                 className={`p-8 border-2 transition-all ${
                   userSide === 'audience'
                     ? 'border-gray-600 bg-gray-600 text-white'
                     : 'border-gray-300 bg-white text-black hover:border-gray-600'
-                }`}
+                } ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="text-2xl font-bold mb-3">观众</div>
                 <div className="text-base opacity-80">观看辩论不参与</div>
@@ -506,14 +507,15 @@ export default function ArenaCampSetup() {
               {/* 反方选项 */}
               <button
                 onClick={() => setUserSide('con')}
+                disabled={isGenerating}
                 className={`p-8 border-2 transition-all ${
                   userSide === 'con'
                     ? 'border-red-600 bg-red-600 text-white'
                     : 'border-gray-300 bg-white text-black hover:border-red-600'
-                }`}
+                } ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="text-2xl font-bold mb-3">反方辩手</div>
-                <div className="text-base opacity-80">{conStance}</div>
+                <div className="text-base opacity-80">{conStance || '立场生成中...'}</div>
               </button>
             </div>
           </div>
