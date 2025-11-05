@@ -397,6 +397,9 @@ export default function ArenaCampSetup() {
             <h1 className="text-5xl font-bold text-black text-center">
               {topic}
             </h1>
+            <p className="text-sm text-gray-500 text-center mt-3">
+              立场由哲学家本人观点和生平经历所决定
+            </p>
           </div>
         )}
 
