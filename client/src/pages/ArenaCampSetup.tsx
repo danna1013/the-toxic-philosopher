@@ -98,43 +98,137 @@ export default function ArenaCampSetup() {
   const [proStance, setProStance] = useState<string>('');
   const [conStance, setConStance] = useState<string>('');
   const [userSide, setUserSide] = useState<'pro' | 'con' | 'audience'>('audience');
+  const [isGenerating, setIsGenerating] = useState(false);
   
   const topic = sessionStorage.getItem('arenaTopic') || '未选择话题';
 
   useEffect(() => {
-    // 设置正反方立场
-    if (topicStances[topic]) {
-      setProStance(topicStances[topic].pro);
-      setConStance(topicStances[topic].con);
-    } else {
-      // 自定义辩题,需要AI生成(这里暂时简化处理)
+    const initializeStances = async () => {
+      // 检查是否是预设辩题
+      if (topicStances[topic]) {
+        // 预设辩题,直接使用预定义的立场
+        setProStance(topicStances[topic].pro);
+        setConStance(topicStances[topic].con);
+
+        // AI自动判断每位哲学家的立场并分配
+        const philosophersWithAI = philosophers.map(p => {
+          const { stance, reason } = getAIStance(p.id, topic);
+          return { ...p, aiStance: stance, aiReason: reason };
+        });
+        setPhilosophersWithStance(philosophersWithAI);
+
+        // 根据AI判断自动分配初始阵营
+        const pro: string[] = [];
+        const con: string[] = [];
+
+        philosophersWithAI.forEach(p => {
+          if (p.aiStance === 'pro') {
+            pro.push(p.id);
+          } else {
+            con.push(p.id);
+          }
+        });
+
+        setProSide(pro);
+        setConSide(con);
+        setUnassigned([]);
+      } else {
+        // 自定义辩题,需要AI生成
+        await generateCustomTopicStances();
+      }
+    };
+
+    initializeStances();
+  }, [topic]);
+
+  // AI生成自定义辩题的立场和哲学家观点
+  const generateCustomTopicStances = async () => {
+    setIsGenerating(true);
+    
+    try {
+      const response = await fetch('/api/generate-stances', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate stances');
+      }
+
+      const data = await response.json();
+      
+      // 设置正反方立场
+      setProStance(data.pro_stance);
+      setConStance(data.con_stance);
+
+      // 设置哲学家观点和立场
+      const philosophersWithAI = philosophers.map(p => {
+        const philosopherData = data.philosophers.find((pd: any) => pd.id === p.id);
+        if (philosopherData) {
+          return {
+            ...p,
+            aiStance: philosopherData.stance as 'pro' | 'con',
+            aiReason: philosopherData.reason
+          };
+        }
+        return p;
+      });
+      
+      setPhilosophersWithStance(philosophersWithAI);
+
+      // 根据AI生成的立场分配初始阵营
+      const pro: string[] = [];
+      const con: string[] = [];
+
+      philosophersWithAI.forEach(p => {
+        if (p.aiStance === 'pro') {
+          pro.push(p.id);
+        } else if (p.aiStance === 'con') {
+          con.push(p.id);
+        }
+      });
+
+      setProSide(pro);
+      setConSide(con);
+      setUnassigned([]);
+    } catch (error) {
+      console.error('AI生成失败:', error);
+      // 失败时使用简化处理
       setProStance(`支持: ${topic}`);
       setConStance(`反对: ${topic}`);
+
+      const philosophersWithAI = philosophers.map(p => {
+        const stance = Math.random() > 0.5 ? 'pro' : 'con';
+        return { 
+          ...p, 
+          aiStance: stance as 'pro' | 'con', 
+          aiReason: '基于其哲学思想倾向' 
+        };
+      });
+      
+      setPhilosophersWithStance(philosophersWithAI);
+
+      const pro: string[] = [];
+      const con: string[] = [];
+
+      philosophersWithAI.forEach(p => {
+        if (p.aiStance === 'pro') {
+          pro.push(p.id);
+        } else {
+          con.push(p.id);
+        }
+      });
+
+      setProSide(pro);
+      setConSide(con);
+      setUnassigned([]);
+    } finally {
+      setIsGenerating(false);
     }
-
-    // AI自动判断每位哲学家的立场并分配
-    const philosophersWithAI = philosophers.map(p => {
-      const { stance, reason } = getAIStance(p.id, topic);
-      return { ...p, aiStance: stance, aiReason: reason };
-    });
-    setPhilosophersWithStance(philosophersWithAI);
-
-    // 根据AI判断自动分配初始阵营
-    const pro: string[] = [];
-    const con: string[] = [];
-
-    philosophersWithAI.forEach(p => {
-      if (p.aiStance === 'pro') {
-        pro.push(p.id);
-      } else {
-        con.push(p.id);
-      }
-    });
-
-    setProSide(pro);
-    setConSide(con);
-    setUnassigned([]); // 初始时所有人都被分配
-  }, [topic]);
+  };
 
   // 拖拽处理函数
   const handleDragStart = (philosopherId: string) => {
@@ -199,7 +293,7 @@ export default function ArenaCampSetup() {
   // 渲染用户卡片
   const renderUserCard = () => {
     return (
-      <div className="flex flex-col items-center p-4 bg-white border border-black">
+      <div className="flex flex-col items-center p-4 bg-white border-2 border-black">
         <div className="w-20 h-20 rounded-full mb-3 bg-black flex items-center justify-center text-white text-3xl font-bold">
           你
         </div>
@@ -232,6 +326,18 @@ export default function ArenaCampSetup() {
   const proCount = proSide.length + (userSide === 'pro' ? 1 : 0);
   const conCount = conSide.length + (userSide === 'con' ? 1 : 0);
   const audienceCount = unassigned.length + (userSide === 'audience' ? 1 : 0);
+
+  if (isGenerating) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-6 animate-pulse">🤔</div>
+          <p className="text-2xl text-black font-bold mb-2">AI正在分析辩题</p>
+          <p className="text-lg text-gray-600">生成正反方立场和哲学家观点...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -274,16 +380,9 @@ export default function ArenaCampSetup() {
 
       {/* 主内容 */}
       <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16">
-        {/* 返回按钮和辩题 */}
+        {/* 辩题 */}
         <div className="w-full max-w-7xl mb-12">
-          <button
-            onClick={() => setLocation('/arena/topic')}
-            className="mb-6 px-4 py-2 border border-gray-400 text-gray-600 hover:border-black hover:text-black transition-colors text-sm"
-          >
-            ← 返回
-          </button>
-          
-          <h1 className="text-4xl font-bold text-black mb-8 text-center">
+          <h1 className="text-4xl font-bold text-black text-center">
             {topic}
           </h1>
         </div>
@@ -296,10 +395,10 @@ export default function ArenaCampSetup() {
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDropToPro}
               className={`border-2 transition-all ${
-                draggedPhilosopher ? 'border-dashed border-gray-400 bg-gray-50' : 'border-black'
+                draggedPhilosopher ? 'border-dashed border-green-400 bg-green-50' : 'border-green-600'
               }`}
             >
-              <div className="bg-black text-white p-4">
+              <div className="bg-green-600 text-white p-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold">正方</h2>
                   <span className="text-lg">({proCount})</span>
@@ -346,10 +445,10 @@ export default function ArenaCampSetup() {
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDropToCon}
               className={`border-2 transition-all ${
-                draggedPhilosopher ? 'border-dashed border-gray-400 bg-gray-50' : 'border-black'
+                draggedPhilosopher ? 'border-dashed border-red-400 bg-red-50' : 'border-red-600'
               }`}
             >
-              <div className="bg-black text-white p-4">
+              <div className="bg-red-600 text-white p-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold">反方</h2>
                   <span className="text-lg">({conCount})</span>
@@ -365,8 +464,8 @@ export default function ArenaCampSetup() {
         </div>
 
         {/* 用户角色选择区域 */}
-        <div className="w-full max-w-5xl mb-12">
-          <h3 className="text-2xl font-bold text-center mb-6">选择你的角色</h3>
+        <div className="w-full max-w-7xl mb-12">
+          <h3 className="text-3xl font-bold text-black text-center mb-6">选择你的角色</h3>
           <div className="border-2 border-black p-8 bg-white">
             <div className="grid grid-cols-3 gap-6">
               {/* 正方选项 */}
@@ -374,8 +473,8 @@ export default function ArenaCampSetup() {
                 onClick={() => setUserSide('pro')}
                 className={`p-6 border-2 transition-all ${
                   userSide === 'pro'
-                    ? 'border-black bg-black text-white'
-                    : 'border-gray-300 bg-white text-black hover:border-black'
+                    ? 'border-green-600 bg-green-600 text-white'
+                    : 'border-gray-300 bg-white text-black hover:border-green-600'
                 }`}
               >
                 <div className="text-2xl font-bold mb-3">正方辩手</div>
@@ -387,8 +486,8 @@ export default function ArenaCampSetup() {
                 onClick={() => setUserSide('audience')}
                 className={`p-6 border-2 transition-all ${
                   userSide === 'audience'
-                    ? 'border-black bg-black text-white'
-                    : 'border-gray-300 bg-white text-black hover:border-black'
+                    ? 'border-gray-600 bg-gray-600 text-white'
+                    : 'border-gray-300 bg-white text-black hover:border-gray-600'
                 }`}
               >
                 <div className="text-2xl font-bold mb-3">观众</div>
@@ -400,8 +499,8 @@ export default function ArenaCampSetup() {
                 onClick={() => setUserSide('con')}
                 className={`p-6 border-2 transition-all ${
                   userSide === 'con'
-                    ? 'border-black bg-black text-white'
-                    : 'border-gray-300 bg-white text-black hover:border-black'
+                    ? 'border-red-600 bg-red-600 text-white'
+                    : 'border-gray-300 bg-white text-black hover:border-red-600'
                 }`}
               >
                 <div className="text-2xl font-bold mb-3">反方辩手</div>
@@ -411,18 +510,26 @@ export default function ArenaCampSetup() {
           </div>
         </div>
 
-        {/* 开始辩论按钮 */}
-        <div>
+        {/* 底部按钮区 */}
+        <div className="w-full max-w-7xl flex items-center justify-between">
+          <button
+            onClick={() => setLocation('/arena/topic')}
+            className="px-8 py-4 border-2 border-gray-400 text-gray-600 hover:border-black hover:text-black transition-colors text-lg font-medium"
+          >
+            ← 返回
+          </button>
+          
           <button
             onClick={handleContinue}
-            className="px-16 py-5 bg-black text-white text-xl font-bold hover:bg-gray-800 transition-colors"
+            className="px-16 py-4 bg-black text-white text-xl font-bold hover:bg-gray-800 transition-colors"
           >
             开始辩论
           </button>
-          <p className="text-center text-sm text-gray-500 mt-3">
-            正反方必须至少各有一位参赛者
-          </p>
         </div>
+        
+        <p className="text-center text-sm text-gray-500 mt-4">
+          正反方必须至少各有一位参赛者
+        </p>
       </div>
     </div>
   );
