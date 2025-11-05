@@ -99,19 +99,23 @@ export default function ArenaCampSetup() {
   const [conStance, setConStance] = useState<string>('');
   const [userSide, setUserSide] = useState<'pro' | 'con' | 'audience'>('audience');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [topic, setTopic] = useState<string>(sessionStorage.getItem('arenaTopic') || '未选择话题');
+  const [topic, setTopic] = useState<string>('');
 
   useEffect(() => {
     const initializeStances = async () => {
+      const userTopic = sessionStorage.getItem('arenaTopic') || '';
+      
       // 检查是否是预设辩题
-      if (topicStances[topic]) {
+      if (topicStances[userTopic]) {
+        // 预设辩题,立即显示标题
+        setTopic(userTopic);
         // 预设辩题,直接使用预定义的立场
-        setProStance(topicStances[topic].pro);
-        setConStance(topicStances[topic].con);
+        setProStance(topicStances[userTopic].pro);
+        setConStance(topicStances[userTopic].con);
 
         // AI自动判断每位哲学家的立场并分配
         const philosophersWithAI = philosophers.map(p => {
-          const { stance, reason } = getAIStance(p.id, topic);
+          const { stance, reason } = getAIStance(p.id, userTopic);
           return { ...p, aiStance: stance, aiReason: reason };
         });
         setPhilosophersWithStance(philosophersWithAI);
@@ -138,11 +142,12 @@ export default function ArenaCampSetup() {
     };
 
     initializeStances();
-  }, [topic]);
+  }, []);
 
   // AI生成自定义辩题的立场和哲学家观点
   const generateCustomTopicStances = async () => {
     setIsGenerating(true);
+    const userTopic = sessionStorage.getItem('arenaTopic') || '';
     
     try {
       const response = await fetch('/api/generate-stances', {
@@ -150,7 +155,7 @@ export default function ArenaCampSetup() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ topic }),
+        body: JSON.stringify({ topic: userTopic }),
       });
 
       if (!response.ok) {
