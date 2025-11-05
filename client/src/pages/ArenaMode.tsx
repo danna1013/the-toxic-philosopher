@@ -57,28 +57,28 @@ export default function ArenaMode() {
       {/* 主内容 */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 pt-24 pb-16">
         {/* 标题 */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-black mb-2">思想的角斗场，没有和局</h1>
-          <p className="text-lg text-gray-500">请选择你的思想擂台</p>
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-bold text-black mb-3">思想的角斗场，没有和局</h1>
+          <p className="text-xl text-gray-500">请选择你的思想擂台</p>
         </div>
 
         {/* 模式卡片 */}
-        <div className="flex gap-6 mb-10">
+        <div className="flex gap-8 mb-12">
           {/* 基础模式 */}
           <div 
             onClick={() => setSelectedMode("basic")}
-            className={`w-80 border-2 p-6 cursor-pointer transition-all duration-300 ${
+            className={`w-96 border-2 p-8 cursor-pointer transition-all duration-300 ${
               selectedMode === "basic" 
                 ? "bg-white text-black border-black shadow-lg" 
                 : "bg-white text-black border-gray-300 hover:border-black"
             }`}
           >
-            <div className="flex items-start justify-between mb-5">
-              <h2 className="text-2xl font-bold">基础模式</h2>
-              <span className="px-2.5 py-1 bg-gray-800 text-white text-xs">快速体验</span>
+            <div className="flex items-start justify-between mb-6">
+              <h2 className="text-3xl font-bold">基础模式</h2>
+              <span className="px-3 py-1.5 bg-gray-800 text-white text-sm">快速体验</span>
             </div>
 
-            <ul className="space-y-2 text-sm mb-6">
+            <ul className="space-y-3 text-base mb-8">
               <li className="flex items-start">
                 <span className="mr-2 text-green-600">✓</span>
                 <span>预设辩题</span>
@@ -117,7 +117,7 @@ export default function ArenaMode() {
               </li>
             </ul>
 
-            <p className="text-center text-gray-600 text-sm">
+            <p className="text-center text-gray-600 text-base">
               基础模式肯定也好玩！
             </p>
           </div>
@@ -125,18 +125,18 @@ export default function ArenaMode() {
           {/* 完整模式 */}
           <div 
             onClick={() => setSelectedMode("full")}
-            className={`w-80 border-2 p-6 cursor-pointer transition-all duration-300 ${
+            className={`w-96 border-2 p-8 cursor-pointer transition-all duration-300 ${
               selectedMode === "full" 
                 ? "bg-white text-black border-black shadow-lg" 
                 : "bg-white text-black border-gray-300 hover:border-black"
             }`}
           >
-            <div className="flex items-start justify-between mb-5">
-              <h2 className="text-2xl font-bold">完整模式</h2>
-              <span className="px-2.5 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">限量内测</span>
+            <div className="flex items-start justify-between mb-6">
+              <h2 className="text-3xl font-bold">完整模式</h2>
+              <span className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm">限量内测</span>
             </div>
 
-            <ul className="space-y-2 text-sm mb-6">
+            <ul className="space-y-3 text-base mb-8">
               <li className="flex items-start">
                 <span className="mr-2 text-green-600">✓</span>
                 <span>预设辩题</span>
@@ -175,7 +175,7 @@ export default function ArenaMode() {
               </li>
             </ul>
 
-            <p className="text-center text-gray-600 text-sm">
+            <p className="text-center text-gray-600 text-base">
               57个AI同时运行
             </p>
           </div>
@@ -185,15 +185,15 @@ export default function ArenaMode() {
         <button
           onClick={handleContinue}
           disabled={!selectedMode}
-          className="px-12 py-3 bg-black text-white text-lg hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors mb-6"
+          className="px-16 py-4 bg-black text-white text-xl hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors mb-8"
         >
           继续
         </button>
 
         {/* 底部说明 */}
         <div className="text-center text-gray-500">
-          <p className="text-xs text-gray-400">
-            💡 <a href="https://teko.woa.com/event/ai-agent/246" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">评论10字以上</a>，获取体验码，即可体验完整模式
+          <p className="text-sm text-gray-400">
+            💡 <a href="https://teko.woa.com/event/ai-agent/246" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline hover:text-blue-600">点击链接</a>，评论10字以上，获取体验码，即可体验完整模式
           </p>
         </div>
       </div>
