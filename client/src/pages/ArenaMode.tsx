@@ -69,8 +69,8 @@ export default function ArenaMode() {
             onClick={() => setSelectedMode("basic")}
             className={`flex-1 border-2 p-8 cursor-pointer transition-all duration-300 ${
               selectedMode === "basic" 
-                ? "bg-black text-white border-black" 
-                : "bg-white text-black border-gray-400 hover:border-black hover:bg-black hover:text-white"
+                ? "bg-white text-black border-black" 
+                : "bg-white text-black border-gray-400 hover:border-black"
             }`}
           >
             <div className="flex items-start justify-between mb-6">
@@ -78,7 +78,7 @@ export default function ArenaMode() {
               <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium">免费</span>
             </div>
             
-            <p className={`mb-6 leading-relaxed ${selectedMode === "basic" ? "text-gray-200" : "text-gray-600"}`}>
+            <p className="text-gray-600 mb-6 leading-relaxed">
               选择辩题，AI自动分配阵营，快速开启一场辩论。适合初次体验。
             </p>
 
@@ -107,8 +107,8 @@ export default function ArenaMode() {
             onClick={() => setSelectedMode("full")}
             className={`flex-1 border-2 p-8 cursor-pointer transition-all duration-300 ${
               selectedMode === "full" 
-                ? "bg-black text-white border-black" 
-                : "bg-white text-black border-gray-400 hover:border-black hover:bg-black hover:text-white"
+                ? "bg-white text-black border-black" 
+                : "bg-white text-black border-gray-400 hover:border-black"
             }`}
           >
             <div className="flex items-start justify-between mb-6">
@@ -116,7 +116,7 @@ export default function ArenaMode() {
               <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium">内测中</span>
             </div>
             
-            <p className={`mb-6 leading-relaxed ${selectedMode === "full" ? "text-gray-200" : "text-gray-600"}`}>
+            <p className="text-gray-600 mb-6 leading-relaxed">
               完全自定义辩题、身份、阵营配置。可以作为辩手参与，与哲学家同台对决。
             </p>
 
@@ -160,7 +160,7 @@ export default function ArenaMode() {
             <strong>完整模式</strong>包含57个AI同时运行：5位哲学家 + 50位观众 + 1位主持人 + 你
           </p>
           <p className="text-sm leading-relaxed text-gray-400">
-            💡 评论10字以上，获取体验码，即可体验完整模式
+            💡 <a href="https://teko.woa.com/event/ai-agent/246" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">评论10字以上</a>，获取体验码，即可体验完整模式
           </p>
         </div>
       </div>
