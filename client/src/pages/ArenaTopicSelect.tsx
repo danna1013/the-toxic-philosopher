@@ -52,11 +52,19 @@ export default function ArenaTopicSelect() {
   const handleContinue = () => {
     const topic = showCustomInput ? customTopic : PRESET_TOPICS.find(t => t.id === selectedTopic)?.title || "";
     if (!topic.trim()) {
-      alert("请选择或输入一个辩题");
+      alert("请选择或输入辩题!");
       return;
     }
-    sessionStorage.setItem("arenaTopic", topic);
-    setLocation("/arena/role");
+
+    sessionStorage.setItem('arenaTopic', topic);
+    
+    // 完整模式直接跳转到阵营配置页（身份选择已合并）
+    if (arenaMode === 'full') {
+      setLocation('/arena/camp');
+    } else {
+      // 基础模式直接开始辩论
+      setLocation('/arena/debate/basic');
+    }
   };
 
   return (
