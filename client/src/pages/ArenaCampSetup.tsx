@@ -11,53 +11,74 @@ interface Philosopher {
 }
 
 const philosophers: Philosopher[] = [
-  { id: 'socrates', name: '苏格拉底', nameEn: 'Socrates', image: '/web-socrates.webp' },
-  { id: 'nietzsche', name: '尼采', nameEn: 'Nietzsche', image: '/web-nietzsche.webp' },
-  { id: 'wittgenstein', name: '维特根斯坦', nameEn: 'Wittgenstein', image: '/web-wittgenstein.webp' },
-  { id: 'kant', name: '康德', nameEn: 'Kant', image: '/web-kant.webp' },
-  { id: 'freud', name: '弗洛伊德', nameEn: 'Freud', image: '/web-freud.webp' },
+  { id: 'socrates', name: '苏格拉底', nameEn: 'Socrates', image: '/web-socrates-bw.jpg' },
+  { id: 'nietzsche', name: '尼采', nameEn: 'Nietzsche', image: '/web-nietzsche-bw.jpg' },
+  { id: 'wittgenstein', name: '维特根斯坦', nameEn: 'Wittgenstein', image: '/web-wittgenstein-bw.jpg' },
+  { id: 'kant', name: '康德', nameEn: 'Kant', image: '/web-kant-bw.jpg' },
+  { id: 'freud', name: '弗洛伊德', nameEn: 'Freud', image: '/web-freud-bw.jpg' },
 ];
 
 // 预设辩题的正反方定义
 const topicStances: Record<string, { pro: string, con: string }> = {
   '996是奋斗还是剥削?': { pro: '996是奋斗的必经之路', con: '996是对员工的剥削' },
   '35岁程序员真的没有出路吗?': { pro: '35岁是程序员的职业分水岭', con: '35岁焦虑是伪命题' },
-  '远程办公会取代坐班吗?': { pro: '远程办公是未来趋势', con: '坐班制度无法被取代' },
-  '大厂还是创业公司?': { pro: '大厂能提供更好的职业发展', con: '创业公司更有成长空间' },
-  'AI会抢走程序员的饭碗吗?': { pro: 'AI将取代大部分程序员', con: 'AI只是程序员的工具' },
-  '内卷是个人选择还是系统问题?': { pro: '内卷源于个人的过度竞争', con: '内卷是系统性问题' },
+  '快乐重要还是意义重要?': { pro: '快乐是人生的终极目标', con: '有意义的人生比快乐更重要' },
+  '社交媒体让人更孤独了吗?': { pro: '社交媒体加剧了孤独感', con: '社交媒体拓展了社交圈' },
+  '真爱存在吗?': { pro: '真爱是客观存在的', con: '真爱只是浪漫化的幻想' },
+  '理性恋爱好还是感性恋爱好?': { pro: '理性恋爱更长久', con: '感性恋爱更真实' },
 };
 
-// 模拟AI判断哲学家立场(基于辩题)
-const getAIStance = (philosopherId: string, topic: string): { stance: 'pro' | 'con', reason: string } => {
-  // 这里是简化版本,实际应该调用后端AI
-  const stanceMap: Record<string, Record<string, { stance: 'pro' | 'con', reason: string }>> = {
-    '996是奋斗还是剥削?': {
-      'socrates': { stance: 'con', reason: '真正的智慧需要闲暇时间思考' },
-      'nietzsche': { stance: 'pro', reason: '超人通过奋斗超越自我' },
-      'wittgenstein': { stance: 'con', reason: '工作的意义不在于时长' },
-      'kant': { stance: 'con', reason: '人不应被当作工具使用' },
-      'freud': { stance: 'con', reason: '过度工作是对欲望的压抑' },
-    },
-    'AI会抢走程序员的饭碗吗?': {
-      'socrates': { stance: 'con', reason: '人类的智慧和创造力不可替代' },
-      'nietzsche': { stance: 'con', reason: '创造性源于人类的意志力' },
-      'wittgenstein': { stance: 'pro', reason: '编程本质上是语言游戏' },
-      'kant': { stance: 'con', reason: '理性和道德判断是AI无法掌握的' },
-      'freud': { stance: 'pro', reason: '程序员的工作可被算法化' },
-    },
-    '内卷是个人选择还是系统问题?': {
-      'socrates': { stance: 'pro', reason: '美德源于个人的自我认知' },
-      'nietzsche': { stance: 'pro', reason: '个人的权力意志驱动竞争' },
-      'wittgenstein': { stance: 'con', reason: '语言游戏由社会规则决定' },
-      'kant': { stance: 'con', reason: '理性的人会选择普遍的道德律' },
-      'freud': { stance: 'con', reason: '内卷是社会超我的压迫' },
-    },
-  };
+// AI生成的哲学家立场数据
+const philosopherStances: Record<string, Record<string, { stance: 'pro' | 'con', reason: string }>> = {
+  '996是奋斗还是剥削?': {
+    'socrates': { stance: 'con', reason: '认识自己，方知何为美德，强求非德即为剥削。' },
+    'nietzsche': { stance: 'con', reason: '奴役意志非真自由，强迫劳动乃精神枷锁。' },
+    'wittgenstein': { stance: 'con', reason: '语言界定生活，996暴露剥削的现实语境。' },
+    'kant': { stance: 'con', reason: '人不可作为工具，996违背普遍道德律。' },
+    'freud': { stance: 'con', reason: '无意识压抑导致痛苦，996剥夺个体自由与心理健康。' },
+  },
+  '35岁程序员真的没有出路吗?': {
+    'socrates': { stance: 'con', reason: '认识自己，持续学习，方能超越年龄限制。' },
+    'nietzsche': { stance: 'con', reason: '人生的价值由创造意志定义，非年龄限制所束缚。' },
+    'wittgenstein': { stance: 'con', reason: '语言界限塑造焦虑，35岁只是语言游戏中的标签而非绝对界限' },
+    'kant': { stance: 'con', reason: '理性普遍法则表明，每个人皆可自为目的，不应被年龄限制' },
+    'freud': { stance: 'con', reason: '无意识驱动行为，焦虑源于内心压抑非年龄界限' },
+  },
+  '快乐重要还是意义重要?': {
+    'socrates': { stance: 'con', reason: '认识自我与追求意义方能导向真正的美德与幸福。' },
+    'nietzsche': { stance: 'con', reason: '意义超越瞬间快乐，彰显个体创造的生命价值。' },
+    'wittgenstein': { stance: 'con', reason: '语言界定意义，意义构成生活的形式与世界的边界' },
+    'kant': { stance: 'con', reason: '道德法则赋予人生普遍意义，超越单纯快乐追求。' },
+    'freud': { stance: 'con', reason: '无意识欲望需超我引导，意义超越短暂快乐更持久' },
+  },
+  '社交媒体让人更孤独了吗?': {
+    'socrates': { stance: 'pro', reason: '真实的自我连接胜于虚拟互动，虚拟或加深孤独。' },
+    'nietzsche': { stance: 'pro', reason: '虚拟连接掩盖真实孤独，削弱个体深刻自我与他人关系。' },
+    'wittgenstein': { stance: 'pro', reason: '语言界限限制交流，虚拟互动难以填补真实生活的孤独感。' },
+    'kant': { stance: 'pro', reason: '虚拟交流不能取代理性且普遍的真实人际关系。' },
+    'freud': { stance: 'pro', reason: '无意识欲望得不到满足，社交媒体加剧内心孤独感。' },
+  },
+  '真爱存在吗?': {
+    'socrates': { stance: 'pro', reason: '认识自己方能识真爱，因美德即知，真爱必客观存在。' },
+    'nietzsche': { stance: 'con', reason: '真爱是权力意志的投射，非客观实在，而是意志的创造。' },
+    'wittgenstein': { stance: 'con', reason: '语言界限决定意义，真爱不过是语言游戏中的概念幻象。' },
+    'kant': { stance: 'pro', reason: '真爱体现理性普遍道德法则，人作为目的不可被工具化。' },
+    'freud': { stance: 'pro', reason: '无意识驱动的深层情感，真爱体现本我与自我的和谐融合。' },
+  },
+  '理性恋爱好还是感性恋爱好?': {
+    'socrates': { stance: 'pro', reason: '通过理性认识自己与他人，恋爱方能长久且有真知。' },
+    'nietzsche': { stance: 'con', reason: '真理源于激情，感性激发生命的创造力与力量意志。' },
+    'wittgenstein': { stance: 'con', reason: '语言界限决定理解，感性是生活形式中的真实表达。' },
+    'kant': { stance: 'pro', reason: '理性为恋爱赋予普遍道德法则与尊重他人之目的性。' },
+    'freud': { stance: 'con', reason: '无意识情感驱动真实关系，感性恋爱更贴近本我需求。' },
+  },
+};
 
-  const topicStances = stanceMap[topic];
-  if (topicStances && topicStances[philosopherId]) {
-    return topicStances[philosopherId];
+// 获取哲学家对辩题的立场
+const getAIStance = (philosopherId: string, topic: string): { stance: 'pro' | 'con', reason: string } => {
+  const topicData = philosopherStances[topic];
+  if (topicData && topicData[philosopherId]) {
+    return topicData[philosopherId];
   }
 
   // 默认随机分配
@@ -76,6 +97,7 @@ export default function ArenaCampSetup() {
   const [draggedPhilosopher, setDraggedPhilosopher] = useState<string | null>(null);
   const [proStance, setProStance] = useState<string>('');
   const [conStance, setConStance] = useState<string>('');
+  const [userRole, setUserRole] = useState<'audience' | 'debater'>('audience');
   
   const topic = sessionStorage.getItem('arenaTopic') || '未选择话题';
 
@@ -191,6 +213,7 @@ export default function ArenaCampSetup() {
     sessionStorage.setItem('arenaProStance', proStance);
     sessionStorage.setItem('arenaConStance', conStance);
     sessionStorage.setItem('arenaUnassigned', JSON.stringify(unassigned));
+    sessionStorage.setItem('arenaUserRole', userRole);
 
     setLocation('/arena/debate/custom');
   };
@@ -235,18 +258,43 @@ export default function ArenaCampSetup() {
       </nav>
 
       {/* 主内容 */}
-      <div className="flex-1 flex flex-col items-center px-6 pt-40 pb-16">
+      <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16">
         {/* 辩题 */}
-        <div className="text-center mb-16">
-          <h1 className="text-6xl font-bold text-black mb-6">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-black mb-4">
             {topic}
           </h1>
-          <p className="text-2xl text-gray-600 mb-4">
+          <p className="text-xl text-gray-600 mb-2">
             配置辩论阵营
           </p>
-          <p className="text-lg text-gray-500">
+          <p className="text-base text-gray-500">
             💡 拖动哲学家头像到正方或反方,自由配置阵营
           </p>
+        </div>
+
+        {/* 用户角色选择 */}
+        <div className="mb-8 flex items-center gap-4">
+          <span className="text-lg font-medium text-gray-700">你的角色:</span>
+          <button
+            onClick={() => setUserRole('audience')}
+            className={`px-6 py-2 border-2 transition-all ${
+              userRole === 'audience'
+                ? 'border-black bg-black text-white'
+                : 'border-gray-300 bg-white text-black hover:border-black'
+            }`}
+          >
+            观众
+          </button>
+          <button
+            onClick={() => setUserRole('debater')}
+            className={`px-6 py-2 border-2 transition-all ${
+              userRole === 'debater'
+                ? 'border-black bg-black text-white'
+                : 'border-gray-300 bg-white text-black hover:border-black'
+            }`}
+          >
+            参与辩论
+          </button>
         </div>
 
         {/* 阵营配置区 */}
@@ -265,7 +313,7 @@ export default function ArenaCampSetup() {
                   <h2 className="text-3xl font-bold text-black">正方</h2>
                   <span className="text-lg text-gray-600">({proSide.length}人)</span>
                 </div>
-                <p className="text-xl text-green-600 font-medium">{proStance}</p>
+                <p className="text-lg text-green-600 font-medium leading-relaxed">{proStance}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {proSide.map(id => renderPhilosopher(id))}
@@ -277,12 +325,12 @@ export default function ArenaCampSetup() {
               )}
             </div>
 
-            {/* 待分配(观众) */}
+            {/* 待分配 */}
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDropToUnassigned}
               className={`border-4 p-8 min-h-[500px] transition-all ${
-                draggedPhilosopher ? 'border-dashed border-gray-500 bg-gray-50' : 'border-gray-400 bg-white'
+                draggedPhilosopher ? 'border-dashed border-gray-500 bg-gray-50' : 'border-gray-300 bg-white'
               }`}
             >
               <div className="mb-6">
@@ -290,19 +338,17 @@ export default function ArenaCampSetup() {
                   <h2 className="text-3xl font-bold text-gray-700">待分配</h2>
                   <span className="text-lg text-gray-600">({unassigned.length}人)</span>
                 </div>
-                <p className="text-xl text-gray-600">观众席 (不参与辩论)</p>
+                <p className="text-base text-gray-500">将哲学家拖动到此</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {unassigned.map(id => renderPhilosopher(id))}
               </div>
               {unassigned.length === 0 && !draggedPhilosopher && (
-                <div className="text-center text-gray-400 mt-8">
-                  所有哲学家已分配
-                </div>
-              )}
-              {draggedPhilosopher && !unassigned.includes(draggedPhilosopher) && (
-                <div className="mt-4 text-center text-gray-600 font-medium">
-                  ↓ 拖到这里成为观众
+                <div className="flex items-center justify-center h-64 text-gray-400">
+                  <div className="text-center">
+                    <div className="text-6xl mb-4">⚖️</div>
+                    <p>所有哲学家已分配完毕</p>
+                  </div>
                 </div>
               )}
             </div>
@@ -320,7 +366,7 @@ export default function ArenaCampSetup() {
                   <h2 className="text-3xl font-bold text-black">反方</h2>
                   <span className="text-lg text-gray-600">({conSide.length}人)</span>
                 </div>
-                <p className="text-xl text-red-600 font-medium">{conStance}</p>
+                <p className="text-lg text-red-600 font-medium leading-relaxed">{conStance}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {conSide.map(id => renderPhilosopher(id))}
@@ -334,14 +380,16 @@ export default function ArenaCampSetup() {
           </div>
         </div>
 
-        {/* 继续按钮 */}
-        <button
-          onClick={handleContinue}
-          disabled={proSide.length === 0 || conSide.length === 0}
-          className="mt-12 px-16 py-4 bg-black text-white text-xl font-medium hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-        >
-          开始辩论
-        </button>
+        {/* 开始辩论按钮 */}
+        <div className="mt-12">
+          <button
+            onClick={handleContinue}
+            disabled={proSide.length === 0 || conSide.length === 0}
+            className="px-12 py-4 bg-black text-white text-xl font-medium hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+          >
+            开始辩论
+          </button>
+        </div>
       </div>
     </div>
   );

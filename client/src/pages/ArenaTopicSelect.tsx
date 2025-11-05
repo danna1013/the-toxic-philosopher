@@ -4,39 +4,39 @@ import { useLocation } from "wouter";
 const PRESET_TOPICS = [
   {
     id: "996-struggle-or-exploitation",
-    title: "996是奋斗还是剥削？",
+    title: "996是奋斗还是剥削?",
     category: "职场伦理",
     description: "互联网行业的加班文化,究竟是个人奋斗的选择还是对员工的剥削?"
   },
   {
     id: "programmer-35-crisis",
-    title: "35岁程序员真的没有出路吗？",
+    title: "35岁程序员真的没有出路吗?",
     category: "职业发展",
     description: "35岁是程序员的职业分水岭,还是社会制造的焦虑?"
   },
   {
-    id: "remote-vs-office",
-    title: "远程办公会取代坐班吗？",
-    category: "工作方式",
-    description: "后疫情时代,远程办公是未来趋势还是坐班制度无法被取代?"
+    id: "happiness-vs-meaning",
+    title: "快乐重要还是意义重要?",
+    category: "人生哲学",
+    description: "在快乐与意义之间,哪个才是人生的终极追求?"
   },
   {
-    id: "bigtech-vs-startup",
-    title: "大厂还是创业公司？",
-    category: "职业选择",
-    description: "大厂的稳定平台和创业公司的成长空间,哪个更值得选择?"
+    id: "social-media-loneliness",
+    title: "社交媒体让人更孤独了吗?",
+    category: "现代生活",
+    description: "社交媒体是拓展了我们的社交圈,还是加剧了孤独感?"
   },
   {
-    id: "ai-replace-programmer",
-    title: "AI会抢走程序员的饭碗吗？",
-    category: "技术焦虑",
-    description: "AI编程工具的崛起,会取代程序员还是只是提升效率的工具?"
+    id: "true-love-exists",
+    title: "真爱存在吗?",
+    category: "爱情哲学",
+    description: "真爱是客观存在的现象,还是浪漫化的幻想?"
   },
   {
-    id: "involution-personal-or-system",
-    title: "内卷是个人选择还是系统问题？",
-    category: "社会现象",
-    description: "互联网行业的内卷,源于个人的过度竞争还是系统性问题?"
+    id: "rational-vs-emotional-love",
+    title: "理性恋爱好还是感性恋爱好?",
+    category: "恋爱观",
+    description: "理性的恋爱更长久,还是感性的恋爱更真实?"
   }
 ];
 
