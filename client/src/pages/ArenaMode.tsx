@@ -16,7 +16,7 @@ export default function ArenaMode() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="bg-white flex flex-col" style={{ height: '100vh' }}>
       {/* 导航栏 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="px-8 py-5 flex items-center justify-between">
@@ -34,8 +34,8 @@ export default function ArenaMode() {
               一对一开怼
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </button>
-            <button className="relative text-lg md:text-xl text-black font-medium group">
-              哲学"奇葩说"
+            <button onClick={() => setLocation("/arena/mode")} className="relative text-lg md:text-xl text-black font-medium group">
+              哲学“奇葩说”
               <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
             </button>
             <button onClick={() => setLocation("/design")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">

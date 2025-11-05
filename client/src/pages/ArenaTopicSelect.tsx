@@ -63,7 +63,7 @@ export default function ArenaTopicSelect() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col pt-20">
+    <div className="bg-white flex flex-col pt-20" style={{ height: '100vh', overflow: 'auto' }}>
       {/* 导航栏 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="px-8 py-5 flex items-center justify-between">
