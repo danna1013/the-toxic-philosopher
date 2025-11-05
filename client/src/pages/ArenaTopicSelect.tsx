@@ -107,10 +107,10 @@ export default function ArenaTopicSelect() {
       <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16">
         {/* 标题 */}
         <div className="text-center mb-16">
-          <h1 className="text-6xl font-bold text-black mb-6">
+          <h1 className="text-7xl font-bold text-black mb-6">
             选择辩论话题
           </h1>
-          <p className="text-2xl text-gray-600">
+          <p className="text-4xl text-gray-600">
             {arenaMode === "basic" ? "从预设辩题中选择一个开始" : "预设辩题或自定义你感兴趣的哲学问题"}
           </p>
         </div>

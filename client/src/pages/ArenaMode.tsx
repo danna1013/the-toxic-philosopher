@@ -69,7 +69,7 @@ export default function ArenaMode() {
         {/* 标题 */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-black mb-3">思想的角斗场，没有和局</h1>
-          <p className="text-2xl text-gray-500">请选择你的思想擂台</p>
+          <p className="text-4xl text-gray-500">请选择你的思想擂台</p>
         </div>
 
         {/* 模式卡片 */}
