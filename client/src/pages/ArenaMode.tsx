@@ -45,30 +45,30 @@ export default function ArenaMode() {
         {/* 模式卡片 */}
         <div className="flex gap-8 max-w-6xl">
           {/* 基础模式 */}
-          <div className="flex-1 border-2 border-black p-8 hover:shadow-2xl transition-all duration-300 bg-white">
+          <div className="flex-1 border-2 border-black p-8 hover:shadow-2xl hover:bg-black transition-all duration-300 bg-white group flex flex-col">
             <div className="flex items-start justify-between mb-6">
-              <h2 className="text-2xl font-bold text-black">基础模式</h2>
+              <h2 className="text-2xl font-bold text-black group-hover:text-white transition-colors">基础模式</h2>
               <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium">免费</span>
             </div>
             
-            <p className="text-gray-600 mb-6 leading-relaxed">
+            <p className="text-gray-600 group-hover:text-gray-200 mb-6 leading-relaxed transition-colors">
               选择辩题，AI自动分配阵营，快速开启一场辩论。适合初次体验。
             </p>
 
-            <ul className="space-y-3 mb-8">
-              <li className="flex items-center text-gray-700">
+            <ul className="space-y-3 mb-auto flex-1">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 选择或自定义辩题
               </li>
-              <li className="flex items-center text-gray-700">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 AI智能分配哲学家阵营
               </li>
-              <li className="flex items-center text-gray-700">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 观众视角观看辩论
               </li>
-              <li className="flex items-center text-gray-700">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 50位AI观众实时投票
               </li>
@@ -80,41 +80,41 @@ export default function ArenaMode() {
                 sessionStorage.setItem("arenaMode", "basic");
                 setLocation("/arena/topic");
               }}
-              className="w-full py-4 bg-black text-white font-medium hover:bg-gray-800 transition-colors"
+              className="w-full py-4 bg-black group-hover:bg-white text-white group-hover:text-black font-medium transition-colors mt-6"
             >
               选择辩题
             </button>
           </div>
 
           {/* 完整模式 */}
-          <div className="flex-1 border-2 border-black p-8 hover:shadow-2xl transition-all duration-300 bg-white">
+          <div className="flex-1 border-2 border-black p-8 hover:shadow-2xl hover:bg-black transition-all duration-300 bg-white group flex flex-col">
             <div className="flex items-start justify-between mb-6">
-              <h2 className="text-2xl font-bold text-black">完整模式</h2>
+              <h2 className="text-2xl font-bold text-black group-hover:text-white transition-colors">完整模式</h2>
               <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium">内测中</span>
             </div>
             
-            <p className="text-gray-600 mb-6 leading-relaxed">
+            <p className="text-gray-600 group-hover:text-gray-200 mb-6 leading-relaxed transition-colors">
               完全自定义辩题、身份、阵营配置。可以作为辩手参与，与哲学家同台对决。
             </p>
 
-            <ul className="space-y-3 mb-8">
-              <li className="flex items-center text-gray-700">
+            <ul className="space-y-3 mb-auto flex-1">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 自定义辩论话题
               </li>
-              <li className="flex items-center text-gray-700">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 自由配置哲学家阵营
               </li>
-              <li className="flex items-center text-gray-700">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 选择观众或辩手身份
               </li>
-              <li className="flex items-center text-gray-700">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 50位AI观众全程投票
               </li>
-              <li className="flex items-center text-gray-700">
+              <li className="flex items-center text-gray-700 group-hover:text-gray-200 transition-colors">
                 <span className="mr-2">✓</span>
                 选择观众发言互动
               </li>
@@ -125,7 +125,7 @@ export default function ArenaMode() {
                 sessionStorage.setItem("arenaMode", "full");
                 setLocation("/arena/topic");
               }}
-              className="w-full py-4 bg-black text-white font-medium hover:bg-gray-800 transition-colors"
+              className="w-full py-4 bg-black group-hover:bg-white text-white group-hover:text-black font-medium transition-colors mt-6"
             >
               开始配置
             </button>

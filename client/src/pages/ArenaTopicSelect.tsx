@@ -45,6 +45,9 @@ export default function ArenaTopicSelect() {
   const [selectedTopic, setSelectedTopic] = useState<string>("");
   const [customTopic, setCustomTopic] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
+  
+  // 检查是否为基础模式
+  const arenaMode = sessionStorage.getItem("arenaMode") || "basic";
 
   const handleContinue = () => {
     const topic = showCustomInput ? customTopic : PRESET_TOPICS.find(t => t.id === selectedTopic)?.title || "";
@@ -132,7 +135,8 @@ export default function ArenaTopicSelect() {
           ))}
         </div>
 
-        {/* 自定义话题 */}
+        {/* 自定义话题 - 仅完整模式显示 */}
+        {arenaMode === "full" && (
         <div className="w-full max-w-2xl mb-8">
           <button
             onClick={() => {
@@ -168,6 +172,7 @@ export default function ArenaTopicSelect() {
             </div>
           )}
         </div>
+        )}
 
         {/* 操作按钮 */}
         <div className="flex gap-4">
