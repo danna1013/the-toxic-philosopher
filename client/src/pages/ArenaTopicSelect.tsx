@@ -88,7 +88,8 @@ export default function ArenaTopicSelect() {
       </nav>
 
       {/* 主内容 */}
-      <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16"        {/* 标题 */}
+      <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16">
+        {/* 标题 */}
         <div className="text-center mb-16">
           <h1 className="text-6xl font-bold text-black mb-6">
             选择辩论话题
@@ -96,7 +97,10 @@ export default function ArenaTopicSelect() {
           <p className="text-2xl text-gray-600">
             预设辩题或自定义你感兴趣的哲学问题
           </p>
-        </div>"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mb-8">
+        </div>
+
+        {/* 辩题卡片 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mb-8">
           {PRESET_TOPICS.map((topic) => (
             <div
               key={topic.id}
