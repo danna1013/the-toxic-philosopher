@@ -6,27 +6,57 @@ interface Philosopher {
   name: string;
   nameEn: string;
   image: string;
+  bwImage: string; // 黑白头像
   aiStance?: 'pro' | 'con' | 'neutral';
   aiReason?: string;
 }
 
 const philosophers: Philosopher[] = [
-  { id: 'socrates', name: '苏格拉底', nameEn: 'Socrates', image: '/web-socrates.webp' },
-  { id: 'nietzsche', name: '尼采', nameEn: 'Nietzsche', image: '/web-nietzsche.webp' },
-  { id: 'wittgenstein', name: '维特根斯坦', nameEn: 'Wittgenstein', image: '/web-wittgenstein.webp' },
-  { id: 'kant', name: '康德', nameEn: 'Kant', image: '/web-kant.webp' },
-  { id: 'freud', name: '弗洛伊德', nameEn: 'Freud', image: '/web-freud.webp' },
+  { 
+    id: 'socrates', 
+    name: '苏格拉底', 
+    nameEn: 'Socrates', 
+    image: '/web-socrates.webp',
+    bwImage: '/web-socrates.webp' // 暂时使用原图,后续添加黑白头像
+  },
+  { 
+    id: 'nietzsche', 
+    name: '尼采', 
+    nameEn: 'Nietzsche', 
+    image: '/web-nietzsche.webp',
+    bwImage: '/web-nietzsche.webp'
+  },
+  { 
+    id: 'wittgenstein', 
+    name: '维特根斯坦', 
+    nameEn: 'Wittgenstein', 
+    image: '/web-wittgenstein.webp',
+    bwImage: '/web-wittgenstein.webp'
+  },
+  { 
+    id: 'kant', 
+    name: '康德', 
+    nameEn: 'Kant', 
+    image: '/web-kant.webp',
+    bwImage: '/web-kant.webp'
+  },
+  { 
+    id: 'freud', 
+    name: '弗洛伊德', 
+    nameEn: 'Freud', 
+    image: '/web-freud.webp',
+    bwImage: '/web-freud.webp'
+  },
 ];
 
-// 模拟AI判断哲学家立场（实际应该调用后端API）
+// 模拟AI判断哲学家立场
 const getAIStance = (philosopherId: string, topic: string): { stance: 'pro' | 'con' | 'neutral', reason: string } => {
-  // 这里是简化的模拟逻辑，实际应该基于哲学家的思想和话题进行深度分析
   const stances: Record<string, { stance: 'pro' | 'con' | 'neutral', reason: string }> = {
-    'socrates': { stance: 'pro', reason: '基于苏格拉底的理性主义和对真理的追求' },
-    'nietzsche': { stance: 'con', reason: '尼采对传统价值的批判和个人主义倾向' },
-    'wittgenstein': { stance: 'neutral', reason: '维特根斯坦更关注语言和逻辑问题' },
-    'kant': { stance: 'pro', reason: '康德的理性主义和道德哲学' },
-    'freud': { stance: 'con', reason: '弗洛伊德对人类无意识的深刻洞察' },
+    'socrates': { stance: 'pro', reason: '基于理性主义和对真理的追求,苏格拉底倾向于支持这一观点' },
+    'nietzsche': { stance: 'con', reason: '尼采对传统价值的批判和个人主义倾向,使他反对这一观点' },
+    'wittgenstein': { stance: 'neutral', reason: '维特根斯坦更关注语言和逻辑问题,对此话题持中立态度' },
+    'kant': { stance: 'pro', reason: '康德的理性主义和道德哲学支持这一立场' },
+    'freud': { stance: 'con', reason: '弗洛伊德对人类无意识的深刻洞察,使他倾向于反对' },
   };
   return stances[philosopherId] || { stance: 'neutral', reason: '需要更多信息判断' };
 };
@@ -35,291 +65,292 @@ export default function ArenaCampSetup() {
   const [, setLocation] = useLocation();
   const [proSide, setProSide] = useState<string[]>([]);
   const [conSide, setConSide] = useState<string[]>([]);
-  const [showAIRecommendation, setShowAIRecommendation] = useState(true);
+  const [unassigned, setUnassigned] = useState<string[]>([]);
+  const [userSide, setUserSide] = useState<'pro' | 'con' | 'unassigned'>('unassigned');
   const [philosophersWithStance, setPhilosophersWithStance] = useState<Philosopher[]>(philosophers);
+  const [draggedPhilosopher, setDraggedPhilosopher] = useState<string | null>(null);
   
   const topic = sessionStorage.getItem('arenaTopic') || '未选择话题';
-  const role = sessionStorage.getItem('arenaRole') || 'audience';
 
   useEffect(() => {
-    // 页面加载时，AI自动判断每位哲学家的立场
+    // AI自动判断每位哲学家的立场并分配
     const philosophersWithAI = philosophers.map(p => {
       const { stance, reason } = getAIStance(p.id, topic);
       return { ...p, aiStance: stance, aiReason: reason };
     });
     setPhilosophersWithStance(philosophersWithAI);
 
-    // 根据AI判断自动分配到正反方
-    const proPhilosophers = philosophersWithAI.filter(p => p.aiStance === 'pro').map(p => p.id);
-    const conPhilosophers = philosophersWithAI.filter(p => p.aiStance === 'con').map(p => p.id);
-    setProSide(proPhilosophers);
-    setConSide(conPhilosophers);
+    // 根据AI判断自动分配初始阵营
+    const pro: string[] = [];
+    const con: string[] = [];
+    const neutral: string[] = [];
+
+    philosophersWithAI.forEach(p => {
+      if (p.aiStance === 'pro') {
+        pro.push(p.id);
+      } else if (p.aiStance === 'con') {
+        con.push(p.id);
+      } else {
+        neutral.push(p.id);
+      }
+    });
+
+    setProSide(pro);
+    setConSide(con);
+    setUnassigned(neutral);
   }, [topic]);
 
-  const handlePhilosopherClick = (id: string) => {
-    if (proSide.includes(id)) {
-      // 从正方移除
-      setProSide(proSide.filter(p => p !== id));
-    } else if (conSide.includes(id)) {
-      // 从反方移除
-      setConSide(conSide.filter(p => p !== id));
-    } else {
-      // 添加到正方
-      setProSide([...proSide, id]);
-    }
-    setShowAIRecommendation(false);
+  // 拖拽开始
+  const handleDragStart = (philosopherId: string) => {
+    setDraggedPhilosopher(philosopherId);
   };
 
-  const moveToProSide = (id: string) => {
-    if (conSide.includes(id)) {
-      setConSide(conSide.filter(p => p !== id));
-      setProSide([...proSide, id]);
-    } else if (!proSide.includes(id)) {
-      setProSide([...proSide, id]);
-    }
-    setShowAIRecommendation(false);
+  // 拖拽结束
+  const handleDragEnd = () => {
+    setDraggedPhilosopher(null);
   };
 
-  const moveToConSide = (id: string) => {
-    if (proSide.includes(id)) {
-      setProSide(proSide.filter(p => p !== id));
-      setConSide([...conSide, id]);
-    } else if (!conSide.includes(id)) {
-      setConSide([...conSide, id]);
-    }
-    setShowAIRecommendation(false);
+  // 放置到正方
+  const handleDropToPro = () => {
+    if (!draggedPhilosopher) return;
+    
+    // 从其他阵营移除
+    setConSide(prev => prev.filter(id => id !== draggedPhilosopher));
+    setUnassigned(prev => prev.filter(id => id !== draggedPhilosopher));
+    
+    // 添加到正方(如果不存在)
+    setProSide(prev => prev.includes(draggedPhilosopher) ? prev : [...prev, draggedPhilosopher]);
+    setDraggedPhilosopher(null);
+  };
+
+  // 放置到反方
+  const handleDropToCon = () => {
+    if (!draggedPhilosopher) return;
+    
+    // 从其他阵营移除
+    setProSide(prev => prev.filter(id => id !== draggedPhilosopher));
+    setUnassigned(prev => prev.filter(id => id !== draggedPhilosopher));
+    
+    // 添加到反方(如果不存在)
+    setConSide(prev => prev.includes(draggedPhilosopher) ? prev : [...prev, draggedPhilosopher]);
+    setDraggedPhilosopher(null);
+  };
+
+  // 放置到待分配
+  const handleDropToUnassigned = () => {
+    if (!draggedPhilosopher) return;
+    
+    // 从其他阵营移除
+    setProSide(prev => prev.filter(id => id !== draggedPhilosopher));
+    setConSide(prev => prev.filter(id => id !== draggedPhilosopher));
+    
+    // 添加到待分配(如果不存在)
+    setUnassigned(prev => prev.includes(draggedPhilosopher) ? prev : [...prev, draggedPhilosopher]);
+    setDraggedPhilosopher(null);
+  };
+
+  // 渲染哲学家卡片
+  const renderPhilosopher = (id: string) => {
+    const philosopher = philosophersWithStance.find(p => p.id === id);
+    if (!philosopher) return null;
+
+    return (
+      <div
+        key={id}
+        draggable
+        onDragStart={() => handleDragStart(id)}
+        onDragEnd={handleDragEnd}
+        className="flex flex-col items-center p-3 bg-white border-2 border-gray-300 rounded cursor-move hover:border-black transition-all"
+      >
+        <img 
+          src={philosopher.bwImage} 
+          alt={philosopher.name}
+          className="w-16 h-16 rounded-full mb-2 object-cover grayscale"
+        />
+        <span className="text-sm font-medium text-black">{philosopher.name}</span>
+        {philosopher.aiReason && (
+          <p className="text-xs text-gray-600 mt-1 text-center">{philosopher.aiReason}</p>
+        )}
+      </div>
+    );
   };
 
   const handleContinue = () => {
-    // 至少正反方各有一人（不包括用户）
-    const minProCount = role === 'debater' ? 0 : 1;
-    const minConCount = role === 'debater' ? 0 : 1;
-    
-    if (proSide.length >= minProCount && conSide.length >= minConCount) {
-      sessionStorage.setItem('arenaProSide', JSON.stringify(proSide));
-      sessionStorage.setItem('arenaConSide', JSON.stringify(conSide));
-      
-      // 如果是辩手模式，跳过观众选择，直接进入辩论
-      if (role === 'debater') {
-        const sessionId = `session_${Date.now()}`;
-        setLocation(`/arena/debate/${sessionId}`);
-      } else {
-        setLocation("/arena/audience");
-      }
+    // 验证至少每方有1人
+    if (proSide.length === 0 || conSide.length === 0) {
+      alert('每方至少需要1位辩手!');
+      return;
     }
+
+    // 保存配置
+    sessionStorage.setItem('arenaProSide', JSON.stringify(proSide));
+    sessionStorage.setItem('arenaConSide', JSON.stringify(conSide));
+    sessionStorage.setItem('arenaUnassigned', JSON.stringify(unassigned));
+    sessionStorage.setItem('arenaUserSide', userSide);
+
+    // 跳转到辩论页面
+    setLocation('/arena/debate/custom');
   };
 
-  const unassigned = philosophersWithStance.filter(p => !proSide.includes(p.id) && !conSide.includes(p.id));
-  const canContinue = proSide.length >= 1 && conSide.length >= 1;
-
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col pt-32">
       {/* 导航栏 */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="px-8 py-5 flex items-center justify-between">
           <div className="flex flex-col gap-0.5">
-            <div className="text-xl md:text-2xl font-bold tracking-wide">毒舌哲学家</div>
-            <div className="text-xs md:text-sm font-medium tracking-[0.2em] text-gray-500">THE TOXIC PHILOSOPHER</div>
+            <h1 className="text-lg font-bold text-black">毒舌哲学家</h1>
+            <p className="text-xs text-gray-500">THE TOXIC PHILOSOPHER</p>
           </div>
-          
-          <div className="flex items-center gap-6">
-            <button onClick={() => setLocation("/")} className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group">
-              首页
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button onClick={() => setLocation("/select")} className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group">
-              一对一开怼
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button onClick={() => setLocation("/arena/mode")} className="relative text-base md:text-lg text-black font-medium group">
-              哲学"奇葩说"
-              <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
-            </button>
+          <div className="flex gap-6">
+            <button onClick={() => setLocation('/')} className="text-black hover:text-gray-600 transition-colors">首页</button>
+            <button onClick={() => setLocation('/select')} className="text-black hover:text-gray-600 transition-colors">一对一开怼</button>
+            <button className="text-black font-medium underline">哲学"奇葩说"</button>
+            <button onClick={() => setLocation('/design')} className="text-black hover:text-gray-600 transition-colors">设计理念</button>
           </div>
         </div>
       </nav>
 
-      {/* 主要内容 */}
-      <div className="flex-1 flex flex-col items-center px-6 py-24">
-        <div className="text-center mb-8 max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-bold text-black mb-4 tracking-tight">
-            配置辩论阵营
+      {/* 主内容 */}
+      <div className="flex-1 flex flex-col items-center px-6 pb-16">
+        {/* 辩题 */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-black mb-4">
+            {topic}
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 font-light mb-2">
-            辩题：{topic}
+          <p className="text-xl text-gray-600">
+            拖动哲学家到正方或反方,配置辩论阵营
           </p>
-          {showAIRecommendation && (
-            <p className="text-sm text-purple-600 font-medium">
-              ✨ AI已根据哲学家思想自动分配阵营，你可以自由调整
-            </p>
-          )}
         </div>
 
-        {/* 阵营配置区域 */}
+        {/* 阵营配置区 */}
         <div className="w-full max-w-7xl">
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-8">
             {/* 正方 */}
-            <div className="border-2 border-green-500 bg-green-50 p-6 min-h-[400px]">
-              <h2 className="text-2xl font-bold text-green-700 mb-4 text-center">
-                正方 ({proSide.length}{role === 'debater' ? '+你' : ''})
-              </h2>
-              <div className="space-y-4">
-                {proSide.map(id => {
-                  const philosopher = philosophersWithStance.find(p => p.id === id);
-                  if (!philosopher) return null;
-                  return (
-                    <div key={id} className="bg-white border-2 border-green-500 p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full border-2 border-green-500 overflow-hidden">
-                          <img src={philosopher.image} alt={philosopher.name} className="w-full h-full object-cover" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-lg">{philosopher.name}</div>
-                          {philosopher.aiStance === 'pro' && (
-                            <div className="text-xs text-green-600">AI推荐</div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => moveToConSide(id)}
-                          className="px-3 py-1 text-sm border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
-                        >
-                          →反方
-                        </button>
-                        <button
-                          onClick={() => handlePhilosopherClick(id)}
-                          className="px-3 py-1 text-sm border border-gray-400 text-gray-600 hover:bg-gray-600 hover:text-white transition-colors"
-                        >
-                          移除
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-                {role === 'debater' && (
-                  <div className="bg-white border-2 border-green-500 p-4 flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full border-2 border-green-500 bg-green-100 flex items-center justify-center">
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDropToPro}
+              className="border-2 border-black p-6 min-h-[400px]"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-black">正方</h2>
+                <span className="text-sm text-gray-600">({proSide.length}人)</span>
+              </div>
+              <p className="text-gray-600 mb-6">支持该观点的辩手</p>
+              <div className="grid grid-cols-2 gap-4">
+                {proSide.map(id => renderPhilosopher(id))}
+                {userSide === 'pro' && (
+                  <div className="flex flex-col items-center p-3 bg-blue-50 border-2 border-blue-300 rounded">
+                    <div className="w-16 h-16 rounded-full mb-2 bg-blue-200 flex items-center justify-center">
                       <span className="text-2xl">👤</span>
                     </div>
-                    <div>
-                      <div className="font-bold text-lg">你</div>
-                      <div className="text-xs text-green-600">辩手</div>
-                    </div>
+                    <span className="text-sm font-medium text-black">你</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* 待分配 */}
-            <div className="border-2 border-gray-300 bg-gray-50 p-6 min-h-[400px]">
-              <h2 className="text-2xl font-bold text-gray-700 mb-4 text-center">
-                待分配 ({unassigned.length})
-              </h2>
-              <div className="space-y-4">
-                {unassigned.map(philosopher => (
-                  <div key={philosopher.id} className="bg-white border-2 border-gray-300 p-4">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-12 h-12 rounded-full border-2 border-gray-300 overflow-hidden">
-                        <img src={philosopher.image} alt={philosopher.name} className="w-full h-full object-cover" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-lg">{philosopher.name}</div>
-                        {philosopher.aiStance === 'neutral' && (
-                          <div className="text-xs text-gray-500">AI未判断</div>
-                        )}
-                      </div>
+            {/* 待分配(观众) */}
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDropToUnassigned}
+              className="border-2 border-gray-300 p-6 min-h-[400px] bg-gray-50"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-gray-700">待分配(观众)</h2>
+                <span className="text-sm text-gray-600">({unassigned.length}人)</span>
+              </div>
+              <p className="text-gray-600 mb-6">作为观众观看辩论</p>
+              <div className="grid grid-cols-2 gap-4">
+                {unassigned.map(id => renderPhilosopher(id))}
+                {userSide === 'unassigned' && (
+                  <div className="flex flex-col items-center p-3 bg-gray-100 border-2 border-gray-400 rounded">
+                    <div className="w-16 h-16 rounded-full mb-2 bg-gray-300 flex items-center justify-center">
+                      <span className="text-2xl">👤</span>
                     </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => moveToProSide(philosopher.id)}
-                        className="flex-1 px-3 py-1 text-sm border border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-colors"
-                      >
-                        →正方
-                      </button>
-                      <button
-                        onClick={() => moveToConSide(philosopher.id)}
-                        className="flex-1 px-3 py-1 text-sm border border-red-500 text-red-600 hover:bg-red-500 hover:text-white transition-colors"
-                      >
-                        →反方
-                      </button>
-                    </div>
+                    <span className="text-sm font-medium text-black">你</span>
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
             {/* 反方 */}
-            <div className="border-2 border-red-500 bg-red-50 p-6 min-h-[400px]">
-              <h2 className="text-2xl font-bold text-red-700 mb-4 text-center">
-                反方 ({conSide.length})
-              </h2>
-              <div className="space-y-4">
-                {conSide.map(id => {
-                  const philosopher = philosophersWithStance.find(p => p.id === id);
-                  if (!philosopher) return null;
-                  return (
-                    <div key={id} className="bg-white border-2 border-red-500 p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full border-2 border-red-500 overflow-hidden">
-                          <img src={philosopher.image} alt={philosopher.name} className="w-full h-full object-cover" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-lg">{philosopher.name}</div>
-                          {philosopher.aiStance === 'con' && (
-                            <div className="text-xs text-red-600">AI推荐</div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => moveToProSide(id)}
-                          className="px-3 py-1 text-sm border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition-colors"
-                        >
-                          →正方
-                        </button>
-                        <button
-                          onClick={() => handlePhilosopherClick(id)}
-                          className="px-3 py-1 text-sm border border-gray-400 text-gray-600 hover:bg-gray-600 hover:text-white transition-colors"
-                        >
-                          移除
-                        </button>
-                      </div>
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDropToCon}
+              className="border-2 border-black p-6 min-h-[400px]"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-black">反方</h2>
+                <span className="text-sm text-gray-600">({conSide.length}人)</span>
+              </div>
+              <p className="text-gray-600 mb-6">反对该观点的辩手</p>
+              <div className="grid grid-cols-2 gap-4">
+                {conSide.map(id => renderPhilosopher(id))}
+                {userSide === 'con' && (
+                  <div className="flex flex-col items-center p-3 bg-red-50 border-2 border-red-300 rounded">
+                    <div className="w-16 h-16 rounded-full mb-2 bg-red-200 flex items-center justify-center">
+                      <span className="text-2xl">👤</span>
                     </div>
-                  );
-                })}
+                    <span className="text-sm font-medium text-black">你</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* 说明文字 */}
-        <div className="mt-8 text-center text-gray-600 max-w-3xl">
-          <p className="text-sm">
-            💡 提示：可以自由配置阵营，支持1v5、2v3等任意组合，只要正反方各至少有一人即可
-          </p>
-        </div>
+          {/* 用户身份选择 */}
+          <div className="mt-8 p-6 border-2 border-gray-300 bg-gray-50">
+            <h3 className="text-xl font-bold text-black mb-4">选择你的身份</h3>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setUserSide('pro')}
+                className={`flex-1 py-3 border-2 transition-all ${
+                  userSide === 'pro' 
+                    ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                    : 'border-gray-300 bg-white text-gray-700 hover:border-black'
+                }`}
+              >
+                加入正方辩手
+              </button>
+              <button
+                onClick={() => setUserSide('unassigned')}
+                className={`flex-1 py-3 border-2 transition-all ${
+                  userSide === 'unassigned' 
+                    ? 'border-gray-500 bg-gray-100 text-gray-700' 
+                    : 'border-gray-300 bg-white text-gray-700 hover:border-black'
+                }`}
+              >
+                作为观众观看
+              </button>
+              <button
+                onClick={() => setUserSide('con')}
+                className={`flex-1 py-3 border-2 transition-all ${
+                  userSide === 'con' 
+                    ? 'border-red-500 bg-red-50 text-red-700' 
+                    : 'border-gray-300 bg-white text-gray-700 hover:border-black'
+                }`}
+              >
+                加入反方辩手
+              </button>
+            </div>
+          </div>
 
-        {/* 继续按钮 */}
-        <div className="mt-8 flex flex-col items-center gap-4">
-          <button
-            onClick={handleContinue}
-            disabled={!canContinue}
-            className={`px-12 py-4 border-2 border-black font-bold text-lg transition-all duration-300 ${
-              canContinue
-                ? 'bg-black text-white hover:bg-white hover:text-black'
-                : 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
-            }`}
-          >
-            继续
-          </button>
-          
-          <button
-            onClick={() => setLocation("/arena/role")}
-            className="text-gray-600 hover:text-black transition-colors underline"
-          >
-            返回身份选择
-          </button>
+          {/* 操作按钮 */}
+          <div className="flex gap-4 mt-8">
+            <button
+              onClick={() => setLocation('/arena/topic')}
+              className="px-8 py-3 border-2 border-black text-black hover:bg-gray-100 transition-colors"
+            >
+              返回
+            </button>
+            <button
+              onClick={handleContinue}
+              disabled={proSide.length === 0 || conSide.length === 0}
+              className="flex-1 py-3 bg-black text-white font-medium hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              开始辩论
+            </button>
+          </div>
         </div>
       </div>
     </div>
