@@ -274,17 +274,17 @@ export default function ArenaCampSetup() {
         draggable
         onDragStart={() => handleDragStart(id)}
         onDragEnd={handleDragEnd}
-        className="flex flex-col items-center p-4 bg-white border border-gray-300 cursor-move hover:border-black hover:shadow-sm transition-all"
+        className="flex flex-col items-center p-5 bg-white border border-gray-300 cursor-move hover:border-black hover:shadow-sm transition-all"
         title="拖动到其他阵营"
       >
         <img 
           src={philosopher.image} 
           alt={philosopher.name}
-          className="w-20 h-20 rounded-full mb-3 object-cover"
+          className="w-24 h-24 rounded-full mb-4 object-cover"
         />
-        <span className="text-base font-medium text-black mb-2">{philosopher.name}</span>
+        <span className="text-lg font-medium text-black mb-3">{philosopher.name}</span>
         {philosopher.aiReason && (
-          <p className="text-xs text-gray-600 text-center leading-snug">{philosopher.aiReason}</p>
+          <p className="text-sm text-gray-600 text-center leading-relaxed">{philosopher.aiReason}</p>
         )}
       </div>
     );
@@ -293,11 +293,10 @@ export default function ArenaCampSetup() {
   // 渲染用户卡片
   const renderUserCard = () => {
     return (
-      <div className="flex flex-col items-center p-4 bg-white border-2 border-black">
-        <div className="w-20 h-20 rounded-full mb-3 bg-black flex items-center justify-center text-white text-3xl font-bold">
+      <div className="flex flex-col items-center p-5 bg-white border-2 border-black">
+        <div className="w-24 h-24 rounded-full bg-black flex items-center justify-center text-white text-4xl font-bold">
           你
         </div>
-        <span className="text-base font-medium text-black">你</span>
       </div>
     );
   };
@@ -326,6 +325,9 @@ export default function ArenaCampSetup() {
   const proCount = proSide.length + (userSide === 'pro' ? 1 : 0);
   const conCount = conSide.length + (userSide === 'con' ? 1 : 0);
   const audienceCount = unassigned.length + (userSide === 'audience' ? 1 : 0);
+
+  // 检查是否满足开始条件
+  const canStart = proCount > 0 && conCount > 0;
 
   if (isGenerating) {
     return (
@@ -381,10 +383,17 @@ export default function ArenaCampSetup() {
       {/* 主内容 */}
       <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16">
         {/* 辩题 */}
-        <div className="w-full max-w-7xl mb-12">
-          <h1 className="text-4xl font-bold text-black text-center">
+        <div className="w-full max-w-7xl mb-8">
+          <h1 className="text-5xl font-bold text-black text-center">
             {topic}
           </h1>
+        </div>
+
+        {/* 拖拽说明 */}
+        <div className="w-full max-w-7xl mb-8">
+          <p className="text-lg text-gray-600 text-center">
+            💡 提示:拖动哲学家卡片到不同阵营,自由配置辩论双方
+          </p>
         </div>
 
         {/* 阵营配置区 */}
@@ -398,14 +407,14 @@ export default function ArenaCampSetup() {
                 draggedPhilosopher ? 'border-dashed border-green-400 bg-green-50' : 'border-green-600'
               }`}
             >
-              <div className="bg-green-600 text-white p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold">正方</h2>
-                  <span className="text-lg">({proCount})</span>
+              <div className="bg-green-600 text-white p-5 text-center">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <h2 className="text-3xl font-bold">正方</h2>
+                  <span className="text-2xl">({proCount})</span>
                 </div>
-                <p className="text-sm mt-2 opacity-90">{proStance}</p>
+                <p className="text-base mt-2 opacity-90">{proStance}</p>
               </div>
-              <div className="p-4 min-h-[400px] space-y-3">
+              <div className="p-5 min-h-[450px] space-y-4">
                 {proSide.map(id => renderPhilosopher(id))}
                 {userSide === 'pro' && renderUserCard()}
               </div>
@@ -419,21 +428,21 @@ export default function ArenaCampSetup() {
                 draggedPhilosopher ? 'border-dashed border-gray-400 bg-gray-50' : 'border-gray-400'
               }`}
             >
-              <div className="bg-gray-100 text-black p-4 border-b border-gray-400">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold">观众席</h2>
-                  <span className="text-lg">({audienceCount})</span>
+              <div className="bg-gray-100 text-black p-5 border-b border-gray-400 text-center">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <h2 className="text-3xl font-bold">观众席</h2>
+                  <span className="text-2xl">({audienceCount})</span>
                 </div>
-                <p className="text-sm mt-2 text-gray-600">待分配或观看</p>
+                <p className="text-base mt-2 text-gray-600">待分配或观看</p>
               </div>
-              <div className="p-4 min-h-[400px] space-y-3">
+              <div className="p-5 min-h-[450px] space-y-4">
                 {unassigned.map(id => renderPhilosopher(id))}
                 {userSide === 'audience' && renderUserCard()}
                 {unassigned.length === 0 && userSide !== 'audience' && (
-                  <div className="flex items-center justify-center h-64 text-gray-400">
+                  <div className="flex items-center justify-center h-80 text-gray-400">
                     <div className="text-center">
-                      <div className="text-5xl mb-3">⚖️</div>
-                      <p className="text-sm">所有哲学家已分配</p>
+                      <div className="text-6xl mb-4">⚖️</div>
+                      <p className="text-base">所有哲学家已分配</p>
                     </div>
                   </div>
                 )}
@@ -448,14 +457,14 @@ export default function ArenaCampSetup() {
                 draggedPhilosopher ? 'border-dashed border-red-400 bg-red-50' : 'border-red-600'
               }`}
             >
-              <div className="bg-red-600 text-white p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold">反方</h2>
-                  <span className="text-lg">({conCount})</span>
+              <div className="bg-red-600 text-white p-5 text-center">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <h2 className="text-3xl font-bold">反方</h2>
+                  <span className="text-2xl">({conCount})</span>
                 </div>
-                <p className="text-sm mt-2 opacity-90">{conStance}</p>
+                <p className="text-base mt-2 opacity-90">{conStance}</p>
               </div>
-              <div className="p-4 min-h-[400px] space-y-3">
+              <div className="p-5 min-h-[450px] space-y-4">
                 {conSide.map(id => renderPhilosopher(id))}
                 {userSide === 'con' && renderUserCard()}
               </div>
@@ -465,71 +474,74 @@ export default function ArenaCampSetup() {
 
         {/* 用户角色选择区域 */}
         <div className="w-full max-w-7xl mb-12">
-          <h3 className="text-3xl font-bold text-black text-center mb-6">选择你的角色</h3>
+          <h3 className="text-2xl font-bold text-black text-center mb-6">选择你的角色</h3>
           <div className="border-2 border-black p-8 bg-white">
             <div className="grid grid-cols-3 gap-6">
               {/* 正方选项 */}
               <button
                 onClick={() => setUserSide('pro')}
-                className={`p-6 border-2 transition-all ${
+                className={`p-8 border-2 transition-all ${
                   userSide === 'pro'
                     ? 'border-green-600 bg-green-600 text-white'
                     : 'border-gray-300 bg-white text-black hover:border-green-600'
                 }`}
               >
                 <div className="text-2xl font-bold mb-3">正方辩手</div>
-                <div className="text-sm opacity-80">{proStance}</div>
+                <div className="text-base opacity-80">{proStance}</div>
               </button>
 
               {/* 观众选项 */}
               <button
                 onClick={() => setUserSide('audience')}
-                className={`p-6 border-2 transition-all ${
+                className={`p-8 border-2 transition-all ${
                   userSide === 'audience'
                     ? 'border-gray-600 bg-gray-600 text-white'
                     : 'border-gray-300 bg-white text-black hover:border-gray-600'
                 }`}
               >
                 <div className="text-2xl font-bold mb-3">观众</div>
-                <div className="text-sm opacity-80">观看辩论不参与</div>
+                <div className="text-base opacity-80">观看辩论不参与</div>
               </button>
 
               {/* 反方选项 */}
               <button
                 onClick={() => setUserSide('con')}
-                className={`p-6 border-2 transition-all ${
+                className={`p-8 border-2 transition-all ${
                   userSide === 'con'
                     ? 'border-red-600 bg-red-600 text-white'
                     : 'border-gray-300 bg-white text-black hover:border-red-600'
                 }`}
               >
                 <div className="text-2xl font-bold mb-3">反方辩手</div>
-                <div className="text-sm opacity-80">{conStance}</div>
+                <div className="text-base opacity-80">{conStance}</div>
               </button>
             </div>
           </div>
         </div>
 
         {/* 底部按钮区 */}
-        <div className="w-full max-w-7xl flex items-center justify-between">
-          <button
-            onClick={() => setLocation('/arena/topic')}
-            className="px-8 py-4 border-2 border-gray-400 text-gray-600 hover:border-black hover:text-black transition-colors text-lg font-medium"
-          >
-            ← 返回
-          </button>
-          
-          <button
-            onClick={handleContinue}
-            className="px-16 py-4 bg-black text-white text-xl font-bold hover:bg-gray-800 transition-colors"
-          >
-            开始辩论
-          </button>
+        <div className="w-full max-w-7xl flex flex-col items-center gap-4">
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => setLocation('/arena/topic')}
+              className="px-10 py-4 border-2 border-gray-400 text-gray-600 hover:border-black hover:text-black transition-colors text-xl font-medium"
+            >
+              ← 返回
+            </button>
+            
+            <button
+              onClick={handleContinue}
+              disabled={!canStart}
+              className={`px-20 py-4 text-xl font-bold transition-colors ${
+                canStart 
+                  ? 'bg-black text-white hover:bg-gray-800 cursor-pointer' 
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              开始辩论
+            </button>
+          </div>
         </div>
-        
-        <p className="text-center text-sm text-gray-500 mt-4">
-          正反方必须至少各有一位参赛者
-        </p>
       </div>
     </div>
   );
