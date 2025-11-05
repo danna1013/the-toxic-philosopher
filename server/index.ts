@@ -18,6 +18,7 @@ async function startServer() {
   app.use(express.json());
 
   // API endpoint for generating custom topic stances
+  // MUST be before static file serving
   app.post("/api/generate-stances", async (req, res) => {
     try {
       const { topic } = req.body;
@@ -26,15 +27,31 @@ async function startServer() {
         return res.status(400).json({ error: "Topic is required" });
       }
 
+      console.log(`[API] Generating stances for topic: ${topic}`);
+
       // Call Python script to generate stances
-      const scriptPath = path.resolve(__dirname, "..", "..", "generate_custom_topic_stances.py");
-      const { stdout } = await execAsync(`python3.11 "${scriptPath}" "${topic}"`);
+      // In development: server/index.ts -> ../generate_custom_topic_stances.py
+      const scriptPath = path.resolve(__dirname, "..", "generate_custom_topic_stances.py");
+      console.log(`[API] Script path: ${scriptPath}`);
+      
+      const command = `python3.11 "${scriptPath}" "${topic}"`;
+      console.log(`[API] Executing: ${command}`);
+      
+      const { stdout, stderr } = await execAsync(command);
+      
+      if (stderr) {
+        console.error(`[API] Python stderr: ${stderr}`);
+      }
+      
+      console.log(`[API] Python stdout: ${stdout}`);
       
       const result = JSON.parse(stdout);
+      console.log(`[API] Parsed result:`, result);
+      
       res.json(result);
     } catch (error) {
-      console.error("Error generating stances:", error);
-      res.status(500).json({ error: "Failed to generate stances" });
+      console.error("[API] Error generating stances:", error);
+      res.status(500).json({ error: "Failed to generate stances", details: error.message });
     }
   });
 
@@ -47,6 +64,7 @@ async function startServer() {
   app.use(express.static(staticPath));
 
   // Handle client-side routing - serve index.html for all routes
+  // This MUST be last
   app.get("*", (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
