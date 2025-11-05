@@ -57,7 +57,7 @@ export default function ArenaTopicSelect() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col pt-20">
       {/* 导航栏 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="px-8 py-5 flex items-center justify-between">
@@ -72,7 +72,7 @@ export default function ArenaTopicSelect() {
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </button>
             <button onClick={() => setLocation("/arena/mode")} className="relative text-lg md:text-xl text-black font-medium group">
-              思维擂台-哲学"奇葩说"
+              哲学"奇葩说"
               <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
             </button>
             <button onClick={() => setLocation("/select")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
@@ -88,15 +88,15 @@ export default function ArenaTopicSelect() {
       </nav>
 
       {/* 主内容 */}
-      <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16">
-        {/* 标题 */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-black mb-4">选择辩论话题</h1>
-          <p className="text-xl text-gray-600">预设话题或自定义你感兴趣的哲学问题</p>
-        </div>
-
-        {/* 话题网格 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mb-8">
+      <div className="flex-1 flex flex-col items-center px-6 pt-32 pb-16"        {/* 标题 */}
+        <div className="text-center mb-16">
+          <h1 className="text-6xl font-bold text-black mb-6">
+            选择辩论话题
+          </h1>
+          <p className="text-2xl text-gray-600">
+            预设辩题或自定义你感兴趣的哲学问题
+          </p>
+        </div>"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mb-8">
           {PRESET_TOPICS.map((topic) => (
             <div
               key={topic.id}
@@ -158,7 +158,7 @@ export default function ArenaTopicSelect() {
                 value={customTopic}
                 onChange={(e) => setCustomTopic(e.target.value)}
                 placeholder="例如: 人工智能会产生意识吗？"
-                className="w-full border-2 border-black p-4 text-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
+                className="w-full border-2 border-black p-4 text-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black resize-none"
                 rows={3}
               />
             </div>

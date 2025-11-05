@@ -62,7 +62,7 @@ export default function ArenaDebate() {
       id: 'msg_0',
       speaker: '主持人',
       role: 'host',
-      content: `欢迎来到思维擂台！今天的辩题是："${topic}"。正方由${proSide.join('、')}组成，反方由${conSide.join('、')}组成。让我们开始这场精彩的辩论！`,
+      content: `欢迎来到哲学"奇葩说"！今天的辩题是："${topic}"。正方由${proSide.join('、')}组成，反方由${conSide.join('、')}组成。让我们开始这场精彩的辩论！`,
       timestamp: Date.now(),
     };
     setMessages([initialMessage]);
@@ -140,7 +140,7 @@ export default function ArenaDebate() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-b border-gray-700">
         <div className="px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold">思维擂台</h1>
+            <h1 className="text-xl font-bold">哲学"奇葩说"</h1>
             <span className="text-sm text-gray-400">Session: {sessionId}</span>
           </div>
           <div className="flex items-center gap-4">

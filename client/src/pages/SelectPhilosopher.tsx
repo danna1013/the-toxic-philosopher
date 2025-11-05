@@ -238,8 +238,8 @@ export default function SelectPhilosopher() {
         </div>
         <div className="flex items-center gap-8 text-lg md:text-xl">
           <a href="/" className="hover:text-gray-300 transition-colors">首页</a>
-          <a href="/arena" className="hover:text-gray-300 transition-colors">思维擂台</a>
           <a href="/select" className="hover:text-gray-300 transition-colors">一对一开怼</a>
+          <a href="/arena" className="hover:text-gray-300 transition-colors">哲学"奇葩说"</a>
           <a href="/design" className="hover:text-gray-300 transition-colors">设计理念</a>
           <a href="https://nops.woa.com/pigeon/v1/tools/add_chat?chatId=ww235627801068712&msgContent=hi%EF%BC%8C%E6%AC%A2%E8%BF%8E%E5%8A%A0%E5%85%A5%E2%80%9C%E6%AF%92%E8%88%8C%E5%93%B2%E5%AD%A6%E5%AE%B6%E2%80%9D%E5%BB%BA%E8%AE%AE%E5%8F%8D%E9%A6%88%E7%BE%A4%EF%BD%9E%20" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors">意见反馈 ↗</a>
           <a href="https://teko.woa.com/event/ai-agent/246" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors">求点赞评论 ↗</a>

@@ -51,17 +51,17 @@ export default function Home() {
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </a>
             <button
-              onClick={() => setLocation("/arena/mode")}
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
-            >
-              思维擂台
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button
               onClick={() => setLocation("/select")}
               className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
             >
               一对一开怼
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
+            <button
+              onClick={() => setLocation("/arena/mode")}
+              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+            >
+              哲学"奇葩说"
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </button>
             <button
@@ -217,20 +217,7 @@ export default function Home() {
           
           {/* 两个选项按钮 */}
           <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
-            <div
-              className="cursor-pointer transition-all duration-500 hover:scale-105 active:scale-95 group flex flex-col items-center"
-              onClick={handleArenaClick}
-            >
-              <div className="flex flex-col items-center bg-white/80 backdrop-blur-sm border-2 border-black/10 hover:border-black/30 rounded-2xl px-8 py-6 min-w-[240px] transition-all duration-300 hover:shadow-xl">
-                <p className="text-xl md:text-2xl font-bold text-black mb-2 tracking-wide">
-                  思维擂台
-                </p>
-                <p className="text-sm text-gray-600 tracking-wider">
-                  哲学奇葩说
-                </p>
-              </div>
-            </div>
-            
+            {/* 一对一开怼 - 左侧 */}
             <div
               className="cursor-pointer transition-all duration-500 hover:scale-105 active:scale-95 group flex flex-col items-center"
               onClick={handleChatClick}
@@ -239,8 +226,23 @@ export default function Home() {
                 <p className="text-xl md:text-2xl font-bold text-black mb-2 tracking-wide">
                   一对一开怼
                 </p>
-                <p className="text-sm text-gray-600 tracking-wider">
-                  深度对话
+                <p className="text-sm text-gray-500 tracking-wider">
+                  与一位哲学家深入对话
+                </p>
+              </div>
+            </div>
+            
+            {/* 哲学"奇葩说" - 右侧 */}
+            <div
+              className="cursor-pointer transition-all duration-500 hover:scale-105 active:scale-95 group flex flex-col items-center"
+              onClick={handleArenaClick}
+            >
+              <div className="flex flex-col items-center bg-white/80 backdrop-blur-sm border-2 border-black/10 hover:border-black/30 rounded-2xl px-8 py-6 min-w-[240px] transition-all duration-300 hover:shadow-xl">
+                <p className="text-xl md:text-2xl font-bold text-black mb-2 tracking-wide">
+                  哲学"奇葩说"
+                </p>
+                <p className="text-sm text-gray-500 tracking-wider">
+                  与5位哲学家同台互怼
                 </p>
               </div>
             </div>

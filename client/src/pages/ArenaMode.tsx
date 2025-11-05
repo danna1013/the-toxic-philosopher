@@ -19,7 +19,7 @@ export default function ArenaMode() {
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </button>
             <button className="relative text-lg md:text-xl text-black font-medium group">
-              思维擂台-哲学"奇葩说"
+              哲学"奇葩说"
               <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
             </button>
             <button onClick={() => setLocation("/select")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
@@ -38,7 +38,7 @@ export default function ArenaMode() {
       <div className="flex-1 flex flex-col items-center justify-center px-6 pt-32 pb-16">
         {/* 标题 */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-black mb-4">思维擂台-哲学"奇葩说"</h1>
+          <h1 className="text-5xl font-bold text-black mb-4">哲学"奇葩说"</h1>
           <p className="text-xl text-gray-600">选择你的辩论模式</p>
         </div>
 
@@ -48,41 +48,41 @@ export default function ArenaMode() {
           <div className="flex-1 border-2 border-black p-8 hover:shadow-2xl transition-all duration-300 bg-white">
             <div className="flex items-start justify-between mb-6">
               <h2 className="text-2xl font-bold text-black">基础模式</h2>
-              <span className="px-3 py-1 border border-black text-sm">快速体验</span>
+              <span className="px-3 py-1 bg-green-500 text-white text-sm font-medium">免费</span>
             </div>
             
             <p className="text-gray-600 mb-6 leading-relaxed">
-              固定话题和辩手阵营，快速开启一场辩论。适合初次体验的用户。
+              选择辩题，AI自动分配阵营，快速开启一场辩论。适合初次体验。
             </p>
 
             <ul className="space-y-3 mb-8">
               <li className="flex items-center text-gray-700">
                 <span className="mr-2">✓</span>
-                预设辩题和阵营
+                选择或自定义辩题
               </li>
               <li className="flex items-center text-gray-700">
                 <span className="mr-2">✓</span>
-                5位哲学家同台辩论
+                AI智能分配哲学家阵营
               </li>
               <li className="flex items-center text-gray-700">
                 <span className="mr-2">✓</span>
-                观众席观战
+                观众视角观看辩论
+              </li>
+              <li className="flex items-center text-gray-700">
+                <span className="mr-2">✓</span>
+                50位AI观众实时投票
               </li>
             </ul>
 
             <button
               onClick={() => {
-                // 基础模式直接进入辩论
+                // 基础模式也要选择辩题
                 sessionStorage.setItem("arenaMode", "basic");
-                sessionStorage.setItem("arenaTopic", "AI会取代人类吗？");
-                sessionStorage.setItem("arenaRole", "audience");
-                sessionStorage.setItem("arenaProSide", JSON.stringify(["socrates", "kant"]));
-                sessionStorage.setItem("arenaConSide", JSON.stringify(["nietzsche", "wittgenstein", "freud"]));
-                setLocation("/arena/debate/basic");
+                setLocation("/arena/topic");
               }}
               className="w-full py-4 bg-black text-white font-medium hover:bg-gray-800 transition-colors"
             >
-              开始辩论
+              选择辩题
             </button>
           </div>
 
@@ -90,11 +90,11 @@ export default function ArenaMode() {
           <div className="flex-1 border-2 border-black p-8 hover:shadow-2xl transition-all duration-300 bg-white">
             <div className="flex items-start justify-between mb-6">
               <h2 className="text-2xl font-bold text-black">完整模式</h2>
-              <span className="px-3 py-1 border border-black text-sm bg-black text-white">深度定制</span>
+              <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium">内测中</span>
             </div>
             
             <p className="text-gray-600 mb-6 leading-relaxed">
-              自由选择话题、身份、阵营。50位AI观众全程观战，完整体验哲学辩论的魅力。
+              完全自定义辩题、身份、阵营配置。可以作为辩手参与，与哲学家同台对决。
             </p>
 
             <ul className="space-y-3 mb-8">

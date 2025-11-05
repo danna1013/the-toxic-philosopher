@@ -27,7 +27,7 @@ export default function Design() {
               onClick={() => setLocation("/arena/mode")}
               className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group"
             >
-              思维擂台-哲学"奇葩说"
+              哲学"奇葩说"
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </button>
             <button
