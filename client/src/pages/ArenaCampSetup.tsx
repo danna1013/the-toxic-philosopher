@@ -99,8 +99,7 @@ export default function ArenaCampSetup() {
   const [conStance, setConStance] = useState<string>('');
   const [userSide, setUserSide] = useState<'pro' | 'con' | 'audience'>('audience');
   const [isGenerating, setIsGenerating] = useState(false);
-  
-  const topic = sessionStorage.getItem('arenaTopic') || '未选择话题';
+  const [topic, setTopic] = useState<string>(sessionStorage.getItem('arenaTopic') || '未选择话题');
 
   useEffect(() => {
     const initializeStances = async () => {
@@ -159,6 +158,12 @@ export default function ArenaCampSetup() {
       }
 
       const data = await response.json();
+      
+      // 使用AI凝练后的标题
+      if (data.refined_title) {
+        setTopic(data.refined_title);
+        sessionStorage.setItem('arenaTopic', data.refined_title);
+      }
       
       // 设置正反方立场
       setProStance(data.pro_stance);
