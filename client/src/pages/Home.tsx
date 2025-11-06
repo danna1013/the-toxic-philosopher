@@ -19,7 +19,14 @@ export default function Home() {
     }
   }, []);
 
-  const handleLogoClick = () => {
+  const handleArenaClick = () => {
+    setIsExploding(true);
+    setTimeout(() => {
+      setLocation("/arena/mode");
+    }, 1500);
+  };
+
+  const handleChatClick = () => {
     setIsExploding(true);
     setTimeout(() => {
       setLocation("/select");
@@ -43,6 +50,20 @@ export default function Home() {
               首页
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </a>
+            <button
+              onClick={() => setLocation("/select")}
+              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+            >
+              一对一开怼
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
+            <button
+              onClick={() => setLocation("/arena/mode")}
+              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+            >
+              哲学"奇葩说"
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
             <button
               onClick={() => setLocation("/design")}
               className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
@@ -186,27 +207,49 @@ export default function Home() {
           <span className="md:inline-block md:ml-2">在此等你</span>
         </p>
 
-        {/* Logo区域 - 可点击,增大尺寸 */}
+        {/* Logo区域 */}
         <div className="flex flex-col items-center mb-12 md:mb-16 lg:mb-20 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
-          <div
-            className="cursor-pointer transition-all duration-500 hover:scale-110 hover:drop-shadow-2xl active:scale-95 group flex flex-col items-center"
-            onClick={handleLogoClick}
-          >
-            <img
-              src="/logo.png"
-              alt="The Toxic Philosopher"
-              className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem] 2xl:w-[32rem] 2xl:h-[32rem] object-contain opacity-90 group-hover:opacity-100 transition-all duration-500 mb-6"
-            />
-            
-            {/* 点击提示 */}
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-px bg-gray-400 group-hover:bg-black transition-colors"></div>
-                <p className="text-sm text-gray-500 group-hover:text-black transition-colors tracking-wider">
-                  点击进入
+          <img
+            src="/logo.png"
+            alt="The Toxic Philosopher"
+            className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem] 2xl:w-[32rem] 2xl:h-[32rem] object-contain opacity-90 mb-12"
+          />
+          
+          {/* 两个选项按钮 */}
+          <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
+            {/* 一对一开怼 - 左侧 */}
+            <div
+              className="cursor-pointer transition-all duration-500 hover:scale-105 active:scale-95 group flex flex-col items-center"
+              onClick={handleChatClick}
+            >
+              <div className="flex flex-col items-center bg-white/80 backdrop-blur-sm border-2 border-black/10 hover:border-black/30 rounded-2xl px-8 py-6 min-w-[240px] transition-all duration-300 hover:shadow-xl">
+                <p className="text-xl md:text-2xl font-bold text-black mb-2 tracking-wide">
+                  一对一开怼
                 </p>
-                <div className="w-6 h-px bg-gray-400 group-hover:bg-black transition-colors"></div>
+                <p className="text-sm text-gray-500 tracking-wider">
+                  与一位哲学家深入对话
+                </p>
               </div>
+            </div>
+            
+            {/* 哲学"奇葩说" - 右侧 */}
+            <div
+              className="cursor-pointer transition-all duration-500 hover:scale-105 active:scale-95 group flex flex-col items-center"
+              onClick={handleArenaClick}
+            >
+              <div className="flex flex-col items-center bg-white/80 backdrop-blur-sm border-2 border-black/10 hover:border-black/30 rounded-2xl px-8 py-6 min-w-[240px] transition-all duration-300 hover:shadow-xl">
+                <p className="text-xl md:text-2xl font-bold text-black mb-2 tracking-wide">
+                  哲学"奇葩说"
+                </p>
+                <p className="text-sm text-gray-500 tracking-wider">
+                  与5位哲学家同台互怼
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-center mt-8">
+            <div className="flex items-center gap-2 mb-2">
               
               {/* 向下箭头动画 */}
               <svg 

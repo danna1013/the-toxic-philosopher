@@ -1,0 +1,380 @@
+{
+  "applications": [
+    {
+      "id": "1762371957529-wd54g4l",
+      "userName": "bestomzhang",
+      "wechatId": "bestomzhang",
+      "screenshot": "screenshot_1762371956559-264947337.jpg",
+      "status": "rejected",
+      "appliedAt": "2025-11-05T19:45:57.529Z",
+      "reviewedAt": "2025-11-05T19:45:57.529Z",
+      "rejectReason": "AI 审核失败，请稍后重试"
+    },
+    {
+      "id": "1762394536528-ckqvxur",
+      "userName": "bestomzhang",
+      "wechatId": "bestomzhang",
+      "screenshot": "screenshot_1762394536524-361606181.jpg",
+      "status": "approved",
+      "appliedAt": "2025-11-06T02:02:16.528Z",
+      "reviewedAt": "2025-11-06T02:02:16.528Z",
+      "aiVerification": {
+        "extractedName": "bestomzhang",
+        "comment": "我不行了，太有攻击性了",
+        "confidence": 1,
+        "verifiedAt": "2025-11-06T02:02:16.528Z"
+      },
+      "code": "PHIL2024-DH3Q6A"
+    },
+    {
+      "id": "1762404673311-kn33orb",
+      "userName": "elisedai",
+      "wechatId": "elisedai",
+      "screenshot": "screenshot_1762404673278-941971960.png",
+      "status": "approved",
+      "appliedAt": "2025-11-06T04:51:13.311Z",
+      "reviewedAt": "2025-11-06T04:51:13.311Z",
+      "aiVerification": {
+        "extractedName": "elisedai",
+        "comment": "欢迎大家评论、体验，近期会上新功能思想擂台、海报分享功能...",
+        "confidence": 1,
+        "verifiedAt": "2025-11-06T04:51:13.311Z"
+      },
+      "code": "PHIL2024-4SCX9C"
+    },
+    {
+      "id": "1762404790283-ek14o7j",
+      "userName": "zihaoyi",
+      "wechatId": "zihaoyi",
+      "screenshot": "screenshot_1762404790281-294554441.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T04:53:10.283Z",
+      "reviewedAt": "2025-11-06T04:53:10.283Z",
+      "aiVerification": {
+        "extractedName": "zihaoyi",
+        "comment": "不错不错",
+        "confidence": 1,
+        "verifiedAt": "2025-11-06T04:53:10.283Z"
+      },
+      "rejectReason": "评论内容不足10字"
+    },
+    {
+      "id": "1762404946555-hofgrm1",
+      "userName": "unknown",
+      "wechatId": "unknown",
+      "screenshot": "screenshot_1762404943714-62383995.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T04:55:46.555Z",
+      "reviewedAt": "2025-11-06T04:55:46.555Z",
+      "aiVerification": {
+        "extractedName": "",
+        "comment": "",
+        "confidence": 0,
+        "verifiedAt": "2025-11-06T04:55:46.555Z"
+      },
+      "rejectReason": "请上传评论截图"
+    },
+    {
+      "id": "1762404969023-i0d9dja",
+      "userName": "awilltian",
+      "wechatId": "awilltian",
+      "screenshot": "screenshot_1762404966271-11002710.png",
+      "status": "pending",
+      "appliedAt": "2025-11-06T04:56:09.023Z",
+      "aiVerification": {
+        "extractedName": "awilltian",
+        "comment": "想体验下，看上去很有趣～想看尼采和弗洛伊德辩论～",
+        "confidence": 0.95,
+        "verifiedAt": "2025-11-06T04:56:09.024Z"
+      }
+    },
+    {
+      "id": "1762404979268-7yhmapa",
+      "userName": "awilltian",
+      "wechatId": "awilltian",
+      "screenshot": "screenshot_1762404977049-821558938.png",
+      "status": "pending",
+      "appliedAt": "2025-11-06T04:56:19.268Z",
+      "aiVerification": {
+        "extractedName": "awilltian",
+        "comment": "想体验下，看上去很有趣～想看尼采和弗洛伊德辩论～",
+        "confidence": 0.95,
+        "verifiedAt": "2025-11-06T04:56:19.268Z"
+      }
+    },
+    {
+      "id": "1762405013884-f2b7485",
+      "userName": "unknown",
+      "wechatId": "unknown",
+      "screenshot": "screenshot_1762405012175-700830908.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T04:56:53.884Z",
+      "reviewedAt": "2025-11-06T04:56:53.884Z",
+      "aiVerification": {
+        "extractedName": "",
+        "comment": "",
+        "confidence": 0,
+        "verifiedAt": "2025-11-06T04:56:53.884Z"
+      },
+      "rejectReason": "请上传评论截图"
+    },
+    {
+      "id": "1762405253186-pbbax3b",
+      "userName": "unknown",
+      "wechatId": "unknown",
+      "screenshot": "screenshot_1762405250772-164566297.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T05:00:53.186Z",
+      "reviewedAt": "2025-11-06T05:00:53.186Z",
+      "aiVerification": {
+        "extractedName": "",
+        "comment": "",
+        "confidence": 0,
+        "verifiedAt": "2025-11-06T05:00:53.186Z"
+      },
+      "rejectReason": "请上传评论截图"
+    },
+    {
+      "id": "1762405315676-lnnr9cn",
+      "userName": "awilltian",
+      "wechatId": "awilltian",
+      "screenshot": "screenshot_1762405313438-413989848.png",
+      "status": "pending",
+      "appliedAt": "2025-11-06T05:01:55.676Z",
+      "aiVerification": {
+        "extractedName": "awilltian",
+        "comment": "想体验下，看上去很有趣～想看尼采和弗洛伊德辩论～",
+        "confidence": 0.95,
+        "verifiedAt": "2025-11-06T05:01:55.677Z"
+      }
+    },
+    {
+      "id": "1762405318479-6ew6lb5",
+      "userName": "awilltian",
+      "wechatId": "awilltian",
+      "screenshot": "screenshot_1762405318476-122842728.png",
+      "status": "approved",
+      "appliedAt": "2025-11-06T05:01:58.479Z",
+      "reviewedAt": "2025-11-06T05:01:58.479Z",
+      "aiVerification": {
+        "extractedName": "awilltian",
+        "comment": "想体验下，看上去很有趣～想看尼采和弗洛伊德辩论～",
+        "confidence": 1,
+        "verifiedAt": "2025-11-06T05:01:58.479Z"
+      },
+      "code": "PHIL2024-3PTY6Z"
+    },
+    {
+      "id": "1762405465883-myw0nhs",
+      "userName": "unknown",
+      "wechatId": "unknown",
+      "screenshot": "screenshot_1762405462701-469891806.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T05:04:25.883Z",
+      "reviewedAt": "2025-11-06T05:04:25.883Z",
+      "aiVerification": {
+        "extractedName": "",
+        "comment": "",
+        "confidence": 0,
+        "verifiedAt": "2025-11-06T05:04:25.883Z"
+      },
+      "rejectReason": "无法从截图中识别出英文名"
+    },
+    {
+      "id": "1762405474297-ingeiv1",
+      "userName": "unknown",
+      "wechatId": "unknown",
+      "screenshot": "screenshot_1762405471829-127058929.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T05:04:34.297Z",
+      "reviewedAt": "2025-11-06T05:04:34.297Z",
+      "aiVerification": {
+        "extractedName": "",
+        "comment": "",
+        "confidence": 0,
+        "verifiedAt": "2025-11-06T05:04:34.297Z"
+      },
+      "rejectReason": "无法从截图中识别出英文名"
+    },
+    {
+      "id": "1762405569857-o3gkpwr",
+      "userName": "awilltian",
+      "wechatId": "awilltian",
+      "screenshot": "screenshot_1762405567453-901934741.png",
+      "status": "pending",
+      "appliedAt": "2025-11-06T05:06:09.857Z",
+      "aiVerification": {
+        "extractedName": "awilltian",
+        "comment": "想体验下，看上去很有趣～想看尼采和弗洛伊德辩论～",
+        "confidence": 0.95,
+        "verifiedAt": "2025-11-06T05:06:09.857Z"
+      }
+    },
+    {
+      "id": "1762405582863-oplyden",
+      "userName": "unknown",
+      "wechatId": "unknown",
+      "screenshot": "screenshot_1762405581675-315400728.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T05:06:22.863Z",
+      "reviewedAt": "2025-11-06T05:06:22.863Z",
+      "aiVerification": {
+        "extractedName": "",
+        "comment": "",
+        "confidence": 0,
+        "verifiedAt": "2025-11-06T05:06:22.863Z"
+      },
+      "rejectReason": "AI 审核失败: 402 \"Insufficient credits\""
+    },
+    {
+      "id": "1762406336910-cqpmmqk",
+      "userName": "unknown",
+      "wechatId": "unknown",
+      "screenshot": "screenshot_1762406334732-120826431.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T05:18:56.910Z",
+      "reviewedAt": "2025-11-06T05:18:56.910Z",
+      "aiVerification": {
+        "extractedName": "",
+        "comment": "",
+        "confidence": 0,
+        "verifiedAt": "2025-11-06T05:18:56.910Z"
+      },
+      "rejectReason": "AI识别失败，请确保截图清晰并包含用户名和评论内容"
+    },
+    {
+      "id": "1762406351180-78957q7",
+      "userName": "bestomzhang",
+      "wechatId": "bestomzhang",
+      "screenshot": "screenshot_1762406349053-821944634.png",
+      "status": "pending",
+      "appliedAt": "2025-11-06T05:19:11.180Z",
+      "aiVerification": {
+        "extractedName": "bestomzhang",
+        "comment": "我不行了，太有攻击性了",
+        "confidence": 0.95,
+        "verifiedAt": "2025-11-06T05:19:11.180Z"
+      }
+    },
+    {
+      "id": "1762408531382-usqnwew",
+      "userName": "awilltian",
+      "wechatId": "awilltian",
+      "screenshot": "screenshot_1762408527920-347821348.png",
+      "status": "pending",
+      "appliedAt": "2025-11-06T05:55:31.382Z",
+      "aiVerification": {
+        "extractedName": "awilltian",
+        "comment": "想体验下，看上去很有趣～想看尼采和弗洛伊德辩论～",
+        "confidence": 0.95,
+        "verifiedAt": "2025-11-06T05:55:31.382Z"
+      }
+    },
+    {
+      "id": "1762408767630-ej8f9zq",
+      "userName": "hecatexiong",
+      "wechatId": "hecatexiong",
+      "screenshot": "screenshot_1762408764971-270650387.png",
+      "status": "pending",
+      "appliedAt": "2025-11-06T05:59:27.630Z",
+      "aiVerification": {
+        "extractedName": "hecatexiong",
+        "comment": "想体验下，看上去很有趣~想看尼采和弗洛伊德辩论~",
+        "confidence": 0.95,
+        "verifiedAt": "2025-11-06T05:59:27.630Z"
+      }
+    },
+    {
+      "id": "1762408779119-7ual1ih",
+      "userName": "hecatexiong",
+      "wechatId": "hecatexiong",
+      "screenshot": "screenshot_1762408779114-90141067.png",
+      "status": "approved",
+      "appliedAt": "2025-11-06T05:59:39.119Z",
+      "reviewedAt": "2025-11-06T05:59:39.119Z",
+      "aiVerification": {
+        "extractedName": "hecatexiong",
+        "comment": "想体验下，看上去很有趣~想看尼采和弗洛伊德辩论~",
+        "confidence": 1,
+        "verifiedAt": "2025-11-06T05:59:39.119Z"
+      },
+      "code": "PHIL2024-F727T0"
+    },
+    {
+      "id": "1762408838928-ml8o4v3",
+      "userName": "hecatexiong",
+      "wechatId": "hecatexiong",
+      "screenshot": "screenshot_1762408836452-583639378.png",
+      "status": "pending",
+      "appliedAt": "2025-11-06T06:00:38.928Z",
+      "aiVerification": {
+        "extractedName": "hecatexiong",
+        "comment": "想体验下，看上去很有趣～想看尼采和弗洛伊德辩论～",
+        "confidence": 0.95,
+        "verifiedAt": "2025-11-06T06:00:38.928Z"
+      }
+    },
+    {
+      "id": "1762408844021-j033pxj",
+      "userName": "hecatexiong",
+      "wechatId": "hecatexiong",
+      "screenshot": "screenshot_1762408844019-983572552.png",
+      "status": "rejected",
+      "appliedAt": "2025-11-06T06:00:44.021Z",
+      "reviewedAt": "2025-11-06T06:00:44.021Z",
+      "aiVerification": {
+        "extractedName": "hecatexiong",
+        "comment": "想体验下，看上去很有趣～想看尼采和弗洛伊德辩论～",
+        "confidence": 1,
+        "verifiedAt": "2025-11-06T06:00:44.021Z"
+      },
+      "rejectReason": "该评论已被其他用户使用，请使用自己的评论"
+    },
+    {
+      "id": "1762409798014-ewbcckx",
+      "userName": "likuizeng",
+      "wechatId": "likuizeng",
+      "screenshot": "",
+      "status": "activated",
+      "appliedAt": "2025-11-06T06:16:38.014Z",
+      "reviewedAt": "2025-11-06T06:16:38.014Z",
+      "aiVerification": {
+        "extractedName": "likuizeng",
+        "comment": "使用体验码激活",
+        "confidence": 1,
+        "verifiedAt": "2025-11-06T06:16:38.014Z"
+      },
+      "code": "PHIL2024-R9PSLY"
+    },
+    {
+      "id": "1762410048597-424q34b",
+      "userName": "elisedai",
+      "wechatId": "elisedai",
+      "screenshot": "",
+      "status": "activated",
+      "appliedAt": "2025-11-06T06:20:48.597Z",
+      "reviewedAt": "2025-11-06T06:20:48.597Z",
+      "code": "PHIL2024-E45QML"
+    },
+    {
+      "id": "1762410089208-v03en8g",
+      "userName": "elisedai",
+      "wechatId": "elisedai",
+      "screenshot": "",
+      "status": "activated",
+      "appliedAt": "2025-11-06T06:21:29.208Z",
+      "reviewedAt": "2025-11-06T06:21:29.208Z",
+      "code": "PHIL2024-I1G2I5"
+    },
+    {
+      "id": "1762410093248-k9kowik",
+      "userName": "hongzhenyu",
+      "wechatId": "hongzhenyu",
+      "screenshot": "",
+      "status": "activated",
+      "appliedAt": "2025-11-06T06:21:33.248Z",
+      "reviewedAt": "2025-11-06T06:21:33.248Z",
+      "code": "PHIL2024-4BT9KN"
+    }
+  ]
+}

@@ -15,17 +15,31 @@ export default function Design() {
           </div>
           
           {/* 右侧导航 */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6">
             <button
               onClick={() => setLocation("/")}
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+              className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group"
             >
               首页
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
             </button>
             <button
+              onClick={() => setLocation("/arena/mode")}
+              className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group"
+            >
+              哲学"奇葩说"
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
+            <button
+              onClick={() => setLocation("/select")}
+              className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group"
+            >
+              一对一开怼
+              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+            </button>
+            <button
               onClick={() => setLocation("/design")}
-              className="relative text-lg md:text-xl text-black font-medium group"
+              className="relative text-base md:text-lg text-black font-medium group"
             >
               设计理念
               <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
@@ -34,7 +48,7 @@ export default function Design() {
               href="https://nops.woa.com/pigeon/v1/tools/add_chat?chatId=ww235627801068712&msgContent=hi%EF%BC%8C%E6%AC%A2%E8%BF%8E%E5%8A%A0%E5%85%A5%E2%80%9C%E6%AF%92%E8%88%8C%E5%93%B2%E5%AD%A6%E5%AE%B6%E2%80%9D%E5%BB%BA%E8%AE%AE%E5%8F%8D%E9%A6%88%E7%BE%A4%EF%BD%9E%20" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+              className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group"
             >
               意见反馈 ↗
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
@@ -43,7 +57,7 @@ export default function Design() {
               href="https://teko.woa.com/event/ai-agent/246" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+              className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group"
             >
               求点赞评论 ↗
               <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
