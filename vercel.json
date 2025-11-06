@@ -11,14 +11,12 @@
   },
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-  "routes": [
+      "source": "/api/:path*",
+      "destination": "/api"
+    },
     {
-      "src": "/api/(.*)",
-      "dest": "/api/index.ts"
+      "source": "/((?!api).*)",
+      "destination": "/index.html"
     }
   ]
 }
