@@ -1,14 +1,14 @@
 /**
  * 存储适配器 - 自动检测环境并使用对应的存储方式
  * - 本地开发：使用 JSON 文件
- * - Vercel 部署：使用 Vercel KV
+ * - 生产环境（Vercel/Render）：使用 Redis/KV
  */
 
-// 检测是否在 Vercel 环境
-const isVercel = process.env.VERCEL === '1' || process.env.KV_REST_API_URL !== undefined;
+// 检测是否在生产环境（有 Redis 连接）
+const isProduction = process.env.REDIS_URL !== undefined || process.env.KV_REST_API_URL !== undefined;
 
-console.log(`[Storage] Environment: ${isVercel ? 'Vercel (KV)' : 'Local (JSON)'}`);
-console.log(`[Storage] VERCEL env: ${process.env.VERCEL}`);
+console.log(`[Storage] Environment: ${isProduction ? 'Production (Redis/KV)' : 'Local (JSON)'}`);
+console.log(`[Storage] REDIS_URL: ${process.env.REDIS_URL ? 'set' : 'not set'}`);
 console.log(`[Storage] KV_REST_API_URL: ${process.env.KV_REST_API_URL ? 'set' : 'not set'}`);
 
 // 懒加载存储模块
@@ -17,7 +17,7 @@ let storageModulePromise: Promise<any> | null = null;
 function getStorageModule() {
   if (!storageModulePromise) {
     storageModulePromise = (async () => {
-      if (isVercel) {
+      if (isProduction) {
         console.log('[Storage] Loading KV storage modules...');
         // 使用 KV 版本
         const codeManagerKV = await import('./code-manager-kv.js');

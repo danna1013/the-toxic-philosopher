@@ -1,0 +1,31 @@
+services:
+  # Web Service
+  - type: web
+    name: toxic-philosopher
+    runtime: node
+    plan: free
+    buildCommand: pnpm install && pnpm build
+    startCommand: pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: API2D_API_KEY
+        sync: false
+      - key: HAIHUB_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: REDIS_URL
+        fromDatabase:
+          name: toxic-philosopher-redis
+          property: connectionString
+    healthCheckPath: /api/health
+
+databases:
+  # Redis Database
+  - name: toxic-philosopher-redis
+    plan: free
+    databaseName: toxic_philosopher
+    user: toxic_philosopher
