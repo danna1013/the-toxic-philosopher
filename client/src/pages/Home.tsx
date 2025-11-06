@@ -184,17 +184,17 @@ export default function Home() {
       >
         {/* 主标题区域 - 添加渐入动画 */}
         <div className="text-center mb-6 md:mb-8 w-full animate-fade-in-up">
-          <h1 className="font-bold text-black tracking-tight leading-[1.1] mb-4 md:mb-6" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}>
+          <h1 className="font-bold text-black tracking-tight leading-[1.1] mb-4 md:mb-6 text-5xl md:text-6xl lg:text-7xl">
             真相往往不太礼貌
           </h1>
           
-          <h2 className="font-light text-gray-600 tracking-tight leading-[1.2] animate-fade-in-up" style={{ fontSize: 'clamp(1.75rem, 3.5vw, 3rem)', animationDelay: '0.2s' }}>
+          <h2 className="font-light text-gray-600 tracking-tight leading-[1.2] animate-fade-in-up text-3xl md:text-4xl lg:text-5xl" style={{ animationDelay: '0.2s' }}>
             但总比谎言有用
           </h2>
         </div>
 
         {/* 副标题 - 哲学家名字 */}
-        <p className="text-lg md:text-xl text-gray-500 mb-6 md:mb-8 text-center leading-relaxed tracking-wide animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+        <p className="text-xl md:text-2xl lg:text-3xl text-gray-500 mb-6 md:mb-8 text-center leading-relaxed tracking-wide animate-fade-in-up" style={{animationDelay: '0.4s'}}>
           苏格拉底、尼采、维特根斯坦、康德、弗洛伊德
           <br className="hidden md:block" />
           <span className="md:inline-block md:ml-2">在此等你</span>

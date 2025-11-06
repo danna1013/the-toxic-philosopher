@@ -101,6 +101,8 @@
     background-color: rgb(var(--background));
     color: rgb(var(--foreground));
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   #root {
@@ -205,4 +207,24 @@
     width: 100%;
     max-width: none !important;
   }
+}
+
+/* Safari 浏览器特定修复 */
+@supports (-webkit-appearance: none) {
+  /* Safari 字体大小修复 */
+  h1, h2, h3, h4, h5, h6 {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  /* 确保 Safari 中的视口单位正确 */
+  .safari-viewport-fix {
+    height: -webkit-fill-available;
+  }
+}
+
+/* 确保所有浏览器的字体渲染一致 */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
