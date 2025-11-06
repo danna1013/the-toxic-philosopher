@@ -18,10 +18,13 @@ import {
   findCodeByUserId,
   findCodeByCode,
   createCode,
-  addCode
-} from '../services/code-manager';
-import { verifyScreenshot } from '../services/ai-verifier';
-import { createApplication, addApplication, findApplicationByComment, findApplicationByCommentContent } from '../services/application-manager';
+  addCode,
+  createApplication,
+  addApplication,
+  findApplicationByComment,
+  findApplicationByCommentContent
+} from '../services/storage-adapter.js';
+import { verifyScreenshot } from '../services/ai-verifier.js';
 import { rateLimit } from '../middleware/rate-limit';
 import { decodeToken } from '../utils/code-generator';
 import { parseCommentTime, isCommentTimeValid, formatTimeDiff } from '../utils/time-parser';
