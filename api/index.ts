@@ -31,7 +31,4 @@ app.get("/api/health", (req: Request, res: Response) => {
 
 // Export for Vercel
 // Vercel 需要一个默认导出的函数
-export default (req: any, res: any) => {
-  // 确保路由正确处理
-  return app(req, res);
-};
+export default app;
