@@ -48,7 +48,7 @@ export default function AdminApplications() {
 
   const loadScreenshot = async (filename: string) => {
     try {
-      const response = await fetch(`/api/admin/screenshots/${filename}`, {
+      const response = await fetch(`/api/admin/screenshots/${encodeURIComponent(filename)}`, {
         headers: {
           'Authorization': `Bearer ${getToken()}`
         }

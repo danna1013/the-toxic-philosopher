@@ -4,13 +4,6 @@
 
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import path from 'node:path';
-import fs from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 import {
   verifyCode,
   markCodeAsUsed,
@@ -28,33 +21,12 @@ import { verifyScreenshot } from '../services/ai-verifier.js';
 import { rateLimit } from '../middleware/rate-limit';
 import { decodeToken } from '../utils/code-generator';
 import { parseCommentTime, isCommentTimeValid, formatTimeDiff } from '../utils/time-parser';
+import { persistScreenshot } from '../services/screenshot-storage.js';
 
 const router = express.Router();
 
-// 配置文件上传
-const UPLOAD_DIR = path.join(__dirname, '../data/uploads');
-
-// 确保上传目录存在
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, UPLOAD_DIR);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    cb(null, `screenshot_${uniqueSuffix}${ext}`);
-  }
-});
-
-// 用于临时解析的内存存储
-const memoryUpload = multer({ storage: multer.memoryStorage() });
-
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 10 * 1024 * 1024 // 10MB
   },
@@ -84,6 +56,13 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
         message: '请填写完整信息并上传评论截图'
       });
     }
+
+    const screenshotInfo = await persistScreenshot(
+      screenshot.buffer,
+      screenshot.originalname || 'screenshot.png'
+    );
+    const screenshotRef = screenshotInfo.reference;
+    console.log('截图已保存:', screenshotRef);
     
     // 验证评论时间（如果提供了时间）
     if (commentTime) {
@@ -97,7 +76,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
           const failedApplication = createApplication({
             userName: userName,
             wechatId: userName,
-            screenshot: screenshot.filename,
+            screenshot: screenshotRef,
             status: 'rejected',
             rejectReason: `评论时间过旧（${timeDiff}），请使用2天内的评论`,
             aiVerification: {
@@ -124,7 +103,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
       const failedApplication = createApplication({
         userName: userName,
         wechatId: userName,
-        screenshot: screenshot.filename,
+        screenshot: screenshotRef,
         status: 'rejected',
         rejectReason: '该评论已被其他用户使用，请使用自己的评论',
         aiVerification: {
@@ -156,7 +135,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
           const failedApplication = createApplication({
             userName: userName,
             wechatId: userName,
-            screenshot: screenshot.filename,
+            screenshot: screenshotRef,
             status: 'rejected',
             rejectReason: '该评论已用于申请体验码，请使用新评论',
             aiVerification: {
@@ -180,7 +159,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
           const application = createApplication({
             userName: userName,
             wechatId: userName,
-            screenshot: screenshot.filename,
+            screenshot: screenshotRef,
             status: 'approved',
             code: existingCode.code,
             aiVerification: {
@@ -206,7 +185,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
       const failedApplication = createApplication({
         userName: userName,
         wechatId: userName,
-        screenshot: screenshot.filename,
+        screenshot: screenshotRef,
         status: 'rejected',
         rejectReason: '评论内容不足10字',
         aiVerification: {
@@ -232,7 +211,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
       const failedApplication = createApplication({
         userName: userName,
         wechatId: userName,
-        screenshot: screenshot.filename,
+        screenshot: screenshotRef,
         status: 'rejected',
         rejectReason: `用户名不匹配：输入${userName}，识别${extractedName}`,
         aiVerification: {
@@ -267,7 +246,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
     const application = createApplication({
       userName: userName,
       wechatId: userName,
-      screenshot: screenshot.filename,
+      screenshot: screenshotRef,
       status: 'approved',
       code: code.code,
       aiVerification: {
@@ -287,16 +266,6 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
     });
   } catch (error: any) {
     console.error('申请体验码错误:', error);
-    
-    // 删除已上传的文件
-    if (req.file) {
-      try {
-        fs.unlinkSync(req.file.path);
-      } catch (e) {
-        // 忽略删除错误
-      }
-    }
-    
     return res.status(500).json({
       success: false,
       message: error.message || '服务器错误，请稍后重试'
@@ -308,7 +277,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
  * POST /api/verify-code
  * 验证体验码
  */
-router.post('/verify-code', (req: Request, res: Response) => {
+router.post('/verify-code', async (req: Request, res: Response) => {
   try {
     const { code } = req.body;
     
@@ -334,7 +303,7 @@ router.post('/verify-code', (req: Request, res: Response) => {
         code: code
         // 激活记录不需要 aiVerification 字段
       });
-      addApplication(activationRecord);
+      await addApplication(activationRecord);
       console.log('激活记录已保存:', activationRecord.id, '用户:', result.data.userName, '体验码:', code);
       
       return res.json({
@@ -365,7 +334,7 @@ router.post('/verify-code', (req: Request, res: Response) => {
  * GET /api/check-access
  * 检查访问权限
  */
-router.get('/check-access', (req: Request, res: Response) => {
+router.get('/check-access', async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
     
@@ -401,7 +370,7 @@ router.get('/check-access', (req: Request, res: Response) => {
  * POST /api/verify-token
  * 验证专属链接 token
  */
-router.post('/verify-token', (req: Request, res: Response) => {
+router.post('/verify-token', async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
     
@@ -424,11 +393,11 @@ router.post('/verify-token', (req: Request, res: Response) => {
     
     // 验证体验码
     const result = await verifyCode(decoded.code);
-    
+
     if (result.valid && result.data) {
       // 标记为已使用
-      markCodeAsUsed(decoded.code);
-      
+      await markCodeAsUsed(decoded.code);
+
       return res.json({
         valid: true,
         code: decoded.code,
@@ -438,12 +407,12 @@ router.post('/verify-token', (req: Request, res: Response) => {
           userId: result.data.userId
         }
       });
-    } else {
-      return res.json({
-        valid: false,
-        message: result.message
-      });
     }
+
+    return res.json({
+      valid: false,
+      message: result.message
+    });
   } catch (error: any) {
     console.error('验证 token 错误:', error);
     return res.status(500).json({
@@ -458,6 +427,8 @@ router.post('/verify-token', (req: Request, res: Response) => {
  * 解析截图（保存截图并记录解析结果）
  */
 router.post('/analyze-screenshot', upload.single('screenshot'), async (req: Request, res: Response) => {
+  let screenshotRef: string | null = null;
+
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -469,10 +440,20 @@ router.post('/analyze-screenshot', upload.single('screenshot'), async (req: Requ
     console.log('\n========== AI 解析开始 ==========');
     console.log('图片大小:', req.file.size, 'bytes');
     console.log('图片类型:', req.file.mimetype);
-    console.log('保存路径:', req.file.filename);
+
+    const screenshotInfo = await persistScreenshot(
+      req.file.buffer,
+      req.file.originalname || 'screenshot.png'
+    );
+    screenshotRef = screenshotInfo.reference;
+    console.log('截图已保存:', screenshotRef);
+
+    if (!screenshotRef) {
+      throw new Error('截图保存失败');
+    }
     
     // 调用 AI 审核服务（不验证姓名）
-    const imageBuffer = fs.readFileSync(req.file.path);
+    const imageBuffer = req.file.buffer;
     const result = await verifyScreenshot(imageBuffer);
     
     console.log('AI 解析结果:', JSON.stringify(result, null, 2));
@@ -482,7 +463,7 @@ router.post('/analyze-screenshot', upload.single('screenshot'), async (req: Requ
     const parseApplication = createApplication({
       userName: result.extractedName || 'unknown',
       wechatId: result.extractedName || 'unknown',
-      screenshot: req.file.filename,
+      screenshot: screenshotRef,
       status: result.success ? 'pending' : 'rejected',
       rejectReason: result.success ? undefined : result.message,
       aiVerification: {
@@ -518,11 +499,11 @@ router.post('/analyze-screenshot', upload.single('screenshot'), async (req: Requ
     });
     
     // 即使出错也记录
-    if (req.file) {
+    if (req.file && screenshotRef) {
       const errorApplication = createApplication({
         userName: 'error',
         wechatId: 'error',
-        screenshot: req.file.filename,
+        screenshot: screenshotRef,
         status: 'rejected',
         rejectReason: `系统错误: ${error.message}`
       });
