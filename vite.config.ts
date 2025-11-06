@@ -1,10 +1,7 @@
-import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
-import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "path";
 import { defineConfig } from "vite";
-import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 import { exec } from "child_process";
 import { promisify } from "util";
 
@@ -12,9 +9,6 @@ const execAsync = promisify(exec);
 
 const plugins = [
   react(), 
-  tailwindcss(), 
-  jsxLocPlugin(), 
-  vitePluginManusRuntime(),
   // Custom plugin to handle API routes
   {
     name: 'api-routes',
