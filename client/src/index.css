@@ -81,8 +81,6 @@
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* 使用zoom进行全局缩放 */
-    zoom: 0.6;
   }
   
   html, body {
