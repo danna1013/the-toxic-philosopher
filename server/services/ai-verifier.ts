@@ -5,13 +5,24 @@
 import fs from 'fs';
 import OpenAI from 'openai';
 
+// 根据模型选择对应的 API 配置
+const MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+
+// 判断是否使用 API2D（仅 gpt-4o-mini）
+const isAPI2D = MODEL === 'gpt-4o-mini';
+
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1'
+  apiKey: isAPI2D 
+    ? (process.env.API2D_API_KEY || process.env.OPENAI_API_KEY)
+    : (process.env.HAIHUB_API_KEY || process.env.OPENAI_API_KEY),
+  baseURL: isAPI2D
+    ? 'https://oa.api2d.net'
+    : 'https://api.haihub.cn/v1'
 });
 
-// 使用 Manus 支持的模型（优先使用环境变量，否则使用 gpt-4.1-mini）
-const MODEL = process.env.OPENAI_MODEL || 'gpt-4.1-mini';
+console.log(`[AI Verifier] Using model: ${MODEL}`);
+console.log(`[AI Verifier] Using API: ${isAPI2D ? 'API2D' : 'HaiHub'}`);
+console.log(`[AI Verifier] Base URL: ${openai.baseURL}`);
 
 export interface VerificationResult {
   success: boolean;
