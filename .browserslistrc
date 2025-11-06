@@ -1,0 +1,28 @@
+# 浏览器兼容性配置
+# 支持最近2个版本的主流浏览器
+
+# 生产环境
+> 0.5%
+last 2 versions
+Firefox ESR
+not dead
+not IE 11
+not op_mini all
+
+# Chrome
+Chrome >= 90
+
+# Edge
+Edge >= 90
+
+# Firefox
+Firefox >= 88
+
+# Safari
+Safari >= 14
+
+# iOS Safari
+iOS >= 14
+
+# Android
+Android >= 90
