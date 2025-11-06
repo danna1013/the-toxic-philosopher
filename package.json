@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": ">=22.0.0",
-    "pnpm": ">=9.0.0"
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   },
   "scripts": {
     "dev": "vite --host",
@@ -47,6 +47,6 @@
     "tsx": "^4.19.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^7.1.9"
+    "vite": "^5.4.11"
   }
 }
