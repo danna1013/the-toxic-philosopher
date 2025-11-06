@@ -5,9 +5,9 @@
  * 将 Express 应用转换为 Serverless 函数
  */
 
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import express, { Request, Response } from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import accessCodeRoutes from '../server/routes/access-code.js';
 import adminRoutes from '../server/routes/admin.js';
 
@@ -25,7 +25,7 @@ app.use("/api", accessCodeRoutes);
 app.use("/api/admin", adminRoutes);
 
 // Health check endpoint
-app.get("/api/health", (req, res) => {
+app.get("/api/health", (req: Request, res: Response) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 

@@ -2,7 +2,7 @@
  * AI 审核服务 - 使用 GPT-4 Vision 审核评论截图
  */
 
-import fs from 'fs';
+import fs from 'node:fs';
 import OpenAI from 'openai';
 
 // 根据模型选择对应的 API 配置

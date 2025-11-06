@@ -2,10 +2,10 @@
  * 申请记录管理服务
  */
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import { generateId } from '../utils/code-generator';
 
 const __filename = fileURLToPath(import.meta.url);
