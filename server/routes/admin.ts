@@ -24,9 +24,9 @@ import {
   addCode,
   getApplications
 } from '../services/storage-adapter.js';
-import { batchSendToWechat } from '../services/wechat-sender';
-import { requireAdmin } from '../middleware/auth';
-import { generateLink, generateCode } from '../utils/code-generator';
+import { batchSendToWechat } from '../services/wechat-sender.js';
+import { requireAdmin } from '../middleware/auth.js';
+import { generateLink, generateCode } from '../utils/code-generator.js';
 
 const router = express.Router();
 

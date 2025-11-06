@@ -25,9 +25,9 @@ import {
   findApplicationByCommentContent
 } from '../services/storage-adapter.js';
 import { verifyScreenshot } from '../services/ai-verifier.js';
-import { rateLimit } from '../middleware/rate-limit';
-import { decodeToken } from '../utils/code-generator';
-import { parseCommentTime, isCommentTimeValid, formatTimeDiff } from '../utils/time-parser';
+import { rateLimit } from '../middleware/rate-limit.js';
+import { decodeToken } from '../utils/code-generator.js';
+import { parseCommentTime, isCommentTimeValid, formatTimeDiff } from '../utils/time-parser.js';
 
 const router = express.Router();
 

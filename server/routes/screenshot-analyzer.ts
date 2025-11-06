@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { aiVerifier } from '../services/ai-verifier';
+import { aiVerifier } from '../services/ai-verifier.js';
 
 const router = Router();
 

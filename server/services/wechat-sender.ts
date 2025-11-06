@@ -3,7 +3,7 @@
  */
 
 import axios from 'axios';
-import { generateLink } from '../utils/code-generator';
+import { generateLink } from '../utils/code-generator.js';
 
 export interface SendResult {
   success: boolean;
