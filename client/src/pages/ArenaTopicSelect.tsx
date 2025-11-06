@@ -45,18 +45,13 @@ export default function ArenaTopicSelect() {
   const [selectedTopic, setSelectedTopic] = useState<string>("");
   const [customTopic, setCustomTopic] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
-  const [containerHeight, setContainerHeight] = useState('100vh');
+  
   
   // 检查是否为基础模式
   const arenaMode = sessionStorage.getItem("arenaMode") || "basic";
 
   useEffect(() => {
-    // 检测浏览器对zoom的支持：Chrome/Edge需要166.67vh，Safari使用00vh
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    const isEdge = /Edg/.test(navigator.userAgent);
-    if (isChrome || isEdge) {
-      setContainerHeight('166.67vh');
-    }
+    // 页面初始化
   }, []);
 
   const handleContinue = () => {
@@ -73,7 +68,7 @@ export default function ArenaTopicSelect() {
   };
 
   return (
-    <div className="bg-white flex flex-col pt-20" style={{ height: containerHeight, overflow: 'auto' }}>
+    <div className="bg-white flex flex-col pt-20" style={{ height: "100vh", overflow: 'auto' }}>
       {/* 导航栏 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="px-8 py-5 flex items-center justify-between">

@@ -77,7 +77,6 @@ export default function SelectPhilosopher() {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [explodingId, setExplodingId] = useState<string | null>(null);
   const [isReturning, setIsReturning] = useState(false);
-  const [containerHeight, setContainerHeight] = useState('100vh');
   
   // 检测是否从其他页面返回
   useEffect(() => {
@@ -86,13 +85,6 @@ export default function SelectPhilosopher() {
       setIsReturning(true);
     } else {
       sessionStorage.setItem('hasVisitedSelect', 'true');
-    }
-    
-    // 检测浏览器对zoom的支持：Chrome/Edge需要166.67vh，Safari使用100vh
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    const isEdge = /Edg/.test(navigator.userAgent);
-    if (isChrome || isEdge) {
-      setContainerHeight('166.67vh');
     }
   }, []);
 
@@ -139,7 +131,7 @@ export default function SelectPhilosopher() {
 
   return (
     <div className="text-white relative overflow-hidden flex flex-col" style={{
-      height: containerHeight,
+      height: '100vh',
       backgroundColor: explodingId ? '#FAFAFA' : '#000000',
       transition: explodingId ? 'background-color 1.8s ease-in-out 0.5s' : 'none',
     }}>
