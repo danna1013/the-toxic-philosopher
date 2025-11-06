@@ -27,6 +27,7 @@ import {
 import { batchSendToWechat } from '../services/wechat-sender';
 import { requireAdmin } from '../middleware/auth';
 import { generateLink, generateCode } from '../utils/code-generator';
+import { loadScreenshot } from '../services/screenshot-storage.js';
 
 const router = express.Router();
 
@@ -658,22 +659,24 @@ router.get('/export', (req: Request, res: Response) => {
  * GET /api/admin/screenshots/:filename
  * 查看申请截图
  */
-router.get('/screenshots/:filename', requireAdmin, (req: Request, res: Response) => {
+router.get('/screenshots/:filename', requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { filename } = req.params;
-    const uploadsDir = path.join(__dirname, '../data/uploads');
-    const filePath = path.join(uploadsDir, filename);
-    
-    // 检查文件是否存在
-    if (!fs.existsSync(filePath)) {
+    const rawReference = req.params.filename || '';
+    const reference = decodeURIComponent(rawReference);
+
+    const screenshot = await loadScreenshot(reference);
+
+    if (!screenshot) {
       return res.status(404).json({
         success: false,
         message: '截图不存在'
       });
     }
-    
-    // 返回图片文件
-    return res.sendFile(filePath);
+
+    res.setHeader('Content-Type', screenshot.mimeType);
+    res.setHeader('Cache-Control', 'public, max-age=60');
+
+    return res.send(screenshot.buffer);
   } catch (error: any) {
     console.error('查看截图错误:', error);
     return res.status(500).json({
