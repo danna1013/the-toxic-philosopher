@@ -192,3 +192,17 @@
     opacity: 0;
   }
 }
+
+/* 全屏布局优化 - 确保内容占满整个视口 */
+@layer utilities {
+  .full-viewport {
+    width: 100vw;
+    min-height: 100vh;
+  }
+  
+  /* 移除页面级别的最大宽度限制 */
+  .page-container {
+    width: 100%;
+    max-width: none !important;
+  }
+}

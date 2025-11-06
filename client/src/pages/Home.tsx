@@ -5,18 +5,10 @@ export default function Home() {
   const [isExploding, setIsExploding] = useState(false);
   const [, setLocation] = useLocation();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [containerHeight, setContainerHeight] = useState('100vh');
 
   useEffect(() => {
     // 页面加载动画
     setTimeout(() => setIsLoaded(true), 100);
-    
-    // 检测浏览器对zoom的支持：Chrome/Edge需要166.67vh，Safari使用100vh
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    const isEdge = /Edg/.test(navigator.userAgent);
-    if (isChrome || isEdge) {
-      setContainerHeight('166.67vh');
-    }
   }, []);
 
   const handleArenaClick = () => {
@@ -34,10 +26,10 @@ export default function Home() {
   };
 
   return (
-    <div className={`bg-white flex flex-col relative overflow-hidden transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ height: containerHeight }}>
+    <div className={`bg-white flex flex-col relative overflow-hidden transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ height: '100vh', width: '100vw', position: 'fixed', top: 0, left: 0 }}>
       {/* 导航栏 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm">
-        <div className="px-8 py-5 flex items-center justify-between">
+        <div className="w-full px-6 md:px-12 lg:px-16 py-5 flex items-center justify-between">
           {/* 左侧品牌名 - 中英文组合 */}
           <div className="flex flex-col gap-0.5">
             <div className="text-xl md:text-2xl font-bold tracking-wide">毒舌哲学家</div>
@@ -185,12 +177,13 @@ export default function Home() {
       {/* 主要内容 */}
       <div
         id="home"
-        className={`flex-1 flex flex-col items-center justify-center px-6 md:px-8 py-12 pt-24 md:pt-32 transition-opacity duration-500 relative z-10 ${
+        className={`flex-1 flex flex-col items-center justify-center w-full px-6 md:px-12 lg:px-16 transition-opacity duration-500 relative z-10 overflow-hidden ${
           isExploding ? "opacity-0" : "opacity-100"
         }`}
+        style={{ paddingTop: '80px', paddingBottom: '40px' }}
       >
         {/* 主标题区域 - 添加渐入动画 */}
-        <div className="text-center mb-12 md:mb-16 lg:mb-20 max-w-6xl animate-fade-in-up">
+        <div className="text-center mb-6 md:mb-8 w-full animate-fade-in-up">
           <h1 className="font-bold text-black tracking-tight leading-[1.1] mb-4 md:mb-6" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}>
             真相往往不太礼貌
           </h1>
@@ -201,18 +194,18 @@ export default function Home() {
         </div>
 
         {/* 副标题 - 哲学家名字 */}
-        <p className="text-lg md:text-xl lg:text-2xl text-gray-500 mb-12 md:mb-16 lg:mb-20 text-center leading-relaxed tracking-wide animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+        <p className="text-lg md:text-xl text-gray-500 mb-6 md:mb-8 text-center leading-relaxed tracking-wide animate-fade-in-up" style={{animationDelay: '0.4s'}}>
           苏格拉底、尼采、维特根斯坦、康德、弗洛伊德
           <br className="hidden md:block" />
           <span className="md:inline-block md:ml-2">在此等你</span>
         </p>
 
         {/* Logo区域 */}
-        <div className="flex flex-col items-center mb-12 md:mb-16 lg:mb-20 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+        <div className="flex flex-col items-center mb-6 md:mb-8 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
           <img
             src="/logo.png"
             alt="The Toxic Philosopher"
-            className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem] 2xl:w-[32rem] 2xl:h-[32rem] object-contain opacity-90 mb-12"
+            className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain opacity-90 mb-6"
           />
           
           {/* 两个选项按钮 */}

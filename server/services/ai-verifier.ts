@@ -11,19 +11,35 @@ const MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 // 判断是否使用 API2D（仅 gpt-4o-mini）
 const isAPI2D = MODEL === 'gpt-4o-mini';
 
+// 获取 API Key
+const API_KEY = isAPI2D 
+  ? (process.env.API2D_API_KEY || process.env.OPENAI_API_KEY)
+  : (process.env.HAIHUB_API_KEY || process.env.OPENAI_API_KEY);
+
+const BASE_URL = isAPI2D
+  ? 'https://oa.api2d.net'
+  : 'https://api.haihub.cn/v1';
+
+// 验证 API Key
+if (!API_KEY) {
+  console.error('[AI Verifier] ERROR: No API key found!');
+  console.error('[AI Verifier] Environment variables:', {
+    API2D_API_KEY: process.env.API2D_API_KEY ? 'SET' : 'NOT SET',
+    HAIHUB_API_KEY: process.env.HAIHUB_API_KEY ? 'SET' : 'NOT SET',
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY ? 'SET' : 'NOT SET',
+    OPENAI_MODEL: process.env.OPENAI_MODEL
+  });
+}
+
 const openai = new OpenAI({
-  apiKey: isAPI2D 
-    ? (process.env.API2D_API_KEY || process.env.OPENAI_API_KEY)
-    : (process.env.HAIHUB_API_KEY || process.env.OPENAI_API_KEY),
-  baseURL: isAPI2D
-    ? 'https://oa.api2d.net'
-    : 'https://api.haihub.cn/v1'
+  apiKey: API_KEY || 'dummy-key',
+  baseURL: BASE_URL
 });
 
 console.log(`[AI Verifier] Using model: ${MODEL}`);
 console.log(`[AI Verifier] Using API: ${isAPI2D ? 'API2D' : 'HaiHub'}`);
-console.log(`[AI Verifier] Base URL: ${openai.baseURL}`);
-
+console.log(`[AI Verifier] Base URL: ${BASE_URL}`);
+console.log(`[AI Verifier] API Key: ${API_KEY ? API_KEY.substring(0, 10) + '...' : 'NOT SET'}`);
 export interface VerificationResult {
   success: boolean;
   valid: boolean;
@@ -43,6 +59,16 @@ export async function verifyScreenshot(
   imageInput: string | Buffer,
   expectedName?: string
 ): Promise<VerificationResult> {
+  // 检查 API Key
+  if (!API_KEY) {
+    console.error('[AI Verifier] No API key available');
+    return {
+      success: false,
+      valid: false,
+      message: 'API 配置错误，请联系管理员检查环境变量配置'
+    };
+  }
+  
   try {
     // 读取图片并转换为 base64
     let imageBuffer: Buffer;
@@ -208,12 +234,31 @@ export async function verifyScreenshot(
       message: error.message,
       stack: error.stack,
       response: error.response?.data,
-      status: error.response?.status
+      status: error.response?.status,
+      config: {
+        baseURL: error.config?.baseURL,
+        url: error.config?.url,
+        method: error.config?.method
+      }
     });
+    
+    // 更详细的错误信息
+    let errorMessage = 'AI 解析失败，请重试';
+    
+    if (error.response) {
+      // API 返回了错误响应
+      errorMessage = `API 错误 (${error.response.status}): ${error.response.data?.error?.message || error.message}`;
+    } else if (error.request) {
+      // 请求已发送但没有收到响应
+      errorMessage = 'API 请求超时，请检查网络连接';
+    } else if (error.message.includes('API key')) {
+      errorMessage = 'API 配置错误，请联系管理员';
+    }
+    
     return {
       success: false,
       valid: false,
-      message: `AI 审核失败: ${error.message}`
+      message: errorMessage
     };
   }
 }
