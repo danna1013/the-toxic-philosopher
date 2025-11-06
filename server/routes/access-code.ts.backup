@@ -106,7 +106,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
               confidence: 1.0
             }
           });
-          await addApplication(failedApplication);
+          addApplication(failedApplication);
           
           return res.status(400).json({
             success: false,
@@ -117,7 +117,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
     }
     
     // 检查是否有其他用户使用过相同评论（防止拿别人评论截图）
-    const existingCommentApp = await findApplicationByCommentContent(comment);
+    const existingCommentApp = findApplicationByCommentContent(comment);
     if (existingCommentApp && existingCommentApp.userName !== userName) {
       console.log(`${userName} 尝试使用其他用户（${existingCommentApp.userName}）的评论`);
       
@@ -133,7 +133,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
           confidence: 1.0
         }
       });
-      await addApplication(failedApplication);
+      addApplication(failedApplication);
       
       return res.status(409).json({
         success: false,
@@ -142,11 +142,11 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
     }
     
     // 检查是否重复使用同一条评论（相同用户名 + 相同评论内容）
-    const existingApplication = await findApplicationByComment(userName, comment);
+    const existingApplication = findApplicationByComment(userName, comment);
     if (existingApplication && existingApplication.code) {
       // 通过申请记录中的体验码查找状态
       const codeValue = existingApplication.code;
-      const existingCode = await findCodeByCode(codeValue);
+      const existingCode = findCodeByCode(codeValue);
       
       if (existingCode) {
         // 如果体验码已使用，拒绝申请
@@ -165,7 +165,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
               confidence: 1.0
             }
           });
-          await addApplication(failedApplication);
+          addApplication(failedApplication);
           
           return res.status(409).json({
             success: false,
@@ -189,7 +189,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
               confidence: 1.0
             }
           });
-          await addApplication(application);
+          addApplication(application);
           
           return res.json({
             success: true,
@@ -215,7 +215,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
           confidence: 1.0
         }
       });
-      await addApplication(failedApplication);
+      addApplication(failedApplication);
       
       return res.status(400).json({
         success: false,
@@ -241,7 +241,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
           confidence: 1.0
         }
       });
-      await addApplication(failedApplication);
+      addApplication(failedApplication);
       
       return res.status(400).json({
         success: false,
@@ -253,7 +253,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
     console.log('用户申请体验码:', userName);
     
     // 生成体验码
-    const code = await createCode({
+    const code = createCode({
       userName: userName,
       userId: userName, // 使用 userName 作为 userId
       source: 'self_apply',
@@ -261,7 +261,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
     });
     
     // 保存体验码
-    await addCode(code);
+    addCode(code);
     
     // 记录成功的申请
     const application = createApplication({
@@ -276,7 +276,7 @@ router.post('/apply-code', rateLimit(3, 60 * 60 * 1000), upload.single('screensh
         confidence: 1.0
       }
     });
-    await addApplication(application);
+    addApplication(application);
     
     console.log('体验码生成成功:', code.code);
     
@@ -319,11 +319,11 @@ router.post('/verify-code', (req: Request, res: Response) => {
       });
     }
     
-    const result = await verifyCode(code);
+    const result = verifyCode(code);
     
     if (result.valid && result.data) {
       // 标记为已使用
-      await markCodeAsUsed(code);
+      markCodeAsUsed(code);
       
       // 记录激活行为到申请列表
       const activationRecord = createApplication({
@@ -376,7 +376,7 @@ router.get('/check-access', (req: Request, res: Response) => {
     }
     
     const code = auth.replace('Bearer ', '');
-    const result = await verifyCode(code, false); // 权限检查，允许已使用的体验码
+    const result = verifyCode(code, false); // 权限检查，允许已使用的体验码
     
     if (result.valid && result.data) {
       return res.json({
@@ -423,7 +423,7 @@ router.post('/verify-token', (req: Request, res: Response) => {
     }
     
     // 验证体验码
-    const result = await verifyCode(decoded.code);
+    const result = verifyCode(decoded.code);
     
     if (result.valid && result.data) {
       // 标记为已使用
