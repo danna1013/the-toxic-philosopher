@@ -1,17 +1,27 @@
 {
   "version": 2,
-  "buildCommand": "pnpm run build",
-  "outputDirectory": "dist/public",
+  "buildCommand": "pnpm build:full",
   "installCommand": "pnpm install",
+  "outputDirectory": "dist/public",
   "framework": null,
-  "rewrites": [
+  "functions": {
+    "dist/index.js": {
+      "runtime": "nodejs20.x",
+      "includeFiles": "dist/**"
+    }
+  },
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api"
+      "src": "/api/(.*)",
+      "dest": "/dist/index.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
