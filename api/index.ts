@@ -8,8 +8,8 @@
 import express, { Request, Response } from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import accessCodeRoutes from '../server/routes/access-code.js';
-import adminRoutes from '../server/routes/admin.js';
+import accessCodeRoutes from './routes/access-code.js';
+import adminRoutes from './routes/admin.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
