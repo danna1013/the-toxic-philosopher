@@ -1,232 +1,119 @@
-import { useLocation } from "wouter";
-import { useState, useEffect } from "react";
-import { useAccessControl } from "../hooks/access-control/useAccessControl";
-import AccessCodeModal from "../components/access-code/AccessCodeModal";
+import { useState } from 'react';
+import { useLocation } from 'wouter';
+import { motion } from 'framer-motion';
+import { Eye, Swords, Users, ArrowRight, Crown, Vote } from 'lucide-react';
+import NavBar from '@/components/NavBar';
+import StarField from '@/components/StarField';
 
 export default function ArenaMode() {
   const [, setLocation] = useLocation();
-  const { hasAccess, code } = useAccessControl();
-  const [selectedMode, setSelectedMode] = useState<"basic" | "full" | null>(null);
-  
-  const [showAccessModal, setShowAccessModal] = useState(false);
+  const [hoveredMode, setHoveredMode] = useState<string | null>(null);
 
-  useEffect(() => {
-    // 页面初始化
-  }, []);
-
-  const handleContinue = () => {
-    if (!selectedMode) {
-      alert("请选择一个辩论模式!");
-      return;
-    }
-
-    // 检查完整模式权限
-    if (selectedMode === "full" && !hasAccess) {
-      setShowAccessModal(true);
-      return;
-    }
-    
-    sessionStorage.setItem("arenaMode", selectedMode);
-    setLocation("/arena/topic");
+  const handleSelectMode = (mode: 'basic' | 'full') => {
+    sessionStorage.setItem('arenaMode', mode);
+    setLocation('/arena/topic');
   };
 
   return (
-    <div className="bg-white flex flex-col" style={{ height: "100vh" }}>
-      {/* 导航栏 */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
-        <div className="px-8 py-5 flex items-center justify-between">
-          <div className="flex flex-col gap-0.5">
-            <div className="text-xl md:text-2xl font-bold tracking-wide">毒舌哲学家</div>
-            <div className="text-xs md:text-sm font-medium tracking-[0.2em] text-gray-500">THE TOXIC PHILOSOPHER</div>
-          </div>
-          
-          <div className="flex items-center gap-8">
-            <button onClick={() => setLocation("/")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
-              首页
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button onClick={() => setLocation("/select")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
-              一对一开怼
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button onClick={() => setLocation("/arena/mode")} className="relative text-lg md:text-xl text-black font-medium group">
-              哲学"奇葩说"
-              <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
-            </button>
-            <button onClick={() => setLocation("/design")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
-              设计理念
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button onClick={() => window.open("https://forms.gle/feedback", "_blank")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
-              意见反馈
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button onClick={() => window.open("https://forms.gle/review", "_blank")} className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
-              求点赞评论
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-[#0a0a0f] text-white relative overflow-hidden">
+      <NavBar />
+      <StarField count={150} />
+      <div className="absolute inset-0 cosmic-bg pointer-events-none" />
 
-      {/* 主内容 */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 pt-24 pb-16">
-        {/* 标题 */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-black mb-3">思想的角斗场，没有和局</h1>
-          <p className="text-4xl text-gray-500">请选择你的思想擂台</p>
-        </div>
-
-        {/* 模式卡片 */}
-        <div className="flex gap-8 mb-12">
-          {/* 基础模式 */}
-          <div 
-            onClick={() => setSelectedMode("basic")}
-            className={`w-96 border-2 p-8 cursor-pointer transition-all duration-300 ${
-              selectedMode === "basic" 
-                ? "bg-white text-black border-black shadow-lg" 
-                : "bg-white text-black border-gray-300 hover:border-black"
-            }`}
-          >
-            <div className="flex items-start justify-between mb-6">
-              <h2 className="text-3xl font-bold">基础模式</h2>
-              <span className="px-3 py-1.5 bg-gray-800 text-white text-sm">快速体验</span>
-            </div>
-
-            <ul className="space-y-3 text-base mb-8">
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>预设辩题</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>AI自动分配阵营</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>观众视角观看</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>1位AI主持人</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>1位AI裁判判定胜负</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-red-600">✗</span>
-                <span className="text-gray-400">自定义话题</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-red-600">✗</span>
-                <span className="text-gray-400">参与讨论</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-red-600">✗</span>
-                <span className="text-gray-400">调整阵营</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-red-600">✗</span>
-                <span className="text-gray-400">观众投票</span>
-              </li>
-            </ul>
-
-            <p className="text-center text-gray-600 text-base">
-              基础模式肯定也好玩！
-            </p>
-          </div>
-
-          {/* 完整模式 */}
-          <div 
-            onClick={() => {
-            setSelectedMode("full");
-            // 如果没有权限，立即显示提示
-            if (!hasAccess) {
-              // 不立即显示，等用户点击继续时再显示
-            }
-          }}
-            className={`w-96 border-2 p-8 cursor-pointer transition-all duration-300 ${
-              selectedMode === "full" 
-                ? "bg-white text-black border-black shadow-lg" 
-                : "bg-white text-black border-gray-300 hover:border-black"
-            }`}
-          >
-            <div className="flex items-start justify-between mb-6">
-              <h2 className="text-3xl font-bold">完整模式</h2>
-              <span className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm">限量内测</span>
-            </div>
-
-            <ul className="space-y-3 text-base mb-8">
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>预设辩题</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>AI自动分配阵营</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>观众视角观看</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span>1位AI主持人</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span className="font-bold">自定义话题</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span className="font-bold">观众或参与讨论</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span className="font-bold">上帝之手调整阵营</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span className="font-bold">50位AI观众</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-green-600">✓</span>
-                <span className="font-bold">奇葩说投票赛制</span>
-              </li>
-            </ul>
-
-            <p className="text-center text-gray-600 text-base">
-              57个AI同时运行
-            </p>
-          </div>
-        </div>
-
-        {/* 继续按钮 */}
-        <button
-          onClick={handleContinue}
-          disabled={!selectedMode}
-          className="px-16 py-4 bg-black text-white text-xl hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors mb-8"
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12"
         >
-          继续
-        </button>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4 gradient-text">
+            哲学奇葩说
+          </h1>
+          <p className="text-white/40 text-base md:text-lg max-w-lg mx-auto">
+            神仙打架的辩论场，选择你的参与方式
+          </p>
+        </motion.div>
 
-        {/* 底部说明 */}
-        <div className="text-center text-gray-500">
-          {hasAccess && code ? (
-            <p className="text-sm text-green-600">
-              🎉 感谢您的评论，您的体验码为：<span className="font-mono font-bold">{code}</span>
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl w-full">
+          {/* Basic Mode */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            onMouseEnter={() => setHoveredMode('basic')}
+            onMouseLeave={() => setHoveredMode(null)}
+            onClick={() => handleSelectMode('basic')}
+            className="glass-card p-8 cursor-pointer group transition-all duration-500 hover:border-blue-500/30"
+            style={{ transform: hoveredMode === 'basic' ? 'translateY(-4px)' : 'translateY(0)' }}
+          >
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+              <Eye className="w-7 h-7 text-blue-400" />
+            </div>
+            <h3 className="text-2xl font-bold mb-2 text-white/90">基础模式</h3>
+            <p className="text-sm text-white/30 mb-4">观看辩论</p>
+            <p className="text-white/50 text-sm leading-relaxed mb-6">
+              作为观众旁观哲学家们的激烈辩论。选择辩题，分配正反方阵营，观看 AI 哲学家们唇枪舌剑。
             </p>
-          ) : (
-            <p className="text-sm text-gray-400">
-              💡 <a href="https://teko.woa.com/event/ai-agent/246" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline hover:text-blue-600">点击链接</a>，评论10字以上，即可体验完整模式
+            <ul className="space-y-2 mb-6">
+              {['选择/自定义辩题', '分配正反方哲学家', '观看完整辩论流程', '裁判判定胜负'].map((item) => (
+                <li key={item} className="flex items-center gap-2 text-xs text-white/40">
+                  <div className="w-1 h-1 rounded-full bg-blue-400" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <div className="flex items-center text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors">
+              进入观战
+              <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-transform duration-300" />
+            </div>
+          </motion.div>
+
+          {/* Full Mode */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            onMouseEnter={() => setHoveredMode('full')}
+            onMouseLeave={() => setHoveredMode(null)}
+            onClick={() => handleSelectMode('full')}
+            className="glass-card p-8 cursor-pointer group transition-all duration-500 hover:border-rose-500/30 relative"
+            style={{ transform: hoveredMode === 'full' ? 'translateY(-4px)' : 'translateY(0)' }}
+          >
+            {/* Recommended badge */}
+            <div className="absolute -top-3 right-6 px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider"
+              style={{ background: 'linear-gradient(135deg, #f43f5e, #f59e0b)', color: 'white' }}>
+              推荐
+            </div>
+
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500/20 to-amber-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+              <Swords className="w-7 h-7 text-rose-400" />
+            </div>
+            <h3 className="text-2xl font-bold mb-2 text-white/90">完整模式</h3>
+            <p className="text-sm text-white/30 mb-4">参与辩论 + AI 观众投票</p>
+            <p className="text-white/50 text-sm leading-relaxed mb-6">
+              不只是旁观——你可以作为辩手亲自下场参与辩论。50位不同背景的 AI 观众实时投票，最终评选 BB King。
             </p>
-          )}
+            <ul className="space-y-2 mb-6">
+              {[
+                { icon: Swords, text: '作为辩手参与辩论' },
+                { icon: Users, text: '50位AI观众实时投票' },
+                { icon: Crown, text: 'BB King 评选' },
+                { icon: Vote, text: '立论\u2192质询\u2192自由辩论\u2192总结\u2192裁判' },
+              ].map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-center gap-2 text-xs text-white/40">
+                  <Icon className="w-3 h-3 text-rose-400/60" />
+                  {text}
+                </li>
+              ))}
+            </ul>
+            <div className="flex items-center text-rose-400 text-sm font-medium group-hover:text-rose-300 transition-colors">
+              进入辩论场
+              <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-transform duration-300" />
+            </div>
+          </motion.div>
         </div>
       </div>
-
-      {/* 体验码弹窗 */}
-      <AccessCodeModal isOpen={showAccessModal} onClose={() => setShowAccessModal(false)} />
     </div>
   );
 }

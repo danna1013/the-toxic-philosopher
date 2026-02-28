@@ -1,230 +1,532 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary: #1d4ed8;
-  --primary-foreground: #eff6ff;
-  --sidebar-primary: #2563eb;
-  --sidebar-primary-foreground: #eff6ff;
-  --chart-1: #93c5fd;
-  --chart-2: #3b82f6;
-  --chart-3: #2563eb;
-  --chart-4: #1d4ed8;
-  --chart-5: #1e40af;
-  --radius: 0.65rem;
-  --background: 255 255 255;
-  --foreground: 10 10 10;
-  --card: 255 255 255;
-  --card-foreground: 10 10 10;
-  --popover: 255 255 255;
-  --popover-foreground: 10 10 10;
-  --secondary: 245 245 245;
-  --secondary-foreground: 64 64 64;
-  --muted: 240 240 240;
-  --muted-foreground: 115 115 115;
-  --accent: 240 240 240;
-  --accent-foreground: 20 20 20;
-  --destructive: 239 68 68;
-  --destructive-foreground: 255 255 255;
-  --border: 229 229 229;
-  --input: 229 229 229;
-  --ring: 59 130 246;
-  --sidebar: 255 255 255;
-  --sidebar-foreground: 10 10 10;
-  --sidebar-accent: 240 240 240;
-  --sidebar-accent-foreground: 20 20 20;
-  --sidebar-border: 229 229 229;
-  --sidebar-ring: 59 130 246;
-}
+/* ============================================
+   毒舌哲学家 - Apple Design System
+   深色星空主题 + 毛玻璃效果
+   ============================================ */
 
-.dark {
-  --primary: #1d4ed8;
-  --primary-foreground: #eff6ff;
-  --sidebar-primary: #3b82f6;
-  --sidebar-primary-foreground: #eff6ff;
-  --background: 20 20 20;
-  --foreground: 240 240 240;
-  --card: 30 30 30;
+:root {
+  /* Apple-style color palette - Dark cosmic theme */
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --accent-purple: #a855f7;
+  --accent-blue: #3b82f6;
+  --accent-cyan: #06b6d4;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --accent-emerald: #10b981;
+
+  /* Cosmic background colors */
+  --cosmic-bg: #0a0a0f;
+  --cosmic-surface: rgba(255, 255, 255, 0.03);
+  --cosmic-surface-hover: rgba(255, 255, 255, 0.06);
+  --cosmic-border: rgba(255, 255, 255, 0.08);
+  --cosmic-border-bright: rgba(255, 255, 255, 0.15);
+
+  /* Glass morphism */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-strong: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  /* Text colors */
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.4);
+  --text-muted: rgba(255, 255, 255, 0.25);
+
+  /* Spacing & Radius */
+  --radius: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+
+  /* Shadcn compatibility */
+  --background: 10 10 15;
+  --foreground: 245 245 245;
+  --card: 15 15 22;
   --card-foreground: 240 240 240;
-  --popover: 30 30 30;
+  --popover: 15 15 22;
   --popover-foreground: 240 240 240;
-  --secondary: 38 38 38;
+  --secondary: 25 25 35;
   --secondary-foreground: 200 200 200;
-  --muted: 45 45 45;
-  --muted-foreground: 163 163 163;
-  --accent: 45 45 45;
+  --muted: 30 30 42;
+  --muted-foreground: 163 163 180;
+  --accent: 35 35 50;
   --accent-foreground: 250 250 250;
   --destructive: 220 38 38;
   --destructive-foreground: 255 255 255;
-  --border: 255 255 255 / 0.1;
-  --input: 255 255 255 / 0.15;
-  --ring: 96 165 250;
-  --chart-1: #93c5fd;
-  --chart-2: #3b82f6;
-  --chart-3: #2563eb;
-  --chart-4: #1d4ed8;
-  --chart-5: #1e40af;
-  --sidebar: 30 30 30;
+  --border: 255 255 255 / 0.08;
+  --input: 255 255 255 / 0.1;
+  --ring: 99 102 241;
+  --chart-1: #6366f1;
+  --chart-2: #a855f7;
+  --chart-3: #3b82f6;
+  --chart-4: #06b6d4;
+  --chart-5: #f59e0b;
+  --sidebar: 12 12 18;
   --sidebar-foreground: 240 240 240;
-  --sidebar-accent: 45 45 45;
+  --sidebar-primary: #6366f1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: 35 35 50;
   --sidebar-accent-foreground: 255 255 255;
-  --sidebar-border: 255 255 255 / 0.1;
-  --sidebar-ring: 96 165 250;
+  --sidebar-border: 255 255 255 / 0.08;
+  --sidebar-ring: 99 102 241;
+}
+
+.dark {
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --background: 10 10 15;
+  --foreground: 245 245 245;
+  --card: 15 15 22;
+  --card-foreground: 240 240 240;
+  --popover: 15 15 22;
+  --popover-foreground: 240 240 240;
+  --secondary: 25 25 35;
+  --secondary-foreground: 200 200 200;
+  --muted: 30 30 42;
+  --muted-foreground: 163 163 180;
+  --accent: 35 35 50;
+  --accent-foreground: 250 250 250;
+  --destructive: 220 38 38;
+  --destructive-foreground: 255 255 255;
+  --border: 255 255 255 / 0.08;
+  --input: 255 255 255 / 0.1;
+  --ring: 99 102 241;
+  --sidebar: 12 12 18;
+  --sidebar-foreground: 240 240 240;
+  --sidebar-accent: 35 35 50;
+  --sidebar-accent-foreground: 255 255 255;
+  --sidebar-border: 255 255 255 / 0.08;
+  --sidebar-ring: 99 102 241;
 }
 
 @layer base {
-  /* 全局样式重置 - 确保正确的缩放和布局 */
   html {
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-  
-  html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-  }
-  
-  * {
-    @apply border-border;
-    box-sizing: border-box;
-  }
-  
-  body {
-    @apply bg-background text-foreground;
-    background-color: rgb(var(--background));
-    color: rgb(var(--foreground));
-    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
   }
-  
-  #root {
-    width: 100%;
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--cosmic-bg);
+    color: var(--text-primary);
+    overflow-x: hidden;
     min-height: 100vh;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
   }
-  
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
-  a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
-    @apply cursor-pointer;
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-color: var(--cosmic-border);
+  }
+
+  ::selection {
+    background: rgba(99, 102, 241, 0.3);
+    color: white;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
   }
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
-    padding-right: 1rem;
+  /* ========== Glass Card ========== */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
   }
 
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
-      padding-right: 1.5rem;
-    }
+  .glass-card-strong {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem; /* 32px - desktop padding */
-      padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
-    }
+  /* ========== Apple-style Navigation ========== */
+  .nav-glass {
+    background: rgba(10, 10, 15, 0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
+
+  /* ========== Gradient Text ========== */
+  .gradient-text {
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-purple {
+    background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-warm {
+    background: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ========== Apple Button Styles ========== */
+  .btn-apple-primary {
+    @apply relative inline-flex items-center justify-center px-8 py-3.5 rounded-full font-medium text-white transition-all duration-300;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .btn-apple-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-apple-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+  }
+
+  .btn-apple-secondary {
+    @apply relative inline-flex items-center justify-center px-8 py-3.5 rounded-full font-medium transition-all duration-300;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-primary);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-apple-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  /* ========== Cosmic Background ========== */
+  .cosmic-bg {
+    background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                var(--cosmic-bg);
+  }
+
+  /* ========== Star Field ========== */
+  .star-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+  }
+
+  /* ========== Planet Glow ========== */
+  .planet-glow {
+    position: relative;
+  }
+
+  .planet-glow::after {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--glow-color, rgba(99, 102, 241, 0.3)) 0%, transparent 70%);
+    filter: blur(20px);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .planet-glow:hover::after {
+    opacity: 1;
+  }
+
+  /* ========== Chat Bubble ========== */
+  .chat-bubble-user {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 20px 20px 4px 20px;
+  }
+
+  .chat-bubble-philosopher {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px 20px 20px 4px;
+  }
+
+  /* ========== Debate Stage ========== */
+  .debate-pro {
+    border-left: 3px solid #3b82f6;
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+  }
+
+  .debate-con {
+    border-left: 3px solid #f43f5e;
+    background: linear-gradient(90deg, rgba(244, 63, 94, 0.08) 0%, transparent 100%);
+  }
+
+  /* ========== Poster Card ========== */
+  .poster-card {
+    background: linear-gradient(145deg, rgba(15, 15, 25, 0.95) 0%, rgba(25, 20, 40, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ========== Emotion Indicator ========== */
+  .emotion-sharp { color: #f43f5e; }
+  .emotion-moderate { color: #f59e0b; }
+  .emotion-gentle { color: #3b82f6; }
+  .emotion-warm { color: #10b981; }
 }
-
-
 
 @layer utilities {
-  /* 分步淡入动画 - 用于选择哲学家页面的入场效果 */
-  @keyframes fadeInStep {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* ========== Animations ========== */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
   }
 
-  /* 第一步：标题 - 立即开始 */
-  .animate-fadeInStep1 {
-    animation: fadeInStep 1.2s ease-out 0s forwards;
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
     opacity: 0;
   }
 
-  /* 第二步：副标题 - 延迟 0.6 秒 */
-  .animate-fadeInStep2 {
-    animation: fadeInStep 1.2s ease-out 0.6s forwards;
+  .animate-fade-in-down {
+    animation: fadeInDown 0.8s ease-out forwards;
     opacity: 0;
   }
 
-  /* 第三步：星球容器 - 延迟 1.2 秒 */
-  .animate-fadeInStep3 {
-    animation: fadeInStep 1.2s ease-out 1.2s forwards;
+  .animate-scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .animate-float-slower {
+    animation: float 12s ease-in-out infinite;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulseSubtle 3s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-orbit {
+    animation: orbit 20s linear infinite;
+  }
+
+  .animate-twinkle-slow {
+    animation: twinkle 4s ease-in-out infinite;
+  }
+
+  .animate-twinkle-fast {
+    animation: twinkle 2s ease-in-out infinite;
+  }
+
+  .animate-meteor {
+    animation: meteor 3s ease-in infinite;
+  }
+
+  .animate-typing {
+    animation: typing 1.5s ease-in-out infinite;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.5s ease-out forwards;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.5s ease-out forwards;
+  }
+
+  .animate-bounce-gentle {
+    animation: bounceGentle 2s ease-in-out infinite;
+  }
+
+  .animate-rotate-slow {
+    animation: rotateSlow 20s linear infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background-size: 200% 100%;
+  }
+}
+
+/* ========== Keyframes ========== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+  to { box-shadow: 0 0 40px rgba(99, 102, 241, 0.4), 0 0 80px rgba(99, 102, 241, 0.1); }
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-radius, 100px)) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-radius, 100px)) rotate(-360deg); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+@keyframes meteor {
+  0% { transform: translate(0, 0) rotate(215deg); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translate(-500px, 500px) rotate(215deg); opacity: 0; }
+}
+
+@keyframes typing {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bounceGentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--tx, 0px)), calc(-50% + var(--ty, 0px))) rotate(var(--rotation, 360deg)) scale(0);
     opacity: 0;
   }
 }
 
-/* 全屏布局优化 - 确保内容占满整个视口 */
-@layer utilities {
-  .full-viewport {
-    width: 100vw;
-    min-height: 100vh;
-  }
-  
-  /* 移除页面级别的最大宽度限制 */
-  .page-container {
-    width: 100%;
-    max-width: none !important;
+@keyframes fadeInStep {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Particle Effects ========== */
+.particle {
+  pointer-events: none;
+}
+
+/* ========== Critical Hit Effect ========== */
+.critical-hit {
+  animation: criticalHit 0.6s ease-out;
+}
+
+@keyframes criticalHit {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.05); }
+  40% { transform: scale(0.98); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ========== Responsive Typography ========== */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
   }
 }
 
-/* Safari 浏览器特定修复 */
-@supports (-webkit-appearance: none) {
-  /* Safari 字体大小修复 */
-  h1, h2, h3, h4, h5, h6 {
-    -webkit-text-size-adjust: 100%;
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px;
   }
-  
-  /* 确保 Safari 中的视口单位正确 */
-  .safari-viewport-fix {
-    height: -webkit-fill-available;
-  }
-}
-
-/* 确保所有浏览器的字体渲染一致 */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }

@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Sparkles, Plus, X } from 'lucide-react';
+import NavBar from '@/components/NavBar';
+import StarField from '@/components/StarField';
 
 interface Philosopher {
   id: string;
@@ -7,582 +11,379 @@ interface Philosopher {
   nameEn: string;
   warning: string;
   description: string;
+  style: string;
   image: string;
-  size: number;
-  top: string;
   color: string;
+  orbitRadius: number;
+  orbitSpeed: number;
+  size: number;
+  startAngle: number;
 }
 
-const philosophers: Philosopher[] = [
+const defaultPhilosophers: Philosopher[] = [
   {
-    id: 'socrates',
-    name: '苏格拉底',
-    nameEn: 'Socrates',
-    warning: '⚠️ 你真的懂吗?',
-    description: '古希腊“街头杠精”,专治各种不懂装懂。',
-    image: '/web-socrates.webp',
-    size: 120,
-    top: '8%',
-    color: '#fcd34d',
+    id: 'socrates', name: '苏格拉底', nameEn: 'Socrates',
+    warning: '你真的懂吗?', description: '古希腊"街头杠精"，专治各种不懂装懂。用反问逼你自相矛盾。',
+    style: '连环追问，步步紧逼', image: '/web-socrates.webp',
+    color: '#fcd34d', orbitRadius: 90, orbitSpeed: 35, size: 52, startAngle: 0,
   },
   {
-    id: 'nietzsche',
-    name: '尼采',
-    nameEn: 'Nietzsche',
-    warning: '⚠️ 别这么平庸',
-    description: '宣布“上帝已死”的哲学摇滚巨星。',
-    image: '/web-nietzsche.webp',
-    size: 240,
-    top: '28%',
-    color: '#fb923c',
+    id: 'nietzsche', name: '尼采', nameEn: 'Nietzsche',
+    warning: '别这么平庸', description: '宣布"上帝已死"的哲学摇滚巨星。用鞭笞激发你的意志。',
+    style: '激烈批判，充满力量', image: '/web-nietzsche.webp',
+    color: '#fb923c', orbitRadius: 140, orbitSpeed: 45, size: 60, startAngle: 72,
   },
   {
-    id: 'wittgenstein',
-    name: '维特根斯坦',
-    nameEn: 'Wittgenstein',
-    warning: '⚠️ 你的逻辑有问题',
-    description: '哲学界的“拆墙工”,专拆语言骗局。',
-    image: '/web-wittgenstein.webp',
-    size: 300,
-    top: '50%',
-    color: '#d4a574',
+    id: 'wittgenstein', name: '维特根斯坦', nameEn: 'Wittgenstein',
+    warning: '你的逻辑有问题', description: '哲学界的"拆墙工"，专拆语言骗局。用逻辑精准打击。',
+    style: '逻辑解构，精准打击', image: '/web-wittgenstein.webp',
+    color: '#d4a574', orbitRadius: 195, orbitSpeed: 55, size: 56, startAngle: 144,
   },
   {
-    id: 'kant',
-    name: '康德',
-    nameEn: 'Kant',
-    warning: '⚠️ 你配谈道德吗?',
-    description: '准时散步的“哥尼斯堡时钟”,为理性划界。',
-    image: '/web-kant.webp',
-    size: 200,
-    top: '72%',
-    color: '#60a5fa',
+    id: 'kant', name: '康德', nameEn: 'Kant',
+    warning: '你配谈道德吗?', description: '准时散步的"哥尼斯堡时钟"，用道德律令审判一切。',
+    style: '冷静剖析，道德审判', image: '/web-kant.webp',
+    color: '#60a5fa', orbitRadius: 250, orbitSpeed: 65, size: 54, startAngle: 216,
   },
   {
-    id: 'freud',
-    name: '弗洛伊德',
-    nameEn: 'Freud',
-    warning: '⚠️ 你在压抑什么?',
-    description: '告诉你“你并不完全是自己的主人”的老爷爷。',
-    image: '/web-freud.webp',
-    size: 160,
-    top: '92%',
-    color: '#a78bfa',
+    id: 'freud', name: '弗洛伊德', nameEn: 'Freud',
+    warning: '你在压抑什么?', description: '告诉你"你并不完全是自己的主人"。用潜意识透视真相。',
+    style: '本能揭露，深层剖析', image: '/web-freud.webp',
+    color: '#a78bfa', orbitRadius: 305, orbitSpeed: 75, size: 50, startAngle: 288,
+  },
+  {
+    id: 'zhuangzi', name: '庄子', nameEn: 'Zhuangzi',
+    warning: '你确定你是醒着的?', description: '梦蝶的逍遥者，用寓言和反讽消解你的执念。',
+    style: '逍遥反讽，消解执念', image: '',
+    color: '#34d399', orbitRadius: 130, orbitSpeed: 40, size: 48, startAngle: 36,
+  },
+  {
+    id: 'schopenhauer', name: '叔本华', nameEn: 'Schopenhauer',
+    warning: '人生本就是苦', description: '悲观主义大师，用冷酷的真相击碎你的幻想。',
+    style: '悲观毒舌，冷酷真相', image: '',
+    color: '#94a3b8', orbitRadius: 170, orbitSpeed: 50, size: 46, startAngle: 108,
+  },
+  {
+    id: 'sartre', name: '萨特', nameEn: 'Sartre',
+    warning: '你在逃避自由', description: '存在主义旗手，告诉你"人是被判定为自由的"。',
+    style: '存在拷问，自由审判', image: '',
+    color: '#f472b6', orbitRadius: 225, orbitSpeed: 60, size: 44, startAngle: 180,
+  },
+  {
+    id: 'machiavelli', name: '马基雅维利', nameEn: 'Machiavelli',
+    warning: '你太天真了', description: '《君主论》作者，用冷酷的权谋逻辑拆解你的理想主义。',
+    style: '权谋冷析，现实主义', image: '',
+    color: '#ef4444', orbitRadius: 280, orbitSpeed: 70, size: 42, startAngle: 252,
+  },
+  {
+    id: 'diogenes', name: '第欧根尼', nameEn: 'Diogenes',
+    warning: '别挡我的阳光', description: '住在木桶里的犬儒哲学家，用行为艺术嘲讽一切虚伪。',
+    style: '犬儒嘲讽，行为艺术', image: '',
+    color: '#a3e635', orbitRadius: 340, orbitSpeed: 80, size: 40, startAngle: 324,
+  },
+  {
+    id: 'beauvoir', name: '波伏娃', nameEn: 'Beauvoir',
+    warning: '你不是天生如此', description: '《第二性》作者，用女性主义视角审视你的性别偏见。',
+    style: '女性主义审视', image: '',
+    color: '#e879f9', orbitRadius: 160, orbitSpeed: 42, size: 46, startAngle: 160,
   },
 ];
 
 export default function SelectPhilosopher() {
   const [, setLocation] = useLocation();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [explodingId, setExplodingId] = useState<string | null>(null);
-  const [isReturning, setIsReturning] = useState(false);
-  
-  // 检测是否从其他页面返回
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [showCustom, setShowCustom] = useState(false);
+  const [customName, setCustomName] = useState('');
+  const [customTopic, setCustomTopic] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
-    const hasVisited = sessionStorage.getItem('hasVisitedSelect');
-    if (hasVisited) {
-      setIsReturning(true);
-    } else {
-      sessionStorage.setItem('hasVisitedSelect', 'true');
-    }
+    setTimeout(() => setIsLoaded(true), 200);
   }, []);
 
-  // 预加载所有图片
-  useEffect(() => {
-    // 设置超时，确保即使图片加载失败也能显示
-    const timeout = setTimeout(() => {
-      console.log('Image preload timeout, showing images anyway');
-      setImagesLoaded(true);
-    }, 2000); // 2秒超时
-
-    const imagePromises = philosophers.map((phil) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = phil.image;
-      });
-    });
-
-    Promise.all(imagePromises)
-      .then(() => {
-        clearTimeout(timeout);
-        setImagesLoaded(true);
-      })
-      .catch((err) => {
-        console.error('Failed to preload images:', err);
-        clearTimeout(timeout);
-        setImagesLoaded(true); // 即使失败也显示
-      });
-
-    return () => clearTimeout(timeout);
-  }, []);
+  const hoveredPhil = useMemo(() => {
+    if (!hoveredId) return null;
+    return defaultPhilosophers.find(p => p.id === hoveredId) || null;
+  }, [hoveredId]);
 
   const handleSelect = (id: string) => {
-    // 触发爆炸动画
-    setExplodingId(id);
-    
-    // 延迟跳转，让粒子爆炸和背景渐变动画播放完
+    setSelectedId(id);
     setTimeout(() => {
-      setLocation(`/intro/${id}`);
-    }, 2500);
+      setLocation(`/chat/${id}`);
+    }, 800);
+  };
+
+  const handleCustomStart = () => {
+    if (!customName.trim()) return;
+    const customId = `custom_${encodeURIComponent(customName)}`;
+    sessionStorage.setItem('customPhilosopherName', customName);
+    sessionStorage.setItem('customPhilosopherTopic', customTopic);
+    setSelectedId(customId);
+    setTimeout(() => {
+      setLocation(`/chat/${customId}`);
+    }, 800);
   };
 
   return (
-    <div className="text-white relative overflow-hidden flex flex-col" style={{
-      height: '100vh',
-      backgroundColor: explodingId ? '#FAFAFA' : '#000000',
-      transition: explodingId ? 'background-color 1.8s ease-in-out 0.5s' : 'none',
-    }}>
-      {/* 星空背景 */}
-      <div className="absolute inset-0 overflow-hidden" style={{
-        opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 1.2s ease-out 0.6s' : 'none',
-      }}>
-        {/* 背景星星 */}
-        {[...Array(200)].map((_, i) => {
-          const size = Math.random();
-          const shouldTwinkle = Math.random();
-          let twinkleClass = '';
-          let twinkleDelay = 0;
-          
-          if (shouldTwinkle > 0.6) {
-            // 40% 星星保持稳定
-            twinkleClass = '';
-          } else if (shouldTwinkle > 0.3) {
-            // 30% 缓慢闪烁
-            twinkleClass = 'animate-twinkle-slow';
-            twinkleDelay = Math.random() * 10;
-          } else {
-            // 30% 快速闪烁
-            twinkleClass = 'animate-twinkle-fast';
-            twinkleDelay = Math.random() * 10;
-          }
-          
-          return (
+    <div className="min-h-screen bg-[#0a0a0f] text-white relative overflow-hidden">
+      <NavBar />
+      <StarField count={300} />
+
+      {/* Cosmic gradient */}
+      <div className="absolute inset-0 cosmic-bg pointer-events-none" />
+
+      {/* Central glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none">
+        <div className="absolute inset-0 rounded-full opacity-20"
+          style={{ background: 'radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, rgba(168, 85, 247, 0.2) 30%, transparent 70%)' }} />
+      </div>
+
+      {/* Main content */}
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center pt-20 pb-12 px-6">
+        {/* Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-8 md:mb-12"
+        >
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-3 gradient-text">
+            选择你的对手
+          </h1>
+          <p className="text-white/40 text-base md:text-lg">
+            宇宙不在乎你的困惑，选一个哲学家来拷问你的灵魂
+          </p>
+        </motion.div>
+
+        {/* Planet System - Solar system layout */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: isLoaded ? 1 : 0, scale: isLoaded ? 1 : 0.9 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="relative w-full max-w-[750px] aspect-square mx-auto"
+        >
+          {/* Orbit rings */}
+          {[90, 130, 140, 160, 170, 195, 225, 250, 280, 305, 340].map((radius, i) => (
             <div
-              key={`star-${i}`}
-              className={`absolute rounded-full bg-white ${twinkleClass}`}
-              style={{
-                width: size > 0.7 ? '6px' : size > 0.4 ? '4px' : '2px',
-                height: size > 0.7 ? '6px' : size > 0.4 ? '4px' : '2px',
-                top: Math.random() * 100 + '%',
-                left: Math.random() * 100 + '%',
-                animationDelay: twinkleDelay + 's',
-              }}
+              key={`orbit-${i}`}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.04]"
+              style={{ width: radius * 2, height: radius * 2 }}
             />
-          );
-        })}
-                {/* 流星 - 带渐变尾巴,有大有小,有亮有暗 */}
-        {[
-          { top: 10, left: 20, delay: 0, size: 3, opacity: 1, tailLength: 180 },
-          { top: 30, left: 65, delay: 3, size: 2, opacity: 0.7, tailLength: 120 },
-          { top: 18, left: 85, delay: 6, size: 2.5, opacity: 0.85, tailLength: 150 },
-          { top: 55, left: 25, delay: 9, size: 3.5, opacity: 0.95, tailLength: 200 },
-          { top: 78, left: 75, delay: 12, size: 2, opacity: 0.65, tailLength: 110 },
-        ].map((meteor, i) => (
-          <div
-            key={`meteor-${i}`}
-            className="absolute animate-meteor"
-            style={{
-              top: `${meteor.top}%`,
-              left: `${meteor.left}%`,
-              animationDelay: `${meteor.delay}s`,
-            }}
-          >
-            <div className="relative">
-              {/* 流星头部 - 动态大小和亮度 */}
-              <div className="bg-white rounded-full relative z-10" style={{
-                width: `${meteor.size * 4}px`,
-                height: `${meteor.size * 4}px`,
-                opacity: meteor.opacity,
-                boxShadow: `0 0 ${meteor.size * 3}px ${meteor.size * 1.5}px rgba(255,255,255,${meteor.opacity * 0.8}), 0 0 ${meteor.size * 6}px ${meteor.size * 3}px rgba(255,255,255,${meteor.opacity * 0.4})`,
-              }} />
-              {/* 流星尾巴 - 动态长度和亮度 */}
-              <div className="absolute top-1/2 right-full" style={{
-                width: `${meteor.tailLength}px`,
-                height: `${meteor.size}px`,
-                background: `linear-gradient(to left, rgba(255,255,255,${meteor.opacity * 0.95}) 0%, rgba(255,255,255,${meteor.opacity * 0.7}) 15%, rgba(255,255,255,${meteor.opacity * 0.4}) 40%, rgba(255,255,255,${meteor.opacity * 0.15}) 70%, transparent 100%)`,
-                transform: 'translateY(-50%)',
-                filter: 'blur(0.5px)',
-              }} />
-              {/* 尾巴内层 - 动态亮度 */}
-              <div className="absolute top-1/2 right-full" style={{
-                width: `${meteor.tailLength * 0.67}px`,
-                height: `${meteor.size * 0.5}px`,
-                background: `linear-gradient(to left, rgba(255,255,255,${meteor.opacity}) 0%, rgba(255,255,255,${meteor.opacity * 0.85}) 20%, rgba(255,255,255,${meteor.opacity * 0.5}) 50%, rgba(255,255,255,${meteor.opacity * 0.15}) 80%, transparent 100%)`,
-                transform: 'translateY(-50%)',
-              }} />
+          ))}
+
+          {/* Center sun */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center"
+              style={{
+                background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(99,102,241,0.1) 50%, transparent 70%)',
+                boxShadow: '0 0 40px rgba(99,102,241,0.3), 0 0 80px rgba(99,102,241,0.1)',
+              }}>
+              <span className="text-xs text-white/40 font-medium tracking-wider">哲</span>
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* 导航栏 */}
-      <nav className="relative z-50 flex items-center justify-between px-8 py-6" style={{
-        opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
-      }}>
-        <div className="flex flex-col gap-0.5">
-          <h1 className="text-xl md:text-2xl font-bold tracking-wide">毒舌哲学家</h1>
-          <p className="text-xs md:text-sm font-medium tracking-[0.2em] text-gray-400">THE TOXIC PHILOSOPHER</p>
-        </div>
-        <div className="flex items-center gap-8 text-lg md:text-xl">
-          <a href="/" className="hover:text-gray-300 transition-colors">首页</a>
-          <a href="/select" className="hover:text-gray-300 transition-colors">一对一开怼</a>
-          <a href="/arena/mode" className="hover:text-gray-300 transition-colors">哲学“奇葩说”</a>
-          <a href="/design" className="hover:text-gray-300 transition-colors">设计理念</a>
-          <a href="https://nops.woa.com/pigeon/v1/tools/add_chat?chatId=ww235627801068712&msgContent=hi%EF%BC%8C%E6%AC%A2%E8%BF%8E%E5%8A%A0%E5%85%A5%E2%80%9C%E6%AF%92%E8%88%8C%E5%93%B2%E5%AD%A6%E5%AE%B6%E2%80%9D%E5%BB%BA%E8%AE%AE%E5%8F%8D%E9%A6%88%E7%BE%A4%EF%BD%9E%20" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors">意见反馈 ↗</a>
-          <a href="https://teko.woa.com/event/ai-agent/246" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors">求点赞评论 ↗</a>
-        </div>
-      </nav>
+          {/* Philosopher planets */}
+          {defaultPhilosophers.map((phil, i) => {
+            const angle = phil.startAngle * (Math.PI / 180);
+            const x = Math.cos(angle) * phil.orbitRadius;
+            const y = Math.sin(angle) * phil.orbitRadius;
+            const isHovered = hoveredId === phil.id;
+            const isSelected = selectedId === phil.id;
+            const isOtherSelected = selectedId && selectedId !== phil.id;
 
-      {/* 标题 - 分步动画 */}
-      <div className="relative z-10 text-center pt-12 pb-8" style={{
-        opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
-      }}>
-        <h1 className={`text-7xl font-bold mb-6 tracking-wider ${isReturning ? '' : 'animate-fadeInStep1'}`}>
-          宇宙不在乎你的困惑
-        </h1>
-        <p className={`text-gray-400 text-4xl tracking-wider font-light ${isReturning ? '' : 'animate-fadeInStep2'}`}>选一个，或者OUT</p>
-      </div>
+            return (
+              <motion.div
+                key={phil.id}
+                className="absolute top-1/2 left-1/2 z-20 cursor-pointer"
+                style={{
+                  width: phil.size,
+                  height: phil.size,
+                  marginLeft: -phil.size / 2,
+                  marginTop: -phil.size / 2,
+                }}
+                initial={{ x, y, opacity: 0, scale: 0 }}
+                animate={{
+                  x,
+                  y,
+                  opacity: isOtherSelected ? 0 : 1,
+                  scale: isSelected ? 2 : isHovered ? 1.25 : 1,
+                }}
+                transition={{
+                  x: { duration: 0 },
+                  y: { duration: 0 },
+                  opacity: { duration: 0.5, delay: i * 0.05 },
+                  scale: { duration: 0.4, type: 'spring', stiffness: 300 },
+                }}
+                onMouseEnter={() => setHoveredId(phil.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                onClick={() => handleSelect(phil.id)}
+              >
+                {/* Planet glow */}
+                <div
+                  className="absolute inset-[-50%] rounded-full transition-opacity duration-500"
+                  style={{
+                    background: `radial-gradient(circle, ${phil.color}40 0%, transparent 70%)`,
+                    opacity: isHovered ? 1 : 0,
+                    filter: 'blur(10px)',
+                  }}
+                />
 
-      {/* 竖直发光连接线 */}
-      <div className="absolute left-1/2 top-0 bottom-0 w-px transform -translate-x-1/2 z-0" style={{
-        opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
-      }}>
-        <div
-          className="w-full h-full"
-          style={{
-            background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.6) 20%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0.6) 80%, transparent 100%)',
-            boxShadow: '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.3)',
-          }}
-        />
-      </div>
-
-      {/* 星球容器 - 延迟显示 */}
-      <div className={`relative w-full flex-1 ${isReturning ? '' : 'animate-fadeInStep3'}`} style={{
-        opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 1s ease-out 0.6s' : 'none',
-      }}>
-        {philosophers.map((phil) => (
-          <div
-            key={phil.id}
-            className="absolute left-1/2 cursor-pointer transition-all duration-500 z-20"
-            style={{
-              top: phil.top,
-              width: phil.size + 'px',
-              height: phil.size + 'px',
-              transform: `translate(-50%, -50%) scale(${hoveredId === phil.id ? 1.15 : hoveredId && hoveredId !== phil.id ? 0.85 : 1})`,
-              opacity: hoveredId && hoveredId !== phil.id ? 0.3 : 1,
-              filter: hoveredId && hoveredId !== phil.id ? 'blur(3px)' : 'none',
-            }}
-            onMouseEnter={() => setHoveredId(phil.id)}
-            onMouseLeave={() => setHoveredId(null)}
-            onClick={() => handleSelect(phil.id)}
-          >
-            
-            {/* 星球图片 */}
-            <img
-              src={phil.image}
-              alt={phil.name}
-              className="relative w-full h-full object-contain z-10"
-              loading="eager"
-              onError={(e) => {
-                // WebP加载失败时，尝试加载PNG格式
-                const target = e.target as HTMLImageElement;
-                if (target.src.endsWith('.webp')) {
-                  console.log(`WebP failed for ${phil.id}, trying PNG`);
-                  target.src = phil.image.replace('.webp', '.png');
-                }
-              }}
-              style={{
-                filter: hoveredId === phil.id ? 'brightness(1.2) drop-shadow(0 0 30px currentColor)' : 'brightness(1) drop-shadow(0 0 10px rgba(255,255,255,0.3))',
-                opacity: explodingId === phil.id ? 0 : (imagesLoaded ? 1 : 0),
-                transform: explodingId === phil.id ? 'scale(2)' : 'scale(1)',
-                transition: explodingId === phil.id ? 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)' : 'filter 0.3s ease, opacity 0.5s ease',
-              }}
-            />
-            
-            {/* 黑白墨水扩散动画 */}
-            {explodingId === phil.id && (
-              <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                {/* 中心黑白墨水扩散波纹 - 减弱光晕 */}
-                {[...Array(4)].map((_, i) => (
-                  <div
-                    key={`ink-${i}`}
-                    className="absolute rounded-full"
-                    style={{
-                      background: `radial-gradient(circle, rgba(255, 255, 255, ${0.3 - i * 0.05}) 0%, rgba(255, 255, 255, 0) 70%)`,
-                      animation: `inkSpreadBWReduced 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
-                      animationDelay: `${i * 0.08}s`,
-                    }}
-                  />
-                ))}
-                
-                {/* 黑白粒子全屏爆炸 - 增强视觉效果 */}
-                {[...Array(80)].map((_, i) => {
-                  const angle = (i / 80) * Math.PI * 2;
-                  const distance = 1000 + Math.random() * 800; // 更远的全屏距离
-                  const size = 4 + Math.random() * 10; // 更大的粒子
-                  const isWhite = Math.random() > 0.4; // 60%白色，40%黑色
-                  return (
-                    <div
-                      key={`dot-${i}`}
-                      className="absolute rounded-full"
-                      style={{
-                        left: '50%',
-                        top: '50%',
-                        width: size + 'px',
-                        height: size + 'px',
-                        backgroundColor: isWhite ? '#FFFFFF' : '#000000',
-                        opacity: 0.9,
-                        boxShadow: isWhite ? '0 0 8px rgba(255,255,255,0.6)' : '0 0 6px rgba(0,0,0,0.4)',
-                        animation: `inkDotBW 2.2s ease-out forwards`,
-                        animationDelay: `${0.1 + i * 0.008}s`,
-                        '--dot-x': `${Math.cos(angle) * distance}px`,
-                        '--dot-y': `${Math.sin(angle) * distance}px`,
-                      } as React.CSSProperties}
+                {/* Planet body */}
+                <div
+                  className="relative w-full h-full rounded-full flex items-center justify-center overflow-hidden transition-all duration-300"
+                  style={{
+                    background: `linear-gradient(135deg, ${phil.color}30 0%, ${phil.color}10 100%)`,
+                    border: `1.5px solid ${isHovered ? phil.color + '60' : phil.color + '25'}`,
+                    boxShadow: isHovered
+                      ? `0 0 20px ${phil.color}30, inset 0 1px 0 ${phil.color}20`
+                      : `inset 0 1px 0 ${phil.color}10`,
+                  }}
+                >
+                  {phil.image ? (
+                    <img
+                      src={phil.image}
+                      alt={phil.name}
+                      className="w-[85%] h-[85%] object-cover rounded-full"
+                      loading="lazy"
                     />
-                  );
-                })}
-              </div>
-            )}
+                  ) : (
+                    <span
+                      className="text-lg font-bold"
+                      style={{ color: phil.color }}
+                    >
+                      {phil.name[0]}
+                    </span>
+                  )}
+                </div>
 
-            {/* 信息卡片 */}
-            {hoveredId === phil.id && (
-              <div className="absolute left-full ml-12 top-1/2 transform -translate-y-1/2 bg-black/80 backdrop-blur-sm border border-white/20 rounded-lg p-6 w-64 animate-fadeIn">
-                <h3 className="text-2xl font-bold mb-1">{phil.name}</h3>
-                <p className="text-gray-400 text-sm mb-3">{phil.nameEn}</p>
-                <p className="text-yellow-400 text-sm mb-2">{phil.warning}</p>
-                <p className="text-gray-300 text-sm mb-4">{phil.description}</p>
-                <p className="text-white/60 text-xs">点击进入对话 →</p>
-              </div>
-            )}
-          </div>
-        ))}
+                {/* Name label */}
+                <div
+                  className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap transition-opacity duration-300"
+                  style={{ opacity: isHovered ? 1 : 0.6 }}
+                >
+                  <span className="text-[11px] font-medium" style={{ color: phil.color }}>
+                    {phil.name}
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
+
+          {/* Custom planet button */}
+          <motion.div
+            className="absolute top-1/2 left-1/2 z-20 cursor-pointer"
+            style={{
+              width: 44,
+              height: 44,
+              marginLeft: -22,
+              marginTop: -22,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{
+              x: Math.cos(60 * Math.PI / 180) * 360,
+              y: Math.sin(60 * Math.PI / 180) * 360,
+              opacity: selectedId ? 0 : 1,
+            }}
+            transition={{ opacity: { duration: 0.5, delay: 0.6 } }}
+            onClick={() => setShowCustom(true)}
+          >
+            <div className="w-full h-full rounded-full border border-dashed border-white/20 flex items-center justify-center hover:border-white/40 hover:bg-white/5 transition-all duration-300 group">
+              <Plus className="w-5 h-5 text-white/40 group-hover:text-white/70 transition-colors" />
+            </div>
+            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap opacity-40">
+              <span className="text-[10px] text-white/60">自定义</span>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Hovered philosopher info panel */}
+        <AnimatePresence>
+          {hoveredPhil && !selectedId && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3 }}
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 glass-card-strong px-8 py-5 max-w-md text-center"
+            >
+              <p className="text-base font-semibold mb-1" style={{ color: hoveredPhil.color }}>
+                {hoveredPhil.name}
+                <span className="text-white/30 text-sm font-normal ml-2">{hoveredPhil.nameEn}</span>
+              </p>
+              <p className="text-sm text-white/50 mb-2">{hoveredPhil.description}</p>
+              <p className="text-xs text-white/30 italic">"{hoveredPhil.warning}"</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* 底部信息 */}
-      <footer className="relative z-10 text-center py-8 text-xs text-gray-500" style={{
-        opacity: explodingId ? 0 : 1,
-        transition: explodingId ? 'opacity 0.8s ease-out 0.5s' : 'none',
-      }}>
-        <p>Made by CSIG 云产品一部 Elisedai · Powered by GPT-4o</p>
-      </footer>
+      {/* Custom Philosopher Modal */}
+      <AnimatePresence>
+        {showCustom && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-6"
+          >
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-xl" onClick={() => setShowCustom(false)} />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative glass-card-strong p-8 max-w-md w-full"
+            >
+              <button
+                onClick={() => setShowCustom(false)}
+                className="absolute top-4 right-4 p-2 text-white/40 hover:text-white transition-colors"
+              >
+                <X size={20} />
+              </button>
 
-      <style>{`
-        /* 星星闪烁动画 */
-        @keyframes twinkleSlow {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
-        }
-        @keyframes twinkleFast {
-          0%, 100% { opacity: 0.2; }
-          50% { opacity: 0.9; }
-        }
-        .animate-twinkle-slow {
-          animation: twinkleSlow 5s ease-in-out infinite;
-        }
-        .animate-twinkle-fast {
-          animation: twinkleFast 2.5s ease-in-out infinite;
-        }
-        
-        /* 流星动画 - 从左上到右下 */
-        @keyframes meteor {
-          0% {
-            transform: translate(0, 0) rotate(45deg);
-            opacity: 0;
-          }
-          5% {
-            opacity: 1;
-          }
-          95% {
-            opacity: 1;
-          }
-          100% {
-            transform: translate(400px, 400px) rotate(45deg);
-            opacity: 0;
-          }
-        }
-        .animate-meteor {
-          animation: meteor 3.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite;
-          /* 初始状态保持45度旋转 */
-          transform: rotate(45deg);
-          opacity: 0;
-        }
-        
-        /* 黑白墨水扩散动画 */
-        @keyframes inkSpreadBW {
-          0% {
-            width: 0;
-            height: 0;
-            opacity: 0;
-          }
-          30% {
-            width: 60vmin;
-            height: 60vmin;
-            opacity: 0.8;
-          }
-          100% {
-            width: 100vmin;
-            height: 100vmin;
-            opacity: 0;
-          }
-        }
-        
-        /* 黑白墨水全屏扩散动画 */
-        @keyframes inkSpreadBWFullscreen {
-          0% {
-            width: 0;
-            height: 0;
-            opacity: 0;
-          }
-          20% {
-            width: 120vmin;
-            height: 120vmin;
-            opacity: 0.9;
-          }
-          100% {
-            width: 300vmin;
-            height: 300vmin;
-            opacity: 0;
-          }
-        }
-        
-        /* 黑白墨水减弱扩散动画 */
-        @keyframes inkSpreadBWReduced {
-          0% {
-            width: 0;
-            height: 0;
-            opacity: 0;
-          }
-          25% {
-            width: 80vmin;
-            height: 80vmin;
-            opacity: 0.3;
-          }
-          100% {
-            width: 150vmin;
-            height: 150vmin;
-            opacity: 0;
-          }
-        }
-        
-        /* 黑白墨点飘散动画 */
-        @keyframes inkDotBW {
-          0% {
-            transform: translate(-50%, -50%) translate(0, 0);
-            opacity: 0;
-          }
-          30% {
-            opacity: 0.8;
-          }
-          100% {
-            transform: translate(-50%, -50%) translate(var(--dot-x), var(--dot-y));
-            opacity: 0;
-          }
-        }
-        
-        /* 分步入场动画 */
-        @keyframes fadeInStep1 {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInStep2 {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInStep3 {
-          0% { opacity: 0; }
-          100% { opacity: 1; }
-        }
-        
-        .animate-fadeInStep1 {
-          animation: fadeInStep1 0.8s ease-out 0.3s both;
-        }
-        .animate-fadeInStep2 {
-          animation: fadeInStep2 0.8s ease-out 1.3s both;
-        }
-        .animate-fadeInStep3 {
-          animation: fadeInStep3 1s ease-out 2.3s both;
-        }
-        
-        /* 星云和光云动画 */
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.25; transform: scale(1); }
-          50% { opacity: 0.45; transform: scale(1.15); }
-        }
-        @keyframes pulse-slower {
-          0%, 100% { opacity: 0.2; transform: scale(1); }
-          50% { opacity: 0.4; transform: scale(1.2); }
-        }
-        @keyframes float {
-          0%, 100% { transform: translate(0, 0); }
-          25% { transform: translate(10px, -10px); }
-          50% { transform: translate(20px, 0); }
-          75% { transform: translate(10px, 10px); }
-        }
-        @keyframes float-delayed {
-          0%, 100% { transform: translate(0, 0); }
-          25% { transform: translate(-10px, 10px); }
-          50% { transform: translate(-20px, 0); }
-          75% { transform: translate(-10px, -10px); }
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 8s ease-in-out infinite;
-        }
-        .animate-pulse-slower {
-          animation: pulse-slower 10s ease-in-out infinite;
-        }
-        .animate-float {
-          animation: float 20s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float-delayed 25s ease-in-out infinite;
-        }
-        
-        /* 信息卡片动画 */
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-50%) translateX(20px); }
-          to { opacity: 1; transform: translateY(-50%) translateX(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-        
-        /* 星球光晕动画 */
-        @keyframes glow-pulse {
-          0%, 100% { 
-            opacity: 0.4; 
-            transform: scale(1.08); 
-          }
-          50% { 
-            opacity: 0.6; 
-            transform: scale(1.12); 
-          }
-        }
-        @keyframes glow-strong {
-          0%, 100% { 
-            opacity: 0.6; 
-            transform: scale(1.15); 
-          }
-          50% { 
-            opacity: 0.8; 
-            transform: scale(1.2); 
-          }
-        }
-        .animate-glow-pulse {
-          animation: glow-pulse 2.5s ease-in-out infinite;
-        }
-        .animate-glow-strong {
-          animation: glow-strong 1.2s ease-in-out infinite;
-        }
-      `}</style>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white/90">自定义思想家</h3>
+                  <p className="text-xs text-white/40">输入任意思想家的名字</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm text-white/50 mb-2 block">思想家名称</label>
+                  <input
+                    type="text"
+                    value={customName}
+                    onChange={(e) => setCustomName(e.target.value)}
+                    placeholder="例如：孔子、柏拉图、鲁迅..."
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/25 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-white/50 mb-2 block">想聊的话题（可选）</label>
+                  <input
+                    type="text"
+                    value={customTopic}
+                    onChange={(e) => setCustomTopic(e.target.value)}
+                    placeholder="例如：人生的意义、爱情、自由..."
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/25 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                  />
+                </div>
+                <button
+                  onClick={handleCustomStart}
+                  disabled={!customName.trim()}
+                  className="w-full btn-apple-primary disabled:opacity-30 disabled:cursor-not-allowed mt-2"
+                >
+                  开始对话
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-

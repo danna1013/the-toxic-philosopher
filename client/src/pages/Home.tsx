@@ -1,417 +1,308 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, MessageCircle, Swords, Sparkles } from "lucide-react";
+import NavBar from "@/components/NavBar";
+import StarField from "@/components/StarField";
+
+const philosophers = [
+  { name: "苏格拉底", nameEn: "Socrates", style: "连环追问", color: "#fcd34d" },
+  { name: "尼采", nameEn: "Nietzsche", style: "鞭笞激励", color: "#fb923c" },
+  { name: "维特根斯坦", nameEn: "Wittgenstein", style: "逻辑解构", color: "#d4a574" },
+  { name: "康德", nameEn: "Kant", style: "道德审判", color: "#60a5fa" },
+  { name: "弗洛伊德", nameEn: "Freud", style: "潜意识透视", color: "#a78bfa" },
+  { name: "庄子", nameEn: "Zhuangzi", style: "逍遥反讽", color: "#34d399" },
+  { name: "叔本华", nameEn: "Schopenhauer", style: "悲观毒舌", color: "#94a3b8" },
+  { name: "萨特", nameEn: "Sartre", style: "存在拷问", color: "#f472b6" },
+  { name: "马基雅维利", nameEn: "Machiavelli", style: "权谋冷析", color: "#ef4444" },
+  { name: "第欧根尼", nameEn: "Diogenes", style: "犬儒嘲讽", color: "#a3e635" },
+  { name: "波伏娃", nameEn: "Beauvoir", style: "女性主义审视", color: "#e879f9" },
+];
 
 export default function Home() {
-  const [isExploding, setIsExploding] = useState(false);
   const [, setLocation] = useLocation();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
 
   useEffect(() => {
-    // 页面加载动画
     setTimeout(() => setIsLoaded(true), 100);
   }, []);
 
-  const handleArenaClick = () => {
-    setIsExploding(true);
-    setTimeout(() => {
-      setLocation("/arena/mode");
-    }, 1500);
-  };
-
-  const handleChatClick = () => {
-    setIsExploding(true);
-    setTimeout(() => {
-      setLocation("/select");
-    }, 1500);
-  };
-
   return (
-    <div className={`bg-white flex flex-col relative overflow-hidden transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ height: '100vh', width: '100vw', position: 'fixed', top: 0, left: 0 }}>
-      {/* 导航栏 */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm">
-        <div className="w-full px-6 md:px-12 lg:px-16 py-5 flex items-center justify-between">
-          {/* 左侧品牌名 - 中英文组合 */}
-          <div className="flex flex-col gap-0.5">
-            <div className="text-xl md:text-2xl font-bold tracking-wide">毒舌哲学家</div>
-            <div className="text-xs md:text-sm font-medium tracking-[0.2em] text-gray-500">THE TOXIC PHILOSOPHER</div>
-          </div>
-          
-          {/* 右侧导航 */}
-          <div className="flex items-center gap-8">
-            <a href="#home" className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group">
-              首页
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </a>
+    <div className="min-h-screen bg-[#0a0a0f] text-white relative overflow-hidden">
+      <NavBar />
+      <StarField count={250} />
+
+      {/* Cosmic gradient overlay */}
+      <div className="absolute inset-0 cosmic-bg pointer-events-none" />
+
+      {/* ===== Hero Section ===== */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 40 }}
+          transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="text-center max-w-4xl mx-auto"
+        >
+          {/* Tagline */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-sm md:text-base font-medium tracking-[0.3em] text-white/40 uppercase mb-6"
+          >
+            不提供廉价安慰，只提供真相
+          </motion.p>
+
+          {/* Main Title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] mb-6"
+          >
+            <span className="gradient-text">真相往往</span>
+            <br />
+            <span className="gradient-text-purple">不太礼貌</span>
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="text-lg md:text-xl lg:text-2xl text-white/50 font-light tracking-wide mb-12 max-w-2xl mx-auto leading-relaxed"
+          >
+            与 AI 哲学家进行犀利深度对话的沉浸式应用
+            <br className="hidden md:block" />
+            但总比谎言有用
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.8 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+          >
             <button
               onClick={() => setLocation("/select")}
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+              className="btn-apple-primary text-base md:text-lg group"
             >
+              <MessageCircle className="w-5 h-5 mr-2" />
               一对一开怼
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
               onClick={() => setLocation("/arena/mode")}
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
+              className="btn-apple-secondary text-base md:text-lg group"
             >
-              哲学"奇葩说"
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
+              <Swords className="w-5 h-5 mr-2" />
+              哲学奇葩说
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button
-              onClick={() => setLocation("/design")}
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
-            >
-              设计理念
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <a 
-              href="https://nops.woa.com/pigeon/v1/tools/add_chat?chatId=ww235627801068712&msgContent=hi%EF%BC%8C%E6%AC%A2%E8%BF%8E%E5%8A%A0%E5%85%A5%E2%80%9C%E6%AF%92%E8%88%8C%E5%93%B2%E5%AD%A6%E5%AE%B6%E2%80%9D%E5%BB%BA%E8%AE%AE%E5%8F%8D%E9%A6%88%E7%BE%A4%EF%BD%9E%20" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
-            >
-              意见反馈 ↗
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </a>
-            <a 
-              href="https://teko.woa.com/event/ai-agent/246" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="relative text-lg md:text-xl text-gray-600 hover:text-black transition-colors group"
-            >
-              求点赞评论 ↗
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </a>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        >
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-xs text-white/30 tracking-widest">SCROLL</span>
+            <div className="w-px h-8 bg-gradient-to-b from-white/30 to-transparent animate-bounce-gentle" />
           </div>
-        </div>
-      </nav>
+        </motion.div>
+      </section>
 
-      {/* 分层背景设计 */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* 第一层: 极浅网格纹理 */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, .05) 25%, rgba(0, 0, 0, .05) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, .05) 75%, rgba(0, 0, 0, .05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, .05) 25%, rgba(0, 0, 0, .05) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, .05) 75%, rgba(0, 0, 0, .05) 76%, transparent 77%, transparent)',
-          backgroundSize: '60px 60px'
-        }}></div>
-        
-        {/* 第二层: 大型几何图案 (远景) */}
-        <div className="absolute inset-0 opacity-[0.04]">
-          <div className="absolute top-[10%] left-[8%] w-40 h-40 border border-black rounded-full animate-float-slow"></div>
-          <div className="absolute top-[15%] right-[12%] w-32 h-32 border border-black rotate-12 animate-rotate-slow"></div>
-          <div className="absolute bottom-[20%] left-[10%] w-48 h-48 border border-black rounded-full animate-float-slower"></div>
-          <div className="absolute bottom-[15%] right-[8%] w-36 h-36 border border-black rotate-45 animate-rotate-slower"></div>
-          <div className="absolute top-[40%] right-[35%] w-44 h-44 border border-black rounded-full animate-float-slow"></div>
-          <div className="absolute bottom-[45%] left-[15%] w-38 h-38 border border-black rotate-[25deg] animate-rotate-slow"></div>
-        </div>
-        
-        {/* 第三层: 中型几何图案 (中景) */}
-        <div className="absolute inset-0 opacity-[0.06]">
-          <div className="absolute top-[25%] left-[20%] w-24 h-24 border border-black rounded-full animate-float"></div>
-          <div className="absolute top-[35%] right-[18%] w-20 h-20 border border-black rotate-[18deg] animate-rotate"></div>
-          <div className="absolute bottom-[30%] left-[25%] w-28 h-28 border border-black rounded-full animate-float-slow"></div>
-          <div className="absolute bottom-[40%] right-[22%] w-22 h-22 border border-black rotate-[-22deg] animate-rotate-slow"></div>
-          <div className="absolute top-[55%] left-[35%] w-26 h-26 border border-black rounded-full animate-float"></div>
-          <div className="absolute top-[48%] right-[28%] w-24 h-24 border border-black rotate-[32deg] animate-rotate"></div>
-          
-          {/* 三角形 */}
-          <div className="absolute top-[30%] right-[40%] w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[35px] border-b-black rotate-[35deg] animate-float-slow"></div>
-          <div className="absolute bottom-[35%] left-[40%] w-0 h-0 border-l-[18px] border-l-transparent border-r-[18px] border-r-transparent border-b-[31px] border-b-black rotate-[-20deg] animate-float"></div>
-        </div>
-        
-        {/* 第四层: 小型装饰 (近景) */}
-        <div className="absolute inset-0 opacity-[0.08]">
-          {/* 小圆点 */}
-          <div className="absolute top-[18%] left-[28%] w-3 h-3 bg-black rounded-full animate-pulse-subtle"></div>
-          <div className="absolute top-[42%] right-[32%] w-4 h-4 bg-black rounded-full animate-pulse-subtle" style={{animationDelay: '0.5s'}}></div>
-          <div className="absolute bottom-[28%] left-[42%] w-3 h-3 bg-black rounded-full animate-pulse-subtle" style={{animationDelay: '1s'}}></div>
-          <div className="absolute bottom-[45%] right-[45%] w-4 h-4 bg-black rounded-full animate-pulse-subtle" style={{animationDelay: '1.5s'}}></div>
-          <div className="absolute top-[65%] left-[18%] w-3 h-3 bg-black rounded-full animate-pulse-subtle" style={{animationDelay: '2s'}}></div>
-          
-          {/* 小线条 */}
-          <div className="absolute top-[22%] left-[45%] w-20 h-px bg-black rotate-[25deg]"></div>
-          <div className="absolute bottom-[38%] right-[38%] w-24 h-px bg-black rotate-[-35deg]"></div>
-          <div className="absolute top-[58%] right-[15%] w-16 h-px bg-black rotate-[15deg]"></div>
-          
-          {/* 小方形 */}
-          <div className="absolute top-[50%] left-[15%] w-12 h-12 border border-black rotate-[15deg] animate-rotate-slow"></div>
-          <div className="absolute bottom-[50%] right-[20%] w-14 h-14 border border-black rotate-[-18deg] animate-rotate"></div>
-        </div>
-      </div>
+      {/* ===== Features Section ===== */}
+      <section className="relative py-32 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 gradient-text">
+              两种深度体验
+            </h2>
+            <p className="text-white/40 text-lg max-w-xl mx-auto">
+              选择你的哲学之旅
+            </p>
+          </motion.div>
 
-      {/* 粒子爆炸效果容器 */}
-      {isExploding && (
-        <div className="absolute inset-0 pointer-events-none z-50">
-          {Array.from({ length: 80 }).map((_, i) => (
-            <div
-              key={i}
-              className="particle absolute"
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+            {/* Feature 1: One-on-One */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              onMouseEnter={() => setHoveredFeature(0)}
+              onMouseLeave={() => setHoveredFeature(null)}
+              onClick={() => setLocation("/select")}
+              className="glass-card p-8 md:p-10 cursor-pointer group transition-all duration-500 hover:border-indigo-500/30"
               style={{
-                left: "50%",
-                top: "50%",
-                width: `${Math.random() * 30 + 10}px`,
-                height: `${Math.random() * 30 + 10}px`,
-                animation: `explode ${Math.random() * 0.8 + 1.2}s cubic-bezier(0.4, 0, 0.2, 1) forwards`,
-                animationDelay: `${Math.random() * 0.2}s`,
-                transform: `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`,
-                "--tx": `${(Math.random() - 0.5) * 2000}px`,
-                "--ty": `${(Math.random() - 0.5) * 2000}px`,
-                "--rotation": `${Math.random() * 720 - 360}deg`,
-              } as React.CSSProperties}
+                transform: hoveredFeature === 0 ? 'translateY(-4px)' : 'translateY(0)',
+              }}
             >
-              <svg viewBox="0 0 20 20" className="w-full h-full">
-                <polygon
-                  points={
-                    Math.random() > 0.5
-                      ? "10,0 20,20 0,20"
-                      : "0,0 20,0 20,20 0,20"
-                  }
-                  fill="none"
-                  stroke="black"
-                  strokeWidth="1"
-                />
-              </svg>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* 主要内容 */}
-      <div
-        id="home"
-        className={`flex-1 flex flex-col items-center justify-center w-full px-6 md:px-12 lg:px-16 transition-opacity duration-500 relative z-10 overflow-hidden ${
-          isExploding ? "opacity-0" : "opacity-100"
-        }`}
-        style={{ paddingTop: '80px', paddingBottom: '40px' }}
-      >
-        {/* 主标题区域 - 添加渐入动画 */}
-        <div className="text-center mb-6 md:mb-8 w-full animate-fade-in-up">
-          <h1 className="font-bold text-black tracking-tight leading-[1.1] mb-4 md:mb-6 text-5xl md:text-6xl lg:text-7xl">
-            真相往往不太礼貌
-          </h1>
-          
-          <h2 className="font-light text-gray-600 tracking-tight leading-[1.2] animate-fade-in-up text-3xl md:text-4xl lg:text-5xl" style={{ animationDelay: '0.2s' }}>
-            但总比谎言有用
-          </h2>
-        </div>
-
-        {/* 副标题 - 哲学家名字 */}
-        <p className="text-xl md:text-2xl lg:text-3xl text-gray-500 mb-6 md:mb-8 text-center leading-relaxed tracking-wide animate-fade-in-up" style={{animationDelay: '0.4s'}}>
-          苏格拉底、尼采、维特根斯坦、康德、弗洛伊德
-          <br className="hidden md:block" />
-          <span className="md:inline-block md:ml-2">在此等你</span>
-        </p>
-
-        {/* Logo区域 */}
-        <div className="flex flex-col items-center mb-6 md:mb-8 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
-          <img
-            src="/logo.png"
-            alt="The Toxic Philosopher"
-            className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain opacity-90 mb-6"
-          />
-          
-          {/* 两个选项按钮 */}
-          <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
-            {/* 一对一开怼 - 左侧 */}
-            <div
-              className="cursor-pointer transition-all duration-500 hover:scale-105 active:scale-95 group flex flex-col items-center"
-              onClick={handleChatClick}
-            >
-              <div className="flex flex-col items-center bg-white/80 backdrop-blur-sm border-2 border-black/10 hover:border-black/30 rounded-2xl px-8 py-6 min-w-[240px] transition-all duration-300 hover:shadow-xl">
-                <p className="text-xl md:text-2xl font-bold text-black mb-2 tracking-wide">
-                  一对一开怼
-                </p>
-                <p className="text-sm text-gray-500 tracking-wider">
-                  与一位哲学家深入对话
-                </p>
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                <MessageCircle className="w-7 h-7 text-indigo-400" />
               </div>
-            </div>
-            
-            {/* 哲学"奇葩说" - 右侧 */}
-            <div
-              className="cursor-pointer transition-all duration-500 hover:scale-105 active:scale-95 group flex flex-col items-center"
-              onClick={handleArenaClick}
-            >
-              <div className="flex flex-col items-center bg-white/80 backdrop-blur-sm border-2 border-black/10 hover:border-black/30 rounded-2xl px-8 py-6 min-w-[240px] transition-all duration-300 hover:shadow-xl">
-                <p className="text-xl md:text-2xl font-bold text-black mb-2 tracking-wide">
-                  哲学"奇葩说"
-                </p>
-                <p className="text-sm text-gray-500 tracking-wider">
-                  与5位哲学家同台互怼
-                </p>
+              <h3 className="text-2xl md:text-3xl font-bold mb-3 text-white/95">一对一开怼</h3>
+              <p className="text-white/50 text-base leading-relaxed mb-6">
+                选择或自定义一位哲学家，进入深度对话。苏格拉底用反问逼你自相矛盾，尼采用鞭笞激发你的意志，弗洛伊德透视你话语背后的真相。
+              </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {['流式输出', '情绪感知', '四级语气调节', '海报生成'].map((tag) => (
+                  <span key={tag} className="px-3 py-1 text-xs font-medium rounded-full bg-white/5 text-white/50 border border-white/8">
+                    {tag}
+                  </span>
+                ))}
               </div>
-            </div>
+              <div className="flex items-center text-indigo-400 text-sm font-medium group-hover:text-indigo-300 transition-colors">
+                开始对话
+                <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-transform duration-300" />
+              </div>
+            </motion.div>
+
+            {/* Feature 2: Debate Arena */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              onMouseEnter={() => setHoveredFeature(1)}
+              onMouseLeave={() => setHoveredFeature(null)}
+              onClick={() => setLocation("/arena/mode")}
+              className="glass-card p-8 md:p-10 cursor-pointer group transition-all duration-500 hover:border-rose-500/30"
+              style={{
+                transform: hoveredFeature === 1 ? 'translateY(-4px)' : 'translateY(0)',
+              }}
+            >
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500/20 to-amber-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                <Swords className="w-7 h-7 text-rose-400" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold mb-3 text-white/95">哲学奇葩说</h3>
+              <p className="text-white/50 text-base leading-relaxed mb-6">
+                多位哲学家围绕辩题展开激烈辩论。观看神仙打架，或亲自下场参与。50位 AI 观众实时投票，裁判判定胜负并评选 BB King。
+              </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {['基础/完整模式', '正反方辩论', 'AI观众投票', 'BB King评选'].map((tag) => (
+                  <span key={tag} className="px-3 py-1 text-xs font-medium rounded-full bg-white/5 text-white/50 border border-white/8">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="flex items-center text-rose-400 text-sm font-medium group-hover:text-rose-300 transition-colors">
+                进入辩论场
+                <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-transform duration-300" />
+              </div>
+            </motion.div>
           </div>
-          
-          <div className="flex flex-col items-center mt-8">
-            <div className="flex items-center gap-2 mb-2">
-              
-              {/* 向下箭头动画 */}
-              <svg 
-                className="w-5 h-5 text-gray-400 group-hover:text-black transition-colors animate-bounce" 
-                fill="none" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth="2" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
+        </div>
+      </section>
+
+      {/* ===== Philosophers Section ===== */}
+      <section className="relative py-32 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 gradient-text">
+              11位哲学家 + 无限自定义
+            </h2>
+            <p className="text-white/40 text-lg max-w-xl mx-auto">
+              每位哲学家都有独特的毒舌风格，等你来挑战
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {philosophers.map((phil, i) => (
+              <motion.div
+                key={phil.name}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05, duration: 0.5 }}
+                className="glass-card p-4 text-center group cursor-pointer hover:border-white/20 transition-all duration-300"
+                onClick={() => setLocation("/select")}
               >
-                <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-              </svg>
-            </div>
+                <div
+                  className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-lg font-bold opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                  style={{
+                    background: `linear-gradient(135deg, ${phil.color}30, ${phil.color}10)`,
+                    border: `1px solid ${phil.color}40`,
+                    color: phil.color,
+                  }}
+                >
+                  {phil.name[0]}
+                </div>
+                <p className="text-sm font-medium text-white/80 mb-0.5">{phil.name}</p>
+                <p className="text-[10px] text-white/30 tracking-wider">{phil.style}</p>
+              </motion.div>
+            ))}
+
+            {/* Custom philosopher card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.55, duration: 0.5 }}
+              className="glass-card p-4 text-center group cursor-pointer hover:border-white/20 transition-all duration-300 border-dashed"
+              onClick={() => setLocation("/select")}
+            >
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-lg border border-dashed border-white/20 group-hover:border-white/40 transition-all duration-300">
+                <Sparkles className="w-5 h-5 text-white/40 group-hover:text-white/70 transition-colors" />
+              </div>
+              <p className="text-sm font-medium text-white/60 mb-0.5">自定义</p>
+              <p className="text-[10px] text-white/30 tracking-wider">任意思想家</p>
+            </motion.div>
           </div>
         </div>
+      </section>
 
-        {/* 底部区域 */}
-        <div className="text-center space-y-5 md:space-y-6 max-w-2xl mb-12 md:mb-0 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
-          {/* 装饰性分割 */}
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-1 h-1 bg-gray-300 rounded-full animate-pulse-subtle"></div>
-            <div className="w-1 h-1 bg-gray-300 rounded-full animate-pulse-subtle" style={{animationDelay: '0.5s'}}></div>
-            <div className="w-1 h-1 bg-gray-300 rounded-full animate-pulse-subtle" style={{animationDelay: '1s'}}></div>
-          </div>
-
-          {/* 品牌名称 */}
-          <h3 className="text-base md:text-lg lg:text-xl font-light tracking-[0.35em] text-black uppercase">
-            The Toxic Philosopher
-          </h3>
-          
-          {/* 引言和说明 */}
-          <div className="space-y-2 md:space-y-3">
-            <p className="text-xs md:text-sm text-gray-500 italic tracking-wide">
-              "语言是世界的边界"
+      {/* ===== Quote Section ===== */}
+      <section className="relative py-32 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="text-6xl md:text-8xl font-serif text-white/10 mb-4">"</div>
+            <p className="text-xl md:text-2xl lg:text-3xl font-light text-white/60 leading-relaxed italic mb-8">
+              未经审视的人生不值得过
             </p>
-            <p className="text-xs md:text-sm text-gray-600 leading-relaxed max-w-xl mx-auto">
-              让哲学的思考与毒舌的态度陪伴前行中的你
+            <p className="text-sm text-white/30 tracking-[0.3em] uppercase">
+              — 苏格拉底
             </p>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* 页脚 */}
-      <div className="py-6 text-center relative z-10 bg-white">
-        <p className="text-xs text-gray-400 tracking-wide">
-          Made by CSIG 云产品一部 Elisedai · Powered by GPT-4o
-        </p>
-      </div>
-
-      <style>{`
-        @keyframes explode {
-          0% {
-            transform: translate(-50%, -50%) rotate(0deg) scale(1);
-            opacity: 1;
-          }
-          100% {
-            transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rotation)) scale(0.5);
-            opacity: 0;
-          }
-        }
-        
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-15px) rotate(5deg);
-          }
-        }
-        
-        @keyframes float-slow {
-          0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-10px) rotate(3deg);
-          }
-        }
-        
-        @keyframes float-slower {
-          0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-8px) rotate(2deg);
-          }
-        }
-        
-        @keyframes rotate {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        
-        @keyframes rotate-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        
-        @keyframes rotate-slower {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        
-        @keyframes pulse-subtle {
-          0%, 100% {
-            opacity: 0.6;
-          }
-          50% {
-            opacity: 1;
-          }
-        }
-        
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-        }
-        
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        
-        .animate-float-slow {
-          animation: float-slow 8s ease-in-out infinite;
-        }
-        
-        .animate-float-slower {
-          animation: float-slower 10s ease-in-out infinite;
-        }
-        
-        .animate-rotate {
-          animation: rotate 20s linear infinite;
-        }
-        
-        .animate-rotate-slow {
-          animation: rotate-slow 30s linear infinite;
-        }
-        
-        .animate-rotate-slower {
-          animation: rotate-slower 40s linear infinite;
-        }
-        
-        .animate-pulse-subtle {
-          animation: pulse-subtle 3s ease-in-out infinite;
-        }
-      `}</style>
+      {/* ===== Footer ===== */}
+      <footer className="relative py-12 px-6 border-t border-white/5">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col items-center md:items-start">
+            <span className="text-sm font-medium text-white/40">毒舌哲学家</span>
+            <span className="text-xs text-white/20 tracking-[0.2em] uppercase mt-1">The Toxic Philosopher</span>
+          </div>
+          <p className="text-xs text-white/20">
+            真相往往不太礼貌，但总比谎言有用。
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
-

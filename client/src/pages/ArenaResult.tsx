@@ -1,278 +1,201 @@
 import { useState } from "react";
-import { useLocation, useParams } from "wouter";
+import { useLocation } from "wouter";
+import { motion } from "framer-motion";
+import { Trophy, Crown, ArrowRight, RotateCcw, Home, Shield, Swords, Users } from "lucide-react";
+import NavBar from "@/components/NavBar";
+import StarField from "@/components/StarField";
 
-interface Audience {
-  id: string;
-  name: string;
-  occupation: string;
-  stance: 'pro' | 'con';
-  reason: string;
-}
+const philosopherNames: Record<string, string> = {
+  'socrates': '苏格拉底', 'nietzsche': '尼采', 'wittgenstein': '维特根斯坦',
+  'kant': '康德', 'freud': '弗洛伊德', 'zhuangzi': '庄子',
+  'schopenhauer': '叔本华', 'sartre': '萨特', 'machiavelli': '马基雅维利',
+  'diogenes': '第欧根尼', 'beauvoir': '波伏娃',
+};
 
-// 模拟观众数据
-const mockAudiences: Audience[] = [
-  { id: '1', name: '张三', occupation: '程序员', stance: 'pro', reason: '从技术发展的角度来看，正方的论点更有说服力。' },
-  { id: '2', name: '李四', occupation: '诗人', stance: 'con', reason: '反方对人性的理解更深刻，触动了我的内心。' },
-  { id: '3', name: '王五', occupation: 'CEO', stance: 'pro', reason: '正方的逻辑更严密，更符合商业实践。' },
-  { id: '4', name: '赵六', occupation: '大学生', stance: 'con', reason: '反方的观点让我重新思考了这个问题。' },
-  { id: '5', name: '钱七', occupation: '教师', stance: 'pro', reason: '正方的论证更有教育意义。' },
-  { id: '6', name: '孙八', occupation: '医生', stance: 'con', reason: '从医学伦理的角度，反方的立场更合理。' },
-  { id: '7', name: '周九', occupation: '律师', stance: 'pro', reason: '正方的法律论证更充分。' },
-  { id: '8', name: '吴十', occupation: '艺术家', stance: 'con', reason: '反方的表达更有艺术感染力。' },
-];
+const philosopherColors: Record<string, string> = {
+  'socrates': '#fcd34d', 'nietzsche': '#fb923c', 'wittgenstein': '#d4a574',
+  'kant': '#60a5fa', 'freud': '#a78bfa', 'zhuangzi': '#34d399',
+  'schopenhauer': '#94a3b8', 'sartre': '#f472b6', 'machiavelli': '#ef4444',
+  'diogenes': '#a3e635', 'beauvoir': '#e879f9',
+};
 
 export default function ArenaResult() {
   const [, setLocation] = useLocation();
-  const params = useParams();
-  const sessionId = params.sessionId || 'unknown';
-  
-  const [topic] = useState(sessionStorage.getItem('arenaTopic') || '未知话题');
-  const [selectedAudiences, setSelectedAudiences] = useState<string[]>([]);
-  const [showAudienceSpeeches, setShowAudienceSpeeches] = useState(false);
-  
-  // 模拟结果数据
-  const finalProVotes = 28;
-  const finalConVotes = 22;
-  const winner = finalProVotes > finalConVotes ? 'pro' : 'con';
 
-  const handleAudienceSelect = (audienceId: string) => {
-    if (selectedAudiences.includes(audienceId)) {
-      setSelectedAudiences(selectedAudiences.filter(id => id !== audienceId));
-    } else if (selectedAudiences.length < 2) {
-      setSelectedAudiences([...selectedAudiences, audienceId]);
-    }
-  };
+  const topic = sessionStorage.getItem('arenaTopic') || '未知话题';
+  const proStance = sessionStorage.getItem('arenaProStance') || '正方';
+  const conStance = sessionStorage.getItem('arenaConStance') || '反方';
+  const proSideIds: string[] = JSON.parse(sessionStorage.getItem('arenaProSide') || '[]');
+  const conSideIds: string[] = JSON.parse(sessionStorage.getItem('arenaConSide') || '[]');
+  const arenaMode = sessionStorage.getItem('arenaMode') || 'basic';
+  const isFullMode = arenaMode === 'full';
 
-  const handleShowSpeeches = () => {
-    if (selectedAudiences.length > 0) {
-      setShowAudienceSpeeches(true);
-    }
-  };
+  const proSide = proSideIds.map(id => philosopherNames[id] || id);
+  const conSide = conSideIds.map(id => philosopherNames[id] || id);
 
-  const handlePlayAgain = () => {
-    // 清除session数据
-    sessionStorage.removeItem('arenaTopic');
-    sessionStorage.removeItem('arenaRole');
-    sessionStorage.removeItem('arenaProSide');
-    sessionStorage.removeItem('arenaConSide');
-    sessionStorage.removeItem('arenaSelectedAudiences');
-    sessionStorage.removeItem('arenaMode');
-    setLocation("/arena/mode");
-  };
+  // Simulated results
+  const proVotes = 28;
+  const conVotes = 22;
+  const winner = proVotes > conVotes ? 'pro' : 'con';
+  const winnerSide = winner === 'pro' ? proSide : conSide;
+  const winnerIds = winner === 'pro' ? proSideIds : conSideIds;
+  const bbKing = winnerSide[0];
+  const bbKingId = winnerIds[0];
+  const bbKingColor = philosopherColors[bbKingId] || '#f59e0b';
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* 导航栏 */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm">
-        <div className="px-8 py-5 flex items-center justify-between">
-          <div className="flex flex-col gap-0.5">
-            <div className="text-xl md:text-2xl font-bold tracking-wide">毒舌哲学家</div>
-            <div className="text-xs md:text-sm font-medium tracking-[0.2em] text-gray-500">THE TOXIC PHILOSOPHER</div>
-          </div>
-          
-          <div className="flex items-center gap-6">
-            <button onClick={() => setLocation("/")} className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group">
-              首页
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button onClick={() => setLocation("/select")} className="relative text-base md:text-lg text-gray-600 hover:text-black transition-colors group">
-              一对一开怼
-              <span className="absolute bottom-0 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <button onClick={() => setLocation("/arena/mode")} className="relative text-base md:text-lg text-black font-medium group">
-              哲学"奇葩说"
-              <span className="absolute bottom-0 left-0 w-full h-px bg-black"></span>
-            </button>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-[#0a0a0f] text-white relative overflow-hidden">
+      <NavBar />
+      <StarField count={200} />
+      <div className="absolute inset-0 cosmic-bg pointer-events-none" />
 
-      {/* 主要内容 */}
-      <div className="flex-1 flex flex-col items-center px-6 py-24 pb-32">
-        <div className="w-full max-w-5xl">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-black mb-6 tracking-tight">
+      <div className="relative z-10 min-h-screen flex flex-col items-center px-6 pt-28 pb-16">
+        {/* Victory Banner */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, type: 'spring' }}
+          className="text-center mb-12"
+        >
+          <motion.div
+            initial={{ rotate: -10, scale: 0 }}
+            animate={{ rotate: 0, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.6, type: 'spring' }}
+            className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
+            style={{
+              background: `radial-gradient(circle, ${winner === 'pro' ? 'rgba(59,130,246,0.3)' : 'rgba(244,63,94,0.3)'} 0%, transparent 70%)`,
+              boxShadow: `0 0 60px ${winner === 'pro' ? 'rgba(59,130,246,0.3)' : 'rgba(244,63,94,0.3)'}`,
+            }}
+          >
+            <Trophy className="w-10 h-10" style={{ color: winner === 'pro' ? '#3b82f6' : '#f43f5e' }} />
+          </motion.div>
+
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-3 gradient-text">
             辩论结束
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 font-light mb-4">
-            辩题：{topic}
+          <p className="text-white/40 text-base">
+            {topic}
           </p>
-          <p className="text-sm text-gray-500">Session ID: {sessionId}</p>
-        </div>
+        </motion.div>
 
-        {/* 结果展示 */}
-        <div className="w-full max-w-5xl space-y-8">
-          {/* 胜负结果 */}
-          <div className="text-center p-12 border-4 border-black bg-gray-50">
-            <h2 className="text-4xl font-bold mb-4">
-              {winner === 'pro' ? (
-                <span className="text-green-600">正方获胜！</span>
-              ) : (
-                <span className="text-red-600">反方获胜！</span>
-              )}
-            </h2>
-            <p className="text-xl text-gray-600">
-              最终投票：正方 {finalProVotes} vs {finalConVotes} 反方
-            </p>
+        {/* Result Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="glass-card-strong p-8 max-w-2xl w-full mb-8"
+        >
+          {/* Winner */}
+          <div className="text-center mb-8">
+            <p className="text-sm text-white/40 mb-2">获胜方</p>
+            <div className="flex items-center justify-center gap-3">
+              {winner === 'pro' ? <Shield className="w-6 h-6 text-blue-400" /> : <Swords className="w-6 h-6 text-rose-400" />}
+              <span className="text-2xl font-bold" style={{ color: winner === 'pro' ? '#3b82f6' : '#f43f5e' }}>
+                {winner === 'pro' ? '正方' : '反方'}
+              </span>
+            </div>
+            <p className="text-sm text-white/40 mt-1">{winner === 'pro' ? proStance : conStance}</p>
           </div>
 
-          {/* 投票条 */}
-          <div className="p-6 border-2 border-black">
-            <h3 className="text-xl font-bold mb-4 text-center">观众投票分布</h3>
-            <div className="h-12 bg-gray-200 rounded-full overflow-hidden flex">
-              <div 
-                className="bg-green-500 flex items-center justify-center text-white font-bold"
-                style={{ width: `${(finalProVotes / 50) * 100}%` }}
-              >
-                {finalProVotes}
+          {/* Vote Bar */}
+          {isFullMode && (
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-blue-400">正方 {proVotes}票</span>
+                <span className="text-sm font-medium text-rose-400">反方 {conVotes}票</span>
               </div>
-              <div 
-                className="bg-red-500 flex items-center justify-center text-white font-bold"
-                style={{ width: `${(finalConVotes / 50) * 100}%` }}
-              >
-                {finalConVotes}
+              <div className="h-3 bg-white/5 rounded-full overflow-hidden flex">
+                <motion.div
+                  initial={{ width: '50%' }}
+                  animate={{ width: `${(proVotes / 50) * 100}%` }}
+                  transition={{ delay: 0.8, duration: 1 }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-400 rounded-l-full"
+                />
+                <motion.div
+                  initial={{ width: '50%' }}
+                  animate={{ width: `${(conVotes / 50) * 100}%` }}
+                  transition={{ delay: 0.8, duration: 1 }}
+                  className="bg-gradient-to-r from-rose-400 to-rose-500 rounded-r-full"
+                />
               </div>
+              <p className="text-[10px] text-white/20 text-center mt-2">50位AI观众投票结果</p>
             </div>
-            <div className="flex justify-between mt-2 text-sm text-gray-600">
-              <span>正方 ({((finalProVotes / 50) * 100).toFixed(1)}%)</span>
-              <span>反方 ({((finalConVotes / 50) * 100).toFixed(1)}%)</span>
-            </div>
-          </div>
+          )}
 
-          {/* 观众发言选择 */}
-          {!showAudienceSpeeches && (
-            <div className="p-6 border-2 border-black">
-              <h3 className="text-xl font-bold mb-4 text-center">邀请观众发言</h3>
-              <p className="text-center text-gray-600 mb-6">
-                选择1-2位观众，听听他们为什么选择这一方
-              </p>
-              
-              <div className="grid md:grid-cols-2 gap-4 mb-6">
-                {mockAudiences.map(audience => (
-                  <button
-                    key={audience.id}
-                    onClick={() => handleAudienceSelect(audience.id)}
-                    className={`p-4 border-2 transition-all text-left ${
-                      selectedAudiences.includes(audience.id)
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 hover:border-black'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-bold">{audience.name}</span>
-                      <span className={`text-xs px-2 py-1 border ${
-                        audience.stance === 'pro' ? 'border-green-500 text-green-600' : 'border-red-500 text-red-600'
-                      } ${selectedAudiences.includes(audience.id) ? 'border-white text-white' : ''}`}>
-                        {audience.stance === 'pro' ? '支持正方' : '支持反方'}
-                      </span>
+          {/* BB King */}
+          <div className="text-center p-6 rounded-2xl" style={{ background: `${bbKingColor}08`, border: `1px solid ${bbKingColor}20` }}>
+            <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: bbKingColor }} />
+            <p className="text-xs text-white/40 tracking-wider uppercase mb-2">BB King · 最佳辩手</p>
+            <div className="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center text-2xl font-bold"
+              style={{ background: `${bbKingColor}20`, color: bbKingColor, border: `2px solid ${bbKingColor}40` }}>
+              {bbKing?.[0] || '?'}
+            </div>
+            <p className="text-xl font-bold" style={{ color: bbKingColor }}>{bbKing}</p>
+            <p className="text-xs text-white/30 mt-1">以犀利的论证和深刻的洞察力赢得了最佳辩手称号</p>
+          </div>
+        </motion.div>
+
+        {/* Participants */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="glass-card p-6 max-w-2xl w-full mb-8"
+        >
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Shield className="w-4 h-4 text-blue-400" />
+                <span className="text-sm font-bold text-blue-400">正方</span>
+              </div>
+              <div className="space-y-2">
+                {proSide.map((name, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold"
+                      style={{ background: `${philosopherColors[proSideIds[i]] || '#3b82f6'}20`, color: philosopherColors[proSideIds[i]] || '#3b82f6' }}>
+                      {name[0]}
                     </div>
-                    <p className="text-sm text-gray-500">{audience.occupation}</p>
-                  </button>
+                    <span className="text-sm text-white/60">{name}</span>
+                  </div>
                 ))}
               </div>
-
-              <div className="flex justify-center gap-4">
-                <button
-                  onClick={handleShowSpeeches}
-                  disabled={selectedAudiences.length === 0}
-                  className={`px-8 py-3 border-2 border-black font-bold transition-all ${
-                    selectedAudiences.length > 0
-                      ? 'bg-black text-white hover:bg-white hover:text-black'
-                      : 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
-                  }`}
-                >
-                  听听他们的想法 ({selectedAudiences.length}/2)
-                </button>
-                <button
-                  onClick={() => setShowAudienceSpeeches(true)}
-                  className="px-8 py-3 border-2 border-gray-400 text-gray-600 hover:border-black hover:text-black transition-all"
-                >
-                  跳过
-                </button>
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Swords className="w-4 h-4 text-rose-400" />
+                <span className="text-sm font-bold text-rose-400">反方</span>
+              </div>
+              <div className="space-y-2">
+                {conSide.map((name, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold"
+                      style={{ background: `${philosopherColors[conSideIds[i]] || '#f43f5e'}20`, color: philosopherColors[conSideIds[i]] || '#f43f5e' }}>
+                      {name[0]}
+                    </div>
+                    <span className="text-sm text-white/60">{name}</span>
+                  </div>
+                ))}
               </div>
             </div>
-          )}
-
-          {/* 观众发言展示 */}
-          {showAudienceSpeeches && (
-            <div className="p-6 border-2 border-black bg-gray-50">
-              <h3 className="text-xl font-bold mb-6 text-center">观众发言</h3>
-              {selectedAudiences.length > 0 ? (
-                <div className="space-y-6">
-                  {selectedAudiences.map(id => {
-                    const audience = mockAudiences.find(a => a.id === id);
-                    if (!audience) return null;
-                    return (
-                      <div key={id} className="p-6 bg-white border-2 border-gray-300">
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <h4 className="text-lg font-bold">{audience.name}</h4>
-                            <p className="text-sm text-gray-600">{audience.occupation}</p>
-                          </div>
-                          <span className={`text-sm px-3 py-1 border-2 font-medium ${
-                            audience.stance === 'pro' 
-                              ? 'border-green-500 text-green-600 bg-green-50' 
-                              : 'border-red-500 text-red-600 bg-red-50'
-                          }`}>
-                            {audience.stance === 'pro' ? '支持正方' : '支持反方'}
-                          </span>
-                        </div>
-                        <p className="text-base leading-relaxed text-gray-700">
-                          "{audience.reason}"
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <p className="text-center text-gray-500">未选择观众发言</p>
-              )}
-            </div>
-          )}
-
-          {/* 精彩回顾（占位） */}
-          <div className="p-6 border-2 border-gray-300 bg-gray-50">
-            <h3 className="text-xl font-bold mb-4 text-center">精彩回顾</h3>
-            <p className="text-center text-gray-500">
-              [辩论精彩片段回顾，待实现]<br/>
-              将展示辩论中最精彩的几轮交锋
-            </p>
           </div>
+        </motion.div>
 
-          {/* 观众立场变化（占位） */}
-          <div className="p-6 border-2 border-gray-300 bg-gray-50">
-            <h3 className="text-xl font-bold mb-4 text-center">观众立场变化</h3>
-            <p className="text-center text-gray-500">
-              [观众立场变化统计，待实现]<br/>
-              将展示辩论过程中观众立场的动态变化
-            </p>
-          </div>
-         </div>
-        </div>
-        {/* 操作按钮 */}
-        <div className="mt-12 flex flex-col items-center gap-4">
-          <div className="flex gap-4">
-            <button
-              onClick={handlePlayAgain}
-              className="px-12 py-4 border-2 border-black bg-black text-white hover:bg-white hover:text-black transition-all font-bold text-lg"
-            >
-              再来一局
-            </button>
-            <button
-              onClick={() => setLocation("/")}
-              className="px-12 py-4 border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-all font-bold text-lg"
-            >
-              返回首页
-            </button>
-          </div>
-          
-          <button
-            onClick={() => alert('分享功能待实现')}
-            className="px-8 py-3 border border-gray-400 text-gray-600 hover:border-black hover:text-black transition-all"
-          >
-            分享结果
+        {/* Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.5 }}
+          className="flex flex-col sm:flex-row items-center gap-4"
+        >
+          <button onClick={() => setLocation("/arena/mode")} className="btn-apple-secondary text-sm">
+            <RotateCcw className="w-4 h-4 mr-2" />
+            再来一场
           </button>
-        </div>
+          <button onClick={() => setLocation("/")} className="btn-apple-primary text-sm">
+            <Home className="w-4 h-4 mr-2" />
+            返回首页
+          </button>
+        </motion.div>
       </div>
     </div>
   );
